@@ -32,6 +32,7 @@ export async function deleteDetailWarehouse(id:number): Promise<boolean>{
     return result.affectedRows > 0;
 }
 
+
 // information
 // ini buat manggil product dan suppliernya
 
