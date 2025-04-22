@@ -18,13 +18,20 @@ export async function insertDetailWarehouse(detailWarehouse:DetailWarehouse): Pr
     return result.insertId;
 }
 
-export async function updateDetailWarehouse(id:number,detailWarehouse:DetailWarehouse): Promise<boolean>{
+export async function updateDetailWarehouse(detailWarehouse:DetailWarehouse): Promise<boolean>{
     const {id_product,id_inventory} = detailWarehouse;
-    const result = (await queryDatabase("UPDATE detail_warehouse SET id_product = ?,id_inventory = ? WHERE id_warehouse = ?",
-        [id_product,id_inventory, id]
+    const result = (await queryDatabase("UPDATE detail_warehouse SET id_inventory = ? WHERE id_product = ?",
+        [id_inventory,id_product]
     )) as ResultSetHeader;
     return result.affectedRows > 0;
 }
+// export async function updateDetailWarehouse(id:number,detailWarehouse:DetailWarehouse): Promise<boolean>{
+//     const {id_product,id_inventory} = detailWarehouse;
+//     const result = (await queryDatabase("UPDATE detail_warehouse SET id_product = ?,id_inventory = ? WHERE id_warehouse = ?",
+//         [id_product,id_inventory, id]
+//     )) as ResultSetHeader;
+//     return result.affectedRows > 0;
+// }
 
 export async function deleteDetailWarehouse(id:number): Promise<boolean>{
     const result = (await queryDatabase("DELETE FROM detail_warehouse WHERE id_detail_warehouse =?",[id]

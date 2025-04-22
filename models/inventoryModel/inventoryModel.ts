@@ -7,7 +7,7 @@ export type Inventory = {
 };
 
 export async function getAllInventory(): Promise<Inventory[]> {
-    const result = (await queryDatabase("SELECT * FROM inventory")) as Inventory[];
+    const result = (await queryDatabase("SELECT * FROM inventory WHERE deleted_at IS NULL")) as Inventory[];
     return result;
 }
 
@@ -33,6 +33,13 @@ export async function updateInventory(id:number, inventory:Inventory): Promise<b
 }
 
 export async function deleteInventory(id:number): Promise<boolean> {
-    const result = (await queryDatabase("DELETE FROM inventory WHERE id_inventory = ?", [id])) as ResultSetHeader;
+    const date = new Date();
+    const result = (await queryDatabase(
+        "UPDATE inventory SET deleted_at = ? WHERE id_inventory = ?", [date, id]
+    )) as ResultSetHeader;
     return result.affectedRows > 0;
 }
+// export async function deleteInventory(id:number): Promise<boolean> {
+//     const result = (await queryDatabase("DELETE FROM inventory WHERE id_inventory = ?", [id])) as ResultSetHeader;
+//     return result.affectedRows > 0;
+// }

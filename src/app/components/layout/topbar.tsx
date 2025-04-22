@@ -25,10 +25,11 @@ export default function Topbar(){
             
 
             <div className="flex ml-auto items-center">
-                <div className="p-3 border-2 rounded-full mr-5 hover:shadow-lg">
-                    <FontAwesomeIcon
+
+                <div className="rounded-full shadow-md border-2 py-2 px-3 mr-5">
+                     <FontAwesomeIcon
                         icon={faBell}
-                        className="text-black/70 w-4"
+                        className="text-black/70 text-xl"
                     />
                 </div>
 

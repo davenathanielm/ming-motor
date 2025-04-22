@@ -10,12 +10,12 @@ export default async function handler(req: NextApiRequest ,res: NextApiResponse)
             return res.status(400).json({success:false, message:"Invalid detail warehouse ID"});
         }
 
-        if(req.method === "PUT"){
-            const {id_inventory, id_product} = req.body;
-            const detailWarehouse: DetailWarehouse = {id_product, id_inventory};
-            const result = await updateDetailWarehouseService(detailWarehouseId,detailWarehouse);
-            return res.status(result.status).json({success:result.success, message:result.message});
-        }
+        // if(req.method === "PUT"){
+        //     const {id_inventory, id_product} = req.body;
+        //     const detailWarehouse: DetailWarehouse = {id_product, id_inventory};
+        //     const result = await updateDetailWarehouseService(detailWarehouseId,detailWarehouse);
+        //     return res.status(result.status).json({success:result.success, message:result.message});
+        // }
 
         if(req.method === "DELETE"){
             const result = await deleteDetailWarehouseService(detailWarehouseId);

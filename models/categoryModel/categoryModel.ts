@@ -7,7 +7,7 @@ export type Category = {
 };
 
 export async function getAllCategory(): Promise<Category[]> {
-    const result = (await queryDatabase("SELECT * FROM category")) as Category[];
+    const result = (await queryDatabase("SELECT * FROM category WHERE deleted_at IS NULL")) as Category[];
     return result;
 }
 
@@ -42,9 +42,10 @@ export async function updateCategory(id: number, category: Category): Promise<bo
 }
 
 export async function deleteCategory(id: number): Promise<boolean> {
+    const date = new Date();
     const result = (await queryDatabase(
-        "DELETE FROM category WHERE id_category = ?", 
-        [id]
+        "UPDATE category SET deleted_at = ? WHERE id_category = ?", 
+        [date, id]
     )) as ResultSetHeader;
 
     return result.affectedRows > 0;

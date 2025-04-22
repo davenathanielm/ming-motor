@@ -10,9 +10,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
 
         if(req.method === "POST"){
-            const {name, qty,brand,hpp,selling_price,barcode, description,image,status,id_category} = req.body;
+            const {name, qty,brand,hpp,selling_price,barcode, description,image,status,id_category,id_supplier,id_inventory} = req.body;
             const product: Product = {name, qty,brand,hpp,selling_price,barcode, description,image,status,id_category};
-            const result = await insertProductService(product);
+            const result = await insertProductService(product,id_supplier,id_inventory);
             return res.status(result.success ? 201 : 500).json(result);
         }
 

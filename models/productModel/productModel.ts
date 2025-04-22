@@ -12,10 +12,14 @@ export type Product = {
     image: string;
     status: string;
     id_category: number;
+    id_product: number;
+    created_at: Date;
+    updated_at: Date;
+    deleted_at: Date; 
 }
 
 export async function getAllProduct(): Promise<Product[]> {
-    const result = (await queryDatabase("SELECT * FROM product")) as Product[]
+    const result = (await queryDatabase("SELECT * FROM product WHERE deleted_at IS NULL")) as Product[]
     return result;
 }
 
@@ -48,9 +52,10 @@ export async function updateProduct(id:number, product: Product) : Promise<boole
 }
 
 export async function deleteProduct(id: number): Promise<boolean> {
+    const date = new Date();
     const result = (await queryDatabase(
-        "DELETE FROM product WHERE id_product = ?", 
-        [id]
+        "UPDATE product SET deleted_at = ? WHERE id_product = ?", 
+        [date, id]
     )) as ResultSetHeader;
 
     return result.affectedRows > 0; 

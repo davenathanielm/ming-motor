@@ -9,12 +9,12 @@ export default async function handler(req: NextApiRequest ,res: NextApiResponse)
         if(isNaN(detailId)){
             return res.status(500).json({success:false, message:"id must be a number"});
         }
-        if(req.method === "PUT"){
-            const {id_supplier, id_product} = req.body;
-            const detailSupplier: DetailSupplier = {id_product, id_supplier};
-            const result = await updateDetailSupplierService(detailId,detailSupplier);
-           return res.status(result.status).json({success: result.success, message: result.message});
-        }
+        // if(req.method === "PUT"){
+        //     const {id_supplier, id_product} = req.body;
+        //     const detailSupplier: DetailSupplier = {id_product, id_supplier};
+        //     const result = await updateDetailSupplierService(detailId,detailSupplier);
+        //    return res.status(result.status).json({success: result.success, message: result.message});
+        // }
 
         if(req.method === "DELETE"){
             const result = await deleteDetailSupplierService(detailId);

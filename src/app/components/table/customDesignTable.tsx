@@ -23,3 +23,13 @@ export const customStyles = {
       },
     },
   }
+
+  // this is for change format currency
+  export const formatCurrency = (value : number) => {
+    return new Intl.NumberFormat("id-ID", {
+        style: "currency",
+        currency: "IDR",
+        minimumFractionDigits: 2,
+    }).format(value);
+
+  }

@@ -9,7 +9,7 @@ export type User = {
 };
 
 export async function getAllUsers(): Promise<User[]> {
-    const result = (await queryDatabase("SELECT * FROM users")) as User[];
+    const result = (await queryDatabase("SELECT * FROM users WHERE deleted_at IS NULL")) as User[];
     return result;
 }
 
@@ -48,13 +48,24 @@ export async function updateUser(id: number, user: User): Promise<boolean> {
 
 // ✅ Delete User (Fix `affectedRows` Error)
 export async function deleteUser(id: number): Promise<boolean> {
+    const date = new Date();
     const result = (await queryDatabase(
-        "DELETE FROM users WHERE id_user = ?", 
-        [id]
+        "UPDATE users SET deleted_at = ? WHERE id_user = ?", 
+        [date, id]
     )) as ResultSetHeader;
 
     return result.affectedRows > 0; 
 }
+
+
+// export async function deleteUser(id: number): Promise<boolean> {
+//     const result = (await queryDatabase(
+//         "DELETE FROM users WHERE id_user = ?", 
+//         [id]
+//     )) as ResultSetHeader;
+
+//     return result.affectedRows > 0; 
+// }
 
 // Information
 // 1. so promise for wait function run first but not block main thread

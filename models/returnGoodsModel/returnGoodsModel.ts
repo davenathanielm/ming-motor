@@ -8,7 +8,7 @@ export type ReturnGoods = {
 }
 
 export async function getAllReturnGoodsModel(): Promise<ReturnGoods[]> {
-    const result = (await queryDatabase("SELECT * FROM return_goods")) as ReturnGoods[];
+    const result = (await queryDatabase("SELECT * FROM return_goods WHERE deleted_at IS NULL")) as ReturnGoods[];
     return result;
 }
 
@@ -35,6 +35,10 @@ export async function updateReturnGoodsModel(id:number, returnGoods: ReturnGoods
 }
 
 export async function deleteReturnGoodsModel(id: number): Promise<boolean>{
-    const result = (await queryDatabase("DELETE FROM return_goods WHERE id_return = ?",[id])) as ResultSetHeader;
+    const date = new Date();
+    const result = (await queryDatabase(
+        "UPDATE return_goods SET deleted_at = ? WHERE id_return = ?", 
+        [date, id]
+    )) as ResultSetHeader;
     return result.affectedRows > 0 ; 
 }

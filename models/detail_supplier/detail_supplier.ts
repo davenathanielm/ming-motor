@@ -18,9 +18,9 @@ export async function insertDetailSupplier(detailSupplier:DetailSupplier): Promi
     return result.insertId;
 }
 
-export async function updateDetailSupplier(id:number,DetailSupplier:DetailSupplier): Promise<boolean>{
+export async function updateDetailSupplier(DetailSupplier:DetailSupplier): Promise<boolean>{
     const {id_product,id_supplier} = DetailSupplier;
-    const result = (await queryDatabase("UPDATE detail_supplier SET id_product = ?,id_supplier = ? WHERE id_warehouse = ?",[id_product,id_supplier, id]
+    const result = (await queryDatabase("UPDATE detail_supplier SET id_supplier = ? WHERE id_product = ?",[id_supplier, id_product]
     )) as ResultSetHeader;
     return result.affectedRows > 0;
 }

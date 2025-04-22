@@ -18,9 +18,9 @@ export async function insertDetailWarehouseService(detailWarehouse:DetailWarehou
     }
 }
 
-export async function updateDetailWarehouseService(id_detail_warehouse:number, detailWarehouse:DetailWarehouse): Promise<{success: boolean; status: number, message?:string}>{
+export async function updateDetailWarehouseService(detailWarehouse:DetailWarehouse): Promise<{success: boolean; status: number, message?:string}>{
     try{
-        const result = await updateDetailWarehouse(id_detail_warehouse,detailWarehouse);
+        const result = await updateDetailWarehouse(detailWarehouse);
         if(result){
             return {success: true , message: "Detail Warehouse Updated Successfully", status:201}
         } else{
@@ -30,6 +30,18 @@ export async function updateDetailWarehouseService(id_detail_warehouse:number, d
         return {success:false, message:e.message, status:500}
     }
 }
+// export async function updateDetailWarehouseService(id_detail_warehouse:number, detailWarehouse:DetailWarehouse): Promise<{success: boolean; status: number, message?:string}>{
+//     try{
+//         const result = await updateDetailWarehouse(id_detail_warehouse,detailWarehouse);
+//         if(result){
+//             return {success: true , message: "Detail Warehouse Updated Successfully", status:201}
+//         } else{
+//             return {success:false, message:"Detail Warehouse not found", status:404}
+//         }
+//     } catch(e:any){
+//         return {success:false, message:e.message, status:500}
+//     }
+// }
 
 export async function deleteDetailWarehouseService(id_detail_warehouse:number): Promise<{success:boolean, status:number, message?:string}>{
     try{

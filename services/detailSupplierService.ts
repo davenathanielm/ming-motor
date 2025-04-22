@@ -18,9 +18,9 @@ export async function insertDetailSupplierService(detailSupplier:DetailSupplier)
     }
 }
 
-export async function updateDetailSupplierService(id_detail_supplier:number, detailSupplier:DetailSupplier): Promise<{success: boolean; status: number, message?:string}>{
+export async function updateDetailSupplierService(detailSupplier:DetailSupplier): Promise<{success: boolean; status: number, message?:string}>{
     try{
-        const result = await updateDetailSupplier(id_detail_supplier,detailSupplier);
+        const result = await updateDetailSupplier(detailSupplier);
         if(result){
             return {success: true , message: "Detail Supplier Updated Successfully", status:201}
         } else{

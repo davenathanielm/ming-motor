@@ -16,9 +16,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
 
         if(req.method === "PUT"){
-            const {name, qty,brand,hpp,selling_price,barcode, description,image,status,id_category} = req.body;
+            const {name, qty,brand,hpp,selling_price,barcode, description,image,status,id_category,id_supplier,id_inventory} = req.body;
             const product : Product = {name, qty,brand,hpp,selling_price,barcode, description,image,status,id_category};
-            const result = await updateProductService(productId,product);
+            const result = await updateProductService(productId,product,id_supplier,id_inventory);
             return res.status(result.status).json({success: result.success, message: result.message});
         }
 

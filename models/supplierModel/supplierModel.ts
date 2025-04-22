@@ -9,7 +9,7 @@ export type Supplier = {
 };
 
 export async function getAllSupplier(): Promise<Supplier[]>{
-    const result = (await queryDatabase("SELECT * FROM supplier")) as Supplier[]
+    const result = (await queryDatabase("SELECT * FROM supplier WHERE deleted_at IS NULL")) as Supplier[]
     return result; 
 }
 
@@ -41,6 +41,10 @@ export async function updateSupplier(id_supplier:number, supplier :Supplier) : P
 }
 
 export async function deleteSupplier(id_supplier:number) : Promise<boolean>{
-    const result = (await queryDatabase("DELETE FROM supplier WHERE id_supplier = ?",[id_supplier])) as ResultSetHeader;
+    const date = new Date();
+    const result = (await queryDatabase(
+        "UPDATE supplier SET deleted_at = ? WHERE id_supplier = ?", 
+        [date, id_supplier]
+    )) as ResultSetHeader;
     return result.affectedRows > 0;
 }
