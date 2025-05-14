@@ -11,7 +11,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         if(req.method === "POST"){
             const {supplier_name, phone_number,city,comment} = req.body;
-            const supplier: Supplier = {supplier_name, phone_number,city,comment};
+            const supplier: any = {supplier_name, phone_number,city,comment};
             const result = await insertSupplierService(supplier);
             return res.status(result.success ? 201 : 500).json(result);
         }

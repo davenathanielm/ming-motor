@@ -1,6 +1,7 @@
 import { useQuery , useMutation, useQueryClient } from "@tanstack/react-query";
 import { Supplier } from "../../../models/supplierModel/supplierModel";
 import { DetailSupplier } from "../../../models/detail_supplier/detail_supplier";
+import { SupplierSummary } from "../../../models/detail_supplier/detail_supplier";
 import API from "../axios";
 
 export const fetchSupplier = async() => {
@@ -24,6 +25,24 @@ export const insertDetailSupplier = async(detailSupplier: DetailSupplier) => {
     const response = await API.post("/api/detailSupplier", detailSupplier);
     return response;
 }
+
+export const updateSupplier = async (id:string,supplier:Supplier)=>{
+    const response = await API.put(`/api/supplier/${id}`, supplier);
+    const supplierData = response.data;
+    return supplierData.data;
+}
+
+export const deleteSupplier = async(id:string) =>{
+    const response = await API.delete(`/api/supplier/${id}`);
+    return response;
+}
+
+export const getSupplierSummary = async () => {
+    const response = await API.get("/api/summarySupplier");
+    const supplierSummaryResponse = response.data;
+    return supplierSummaryResponse.data;
+}
+
 
 // ----------------------------------------------------- custom hook to call data from API ------------------------------------------------------------------------
 
@@ -58,5 +77,33 @@ export const useInsertDetailSupplier = () =>{
         onSuccess: ()=>{
              queryClient.invalidateQueries({ queryKey: ["detailSupplier"] });
         }
+    });
+}
+
+export const useUpdateSupplier = (id:any) => {
+    const queryClient= useQueryClient();
+    return useMutation({
+        mutationFn: (supplier:Supplier)=> updateSupplier(id,supplier),
+        onSuccess:()=>{
+            queryClient.invalidateQueries({ queryKey: ["supplier"] });
+        },
+    });
+
+}
+
+export const useDeleteSupplier = ()=>{
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (id:any) => deleteSupplier(id),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["supplier"] });
+        },
+    });
+}
+
+export const useFetchSupplierSummary = () => {
+    return useQuery({
+        queryKey: ["supplierSummary"],
+        queryFn: getSupplierSummary,
     });
 };

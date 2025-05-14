@@ -4,6 +4,21 @@ import { RowDataPacket, ResultSetHeader } from "mysql2";
 export type DetailWarehouse = {
     id_product : number;
     id_inventory : number;
+    movement_type : string;
+    qty : number;
+}
+
+export type InventorySummary = {
+    id_inventory : number;
+    id_detail_warehouse : number;
+    name : string;
+    barcode : string;
+    qty : number;
+    movement_type : string;
+    location : string;
+    created_at : Date;
+    updated_at : Date;
+    description : string;
 }
 
 export async function getAllDetailWarehouse(): Promise<DetailWarehouse[]> {
@@ -12,8 +27,8 @@ export async function getAllDetailWarehouse(): Promise<DetailWarehouse[]> {
 }
 
 export async function insertDetailWarehouse(detailWarehouse:DetailWarehouse): Promise<number>{
-    const {id_product,id_inventory} = detailWarehouse;
-    const result = (await queryDatabase("INSERT INTO detail_warehouse (id_product,id_inventory) VALUES (?,?)",[id_product,id_inventory]
+    const {id_product,id_inventory,movement_type,qty} = detailWarehouse;
+    const result = (await queryDatabase("INSERT INTO detail_warehouse (id_product,id_inventory,movement_type,qty) VALUES (?,?,?,?)",[id_product,id_inventory,movement_type,qty]
     )) as ResultSetHeader;
     return result.insertId;
 }
@@ -38,6 +53,29 @@ export async function deleteDetailWarehouse(id:number): Promise<boolean>{
     )) as ResultSetHeader;
     return result.affectedRows > 0;
 }
+
+export async function getInventorySummary(): Promise<InventorySummary[]> {
+    const query = `
+        SELECT 
+            a.id_inventory,
+            a.id_detail_warehouse, 
+            c.name, 
+            c.barcode, 
+            a.qty, 
+            a.movement_type, 
+            b.location, 
+            a.created_at,
+            c.updated_at, 
+            b.description  
+        FROM detail_warehouse a 
+        INNER JOIN inventory b ON a.id_inventory = b.id_inventory 
+        INNER JOIN product c ON a.id_product = c.id_product
+    `;
+
+    const result = (await queryDatabase(query)) as InventorySummary[];
+    return result;
+}
+ 
 
 
 // information

@@ -2,10 +2,14 @@ import { queryDatabase } from "../../lib/query";
 import { RowDataPacket, ResultSetHeader } from "mysql2"; // Import MySQL types
 
 export type User = {
+    id_user: string;
+    fullName: string;
     username: string;
     password: string;
     phone_number: string;
     role: string;
+    confirmPassword?: any; // Optional field for confirmation
+    id:any;
 };
 
 export async function getAllUsers(): Promise<User[]> {
@@ -22,13 +26,29 @@ export async function getUserById(id: number): Promise<User | null> {
     return result.length > 0 ? (result[0] as User) : null;
 }
 
+export async function checkUsername(username: string): Promise<User | null> {
+    const result = (await queryDatabase(
+        "SELECT * FROM users WHERE username = ?", 
+        [username]
+    )) as RowDataPacket[];
+    return result.length > 0 ? (result[0] as User) : null;
+}
+
+export async function checkPassword(id:string, password: string): Promise<User | null> {
+    const result = (await queryDatabase(
+        "SELECT * FROM users WHERE password = ? AND id_user = ?", 
+        [password, id]
+    )) as RowDataPacket[];
+    return result.length > 0 ? (result [0] as User) : null; 
+}
+
 // ✅ Insert User (Fix `insertId` Error)
 export async function insertUser(user: User): Promise<number> {
-    const { username, password, phone_number, role } = user;
+    const { username, password, phone_number, role, fullName } = user;
     
     const result = (await queryDatabase(
-        "INSERT INTO users (username, password, phone_number, role) VALUES (?, ?, ?, ?)",
-        [username, password, phone_number, role]
+        "INSERT INTO users (username, password, phone_number, role , fullName) VALUES (?, ?, ?, ?, ?)",
+        [username, password, phone_number, role, fullName]
     )) as ResultSetHeader;
 
     return result.insertId; 
@@ -36,11 +56,11 @@ export async function insertUser(user: User): Promise<number> {
 
 // ✅ Update User (Fix `affectedRows` Error)
 export async function updateUser(id: number, user: User): Promise<boolean> {
-    const { username, password, phone_number, role } = user;
+    const { username, password, phone_number ,fullName } = user;
 
     const result = (await queryDatabase(
-        "UPDATE users SET username = ?, password = ?, phone_number = ?, role = ? WHERE id_user = ?",
-        [username, password, phone_number, role, id]
+        "UPDATE users SET username = ?, password = ?, phone_number = ? , fullName = ? WHERE id_user = ?",
+        [username, password, phone_number,fullName, id]
     )) as ResultSetHeader;
 
     return result.affectedRows > 0;
@@ -56,6 +76,34 @@ export async function deleteUser(id: number): Promise<boolean> {
 
     return result.affectedRows > 0; 
 }
+
+
+export async function updateUsername(id_user : string , username: string): Promise<number>{
+    const result = (await queryDatabase(
+        "UPDATE users set username = ? WHERE id_user = ?",
+        [username, id_user]
+    )) as ResultSetHeader;
+    return result.affectedRows;
+}
+
+export async function updatePassword(id_user : string , password: string): Promise<number>{
+    const result = (await queryDatabase(
+        "UPDATE users set password = ? WHERE id_user = ?",
+        [password, id_user]
+    )) as ResultSetHeader;
+
+    return result.affectedRows; 
+}
+
+export async function updateRole(id_user : string , role: string):Promise<number>{
+    const result = (await queryDatabase(
+        "UPDATE users set role = ? WHERE id_user = ?",
+        [role, id_user]
+    )) as ResultSetHeader;
+
+    return result.affectedRows; 
+}
+
 
 
 // export async function deleteUser(id: number): Promise<boolean> {

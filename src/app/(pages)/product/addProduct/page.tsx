@@ -52,10 +52,7 @@ export default function AddProductPage() {
     }, [categories, supplier]);
 
 
-    // const updatedFormData = useMemo(() => 
-    //         injectOptionForm(formDataProduct, "id_category", categories),
-    //     [categories]
-    // ); 
+  
     const mutationInsertProduct = useInsertProduct();
 
     useEffect(() => {
@@ -118,9 +115,13 @@ export default function AddProductPage() {
         </div>
     </LayoutComponent>
 );  
-
 }
 
 // information
 //  1. injection use to inject the options from form Template
 // 2. useMemo will be running if categories change
+
+  // const updatedFormData = useMemo(() => 
+    //         injectOptionForm(formDataProduct, "id_category", categories),
+    //     [categories]
+    // ); 

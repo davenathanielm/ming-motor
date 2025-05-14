@@ -25,6 +25,24 @@ export const insertDetailInventory = async(detailInventory: DetailWarehouse) => 
     return response;
 }
 
+export const updateInventory = async( id:string , inventory:Inventory) => {
+    const response = await API.put(`/api/inventory/${id}`,inventory);
+    const inventoryData = response.data
+    return inventoryData.data;
+}
+
+export const deleteInventory = async(id:string) =>{
+    const response = await API.delete(`/api/inventory/${id}`);
+    return response;
+}
+
+export const fetchInventorySummary = async () => {
+    const response = await API.get("/api/summaryInventory");
+    const inventorySummaryResponse = response.data;
+    return inventorySummaryResponse.data;
+}
+
+
 // ----------------------------------------------------- custom hook to call data from API ------------------------------------------------------------------------
 
 export const useFetchInventory = () => {
@@ -60,3 +78,30 @@ export const useInsertDetailInventory = () =>{
         }
     });
 };
+
+export const useUpdateInventory = (id:any) => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (inventory:Inventory) => updateInventory(id, inventory),
+        onSuccess : () => {
+            queryClient.invalidateQueries({ queryKey: ["inventory"] });
+        }
+    })
+}
+
+export const useDeleteInventory = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (id:string) => deleteInventory(id),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["inventory"] });
+        }
+    })
+}
+
+export const useFetchInventorySummary = () =>{
+    return useQuery({
+        queryKey: ["inventorySummary"],
+        queryFn : fetchInventorySummary,
+    });
+}

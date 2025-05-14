@@ -1,11 +1,11 @@
-import {menuIcon} from "../items/menuImage";
+import {menuIcon} from "../items/image";
 import Image from "next/image";
 import Link from "next/link";
 
 
 export default function Navbar(){
     return(
-        <div className="flex min-h-screen h-screen  bg-white flex-col border-r-2">
+        <div className="flex min-h-screen  bg-white flex-col border-r-1">
             <h1 className= "text-black font-bold text-2xl px-5 py-5">Ming Motor</h1>
             <p className="pl-5 text-[12px] text-black/50 my-3">MENU</p>
             <div className="text-black flex flex-col gap-6 w-full">

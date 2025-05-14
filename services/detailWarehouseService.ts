@@ -1,4 +1,5 @@
-import { DetailWarehouse , getAllDetailWarehouse, insertDetailWarehouse, updateDetailWarehouse,deleteDetailWarehouse } from "../models/detail_warehouse/detail_warehouse";
+import { DetailWarehouse , getAllDetailWarehouse, insertDetailWarehouse, updateDetailWarehouse,deleteDetailWarehouse, InventorySummary , getInventorySummary } from "../models/detail_warehouse/detail_warehouse";
+
 
 export async function getAllDetailWarehouseService(): Promise<{ success: boolean; data?: DetailWarehouse[]; message?: string }> {
     try {
@@ -53,5 +54,15 @@ export async function deleteDetailWarehouseService(id_detail_warehouse:number): 
         }
     }catch(e:any){
         return {success:false, message:e.message, status:500}
+    }
+}
+
+export async function getInventorySummaryService(): Promise<{success: boolean; data?: InventorySummary[]; message?: string}> {
+    try{
+        const result = await getInventorySummary();
+        return {success: true, data: result}
+    }
+    catch(error:any){
+        return {success: false, message:error.message}
     }
 }

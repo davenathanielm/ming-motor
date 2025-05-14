@@ -4,6 +4,8 @@ import { RowDataPacket,ResultSetHeader } from "mysql2";
 export type Inventory = {
     location : string;
     description : string;
+    created_at : Date;
+    id_inventory : number;
 };
 
 export async function getAllInventory(): Promise<Inventory[]> {

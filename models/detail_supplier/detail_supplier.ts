@@ -4,6 +4,22 @@ import { RowDataPacket, ResultSetHeader } from "mysql2";
 export type DetailSupplier = {
     id_product : number;
     id_supplier : number;
+    qty : number;
+    hpp : number;
+}
+
+export type SupplierSummary = {
+    id_detail_supplier : number;
+    barcode : string;
+    name : string;
+    supplier_name : string;
+    phone_number : string;
+    city : string;
+    qty : number;
+    hpp : number;
+    created_at : Date;
+    updated_at : Date;
+    description : string;
 }
 
 export async function getAllDetailSupplier(): Promise<DetailSupplier[]> {
@@ -12,8 +28,8 @@ export async function getAllDetailSupplier(): Promise<DetailSupplier[]> {
 }
 
 export async function insertDetailSupplier(detailSupplier:DetailSupplier): Promise<number>{
-    const {id_product,id_supplier} = detailSupplier;
-    const result = (await queryDatabase("INSERT INTO detail_supplier (id_product,id_supplier) VALUES (?,?)",[id_product,id_supplier]
+    const {id_product,id_supplier,qty,hpp} = detailSupplier;
+    const result = (await queryDatabase("INSERT INTO detail_supplier (id_product,id_supplier,qty,hpp) VALUES (?,?,?,?)",[id_product,id_supplier,qty,hpp]
     )) as ResultSetHeader;
     return result.insertId;
 }
@@ -30,6 +46,31 @@ export async function deleteDetailSupplier(id:number): Promise<boolean>{
     )) as ResultSetHeader;
     return result.affectedRows > 0;
 }
+
+export async function getSupplierSummary(): Promise<SupplierSummary[]> {
+    const query = `
+        SELECT 
+            a.id_detail_supplier, 
+            b.barcode, 
+            b.name, 
+            c.supplier_name, 
+            c.phone_number, 
+            c.city, 
+            a.qty, 
+            a.hpp, 
+            a.created_at, 
+            c.updated_at, 
+            b.description 
+        FROM detail_supplier a 
+        INNER JOIN product b ON a.id_product = b.id_product 
+        INNER JOIN supplier c ON a.id_supplier = c.id_supplier
+    `;
+
+    const result = (await queryDatabase(query)) as SupplierSummary[];
+    return result;
+}
+
+
 
 // information
 // ini buat manggil product dan suppliernya

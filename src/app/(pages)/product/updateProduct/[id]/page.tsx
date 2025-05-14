@@ -53,6 +53,7 @@
      
     const oldProduct = productData?.data;
      
+     // this part that do auto fill to the form when the page is loaded
     useEffect(() =>{
       if(oldProduct){
         reset(oldProduct);

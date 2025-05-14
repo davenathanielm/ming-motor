@@ -18,6 +18,17 @@ export type Product = {
     deleted_at: Date; 
 }
 
+export type Barcode = {
+    barcode : string;
+}
+
+export type UpdateQtyData = {
+    qty: number;
+    id_supplier: number;
+    id_inventory: number;
+    hpp: number;
+}
+
 export async function getAllProduct(): Promise<Product[]> {
     const result = (await queryDatabase("SELECT * FROM product WHERE deleted_at IS NULL")) as Product[]
     return result;
@@ -35,6 +46,15 @@ export async function getProductById(id:number) : Promise<Product | null>{
     return result.length > 0 ? (result[0] as Product):null;
 }
 
+export async function searchBarcodeProduct(barcode : string): Promise<Product | null>{
+    const result = (await queryDatabase(
+        "SELECT * FROM product WHERE barcode = ?",
+         [barcode]  
+    )) as RowDataPacket;
+
+    return result.length > 0 ? (result[0] as Product):null;
+}
+
 export async function insertProduct(product: Product): Promise<number> {
     const { name, qty, brand, hpp, selling_price,barcode,description,image, status,id_category} = product;
     const result = (await queryDatabase("INSERT INTO product (name, qty, brand, hpp, selling_price, barcode, description, image, status, id_category) VALUES (?,?,?,?,?,?,?,?,?,?)", [name, qty, brand, hpp, selling_price,barcode,description,image, status,id_category]
@@ -47,6 +67,13 @@ export async function updateProduct(id:number, product: Product) : Promise<boole
     const { name, qty, brand, hpp, selling_price,barcode,description,image, status,id_category} = product;
     const result = (await queryDatabase("UPDATE product SET name = ?, qty = ?, brand = ? , hpp = ?, selling_price = ?, barcode = ?, description = ? , image = ?, status = ?, id_category = ? WHERE id_product = ?" , 
         [name, qty, brand, hpp, selling_price,barcode,description,image, status,id_category , id]
+    ))as ResultSetHeader;
+    return result.affectedRows > 0;
+}
+
+export async function updateQtyProduct(id:number, qty: number) : Promise<boolean>{
+    const result = (await queryDatabase("UPDATE product SET  qty = ? WHERE id_product = ?" , 
+        [qty , id]
     ))as ResultSetHeader;
     return result.affectedRows > 0;
 }

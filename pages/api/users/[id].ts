@@ -16,15 +16,13 @@ export default async function handler(req: NextApiRequest, res:NextApiResponse){
         }
 
         if(req.method === "PUT"){
-            if(isNaN(userId)){
-                return res.status(400).json({success:false,message:"Invalid user id"});
-            }
-            const {username,password,phone_number,role} = req.body;
             
-            if(!username || !password || !phone_number || !role){
+            const {username,password,phone_number,fullName,role} = req.body;
+            
+            if(!username || !password || !phone_number || !fullName){
                 return res.status(400).json({success:false,message:"Missing required fields"});
             }
-            const user: User = {username,password,phone_number,role};
+            const user: User = {username,fullName,password,phone_number};
             const result = await updateUserService(userId,user);
             return res.status(result.success ? 201 : 500).json(result);
         }
