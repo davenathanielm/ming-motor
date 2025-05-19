@@ -6,7 +6,6 @@ import { useFetchSupplierSummary } from "../../../../lib/calledAPI/service/servi
 import { detailSupplierColumns } from "@/app/components/table/detailSupplierTable"
 import { detailInventoryColumns } from "@/app/components/table/detailInventoryTable";
 import { useFetchInventorySummary } from "../../../../lib/calledAPI/service/serviceApiInventory";
-import {toast} from "sonner"
 import { SupplierSummary } from "../../../../models/detail_supplier/detail_supplier"
 import { customStyles } from "@/app/components/table/customDesignTable"
 import { InventorySummary } from "../../../../models/detail_warehouse/detail_warehouse";
@@ -42,7 +41,7 @@ export default function Summary() {
 
     return (
         <LayoutComponent title={""} subTitle={"Home / Summary"}>
-          <div className="p-4">
+          <div className="px-14 py-10">
              <header>
                 <h1 className="text-black font-bold text-2xl">Laporan</h1>
                 <p className="text-gray-500">Laporan untuk memantau data</p>
@@ -58,6 +57,7 @@ export default function Summary() {
                 striped
                 persistTableHead
                 defaultSortFieldId={1}
+                // @ts-ignore
                 customStyles={customStyles}
               />
             </div>
@@ -72,6 +72,7 @@ export default function Summary() {
                 striped
                 persistTableHead
                 defaultSortFieldId={1}
+                // @ts-ignore
                 customStyles={customStyles}
               />
             </div>

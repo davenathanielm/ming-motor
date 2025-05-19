@@ -13,6 +13,7 @@ import UpdateInventoryPage from "@/app/components/card/inventory/updateInventory
 import { useDeleteInventory } from "../../../../lib/calledAPI/service/serviceApiInventory";
 import { toast } from "sonner";
 import Modal from "@/app/components/modal/modal";
+import Button from "@/app/components/items/button";
 
 export default function InventoryPage(){
    const {data : inventoryData} = useFetchInventory();
@@ -38,38 +39,35 @@ export default function InventoryPage(){
             toast.error(`Inventory ${name} gagal dihapus`);
         }
     };
-    const handleDetail = (inventory:Inventory) => {
-        // setSelectedInventory(product);
-    };
 
     const handleAddInventory = () => {
         setAddedInventory(true);
     }
 
     return (
-        <LayoutComponent>
-            <div className="py-6">
-                <div className="flex  mb-3 px-2">
-                    <h1 className="text-2xl font-bold text-black">Daftar Gudang Penyimpanan</h1>
-                    {/* <Link href={"/product/addProduct"} >
-                        <button className="px-3 bg-blue-300 text-blue-950 font-bold rounded-lg py-2 hover:cursor-pointer">+ Tambah barang</button>
-                    </Link> */}
+        <LayoutComponent subTitle="Home / Product / Inventory">
+            <div className="px-14 py-10">
+                <div className="flex flex-col px-2">
+                <header>
+                    <h1 className="text-black font-bold text-2xl">Pengaturan Gudang</h1>
+                    <p className="text-gray-500">Preferensi Gudang dan Pengaturan</p>
+                </header>
                     <div className="flex justify-end ml-auto gap-4">   
-                        <button className="px-3 bg-blue-300 text-blue-950 font-bold rounded-lg py-2 hover:cursor-pointer" onClick={handleAddInventory}>+ Tambah Inventory</button>
+                        <Button title={"+ Tambah Gudang"} onClick={handleAddInventory}/>
                     </div>
                 </div>
 
-                <div className="rounded-xl shadow-md overflow-hidden text-black bg-white">
-                <DataTable
-                    columns={inventoryColumns(handleUpdate,handleDelete,handleDetail)}
-                    data={filteredData}
-                    pagination
-                    highlightOnHover
-                    striped
-                    persistTableHead
-                    defaultSortFieldId={1}
-                    customStyles={customStyles}
-                />
+                <div className="rounded-xl shadow-md overflow-hidden text-black bg-white mt-3">
+                    <DataTable
+                        columns={inventoryColumns(handleUpdate,handleDelete)}
+                        data={filteredData}
+                        pagination
+                        highlightOnHover
+                        striped
+                        persistTableHead
+                        defaultSortFieldId={1}
+                        customStyles={customStyles}
+                    />
                 </div>
 
                 {/* check if selectedInventory = null (falsy) return isOpen false or selectedInventory = Product (thruthy) return isOpen true */}

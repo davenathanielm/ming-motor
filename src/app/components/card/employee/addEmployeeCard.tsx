@@ -4,6 +4,7 @@ import { useInsertEmployee } from "../../../../../lib/calledAPI/service/serviceA
 import { formDataEmployee } from "../../items/formTemplate";
 import FormRenderer from "../../items/formRender";
 import { toast } from "sonner";
+import Button from "../../items/button";
 
 export default function AddEmployeePage() {
     const {register, handleSubmit, reset, setValue, control, formState: {errors}} = useForm<Employee>();
@@ -27,6 +28,7 @@ export default function AddEmployeePage() {
             <div className="mt-6">
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <FormRenderer<Employee> 
+                    // @ts-ignore
                         formData={formDataEmployee} 
                         register={register} 
                         control={control} 
@@ -35,7 +37,9 @@ export default function AddEmployeePage() {
                         gridClassname=" grid gap-5"/>
 
                     <div className="flex justify-end gap-6 mt-10">
-                        <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded hover:cursor-pointer">Simpan</button>
+                        <Button title="Batal" variant="delete" onClick={reset}/>
+                        <Button title="Simpan" type="submit" variant="submit"/>
+                        {/* <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded hover:cursor-pointer">Simpan</button> */}
                     </div> 
                 </form>
             </div>

@@ -6,6 +6,7 @@ export type DetailWarehouse = {
     id_inventory : number;
     movement_type : string;
     qty : number;
+    total_qty: number;
 }
 
 export type InventorySummary = {
@@ -14,6 +15,7 @@ export type InventorySummary = {
     name : string;
     barcode : string;
     qty : number;
+    total_qty:number;
     movement_type : string;
     location : string;
     created_at : Date;
@@ -27,11 +29,11 @@ export async function getAllDetailWarehouse(): Promise<DetailWarehouse[]> {
 }
 
 export async function insertDetailWarehouse(detailWarehouse:DetailWarehouse): Promise<number>{
-    const {id_product,id_inventory,movement_type,qty} = detailWarehouse;
-    const result = (await queryDatabase("INSERT INTO detail_warehouse (id_product,id_inventory,movement_type,qty) VALUES (?,?,?,?)",[id_product,id_inventory,movement_type,qty]
+    const {id_product,id_inventory,movement_type,qty,total_qty} = detailWarehouse;
+    const result = (await queryDatabase("INSERT INTO detail_warehouse (id_product,id_inventory,movement_type,qty,total_qty) VALUES (?,?,?,?,?)",[id_product,id_inventory,movement_type,qty, total_qty]
     )) as ResultSetHeader;
     return result.insertId;
-}
+}   
 
 export async function updateDetailWarehouse(detailWarehouse:DetailWarehouse): Promise<boolean>{
     const {id_product,id_inventory} = detailWarehouse;
@@ -62,6 +64,7 @@ export async function getInventorySummary(): Promise<InventorySummary[]> {
             c.name, 
             c.barcode, 
             a.qty, 
+            a.total_qty,
             a.movement_type, 
             b.location, 
             a.created_at,

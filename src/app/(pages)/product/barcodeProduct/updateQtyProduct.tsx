@@ -65,94 +65,102 @@ const {register, handleSubmit, reset, setValue, control, formState: {errors}} = 
     }
     
     return(
-        <div className="flex flex-col lg:flex-row flex-wrap gap-6 mt-6">
+        <div className="p-5">
+            <header>
+                <h1 className="text-black font-bold text-xl">Update Qty Product</h1>
+                <p className="text-gray-500 text-base">Preferensi Akun dan Pengaturan</p>
+            </header>
             {/* Image Placeholder */}
-            <div className="bg-gray-200 w-full lg:w-80 h-80 rounded-xl flex-shrink-0" />
+            {/* <div className="p-3 rounded-xl  w-fit h-fit">
+                <div className="bg-gray-200  rounded-xl shadow-md" />
+            </div> */}
 
-            {/* Product Info */}
-            <div className="flex flex-col gap-4 flex-1 w-full text-black">
-                {/* Info */}
-                <div className="border border-gray-200 rounded-xl p-4">
-                    <h2 className="font-semibold mb-2">Informasi Produk</h2>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4 mt-6 text-sm">
-                        <div>
-                            <p className="text-gray-700">Produk :</p>
-                            <span className="text-black font-semibold">{name}</span>
+                <div className="flex flex-col lg:flex-row flex-wrap gap-6 mt-6">
+                {/* Product Info */}
+                    <div className="flex flex-col gap-4 flex-1 w-full text-black">
+                        {/* Info */}    
+                        <div className="border border-gray-300 rounded-xl p-4 ">
+                            <h2 className="font-semibold mb-2 text-lg">Informasi Produk</h2>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4 mt-6 text-sm">
+                                    <div>
+                                        <p className="text-gray-700">Produk :</p>
+                                        <span className="text-black font-semibold">{name}</span>
+                                    </div>
+                                    <div>
+                                        <p className="text-gray-700">Barcode :</p>
+                                        <span className="text-black font-semibold">{barcode}</span>
+                                    </div>
+                                    <div>
+                                        <p className="text-gray-700">Harga Beli</p>
+                                        <p className="font-semibold">{currencyFormat(hpp)}</p>
+                                    </div>
+                                    <div>
+                                        <p className="text-gray-700">Harga Jual</p>
+                                        <p className="font-semibold">{currencyFormat(selling_price)}</p>
+                                    </div>
+                                    <div>
+                                        <p className="text-gray-700">Keuntungan</p>
+                                        <p className="font-semibold text-green-600">{currencyFormat(profit)}</p>
+                                    </div>
+                                    <div>
+                                        <p className="text-gray-700">Stok</p>
+                                        <p className="font-semibold">{qty} pcs</p>
+                                    </div>
+                                </div>
                         </div>
-                        <div>
-                            <p className="text-gray-700">Barcode :</p>
-                            <span className="text-black font-semibold">{barcode}</span>
-                        </div>
-                        <div>
-                            <p className="text-gray-700">Harga Beli</p>
-                            <p className="font-semibold">{currencyFormat(hpp)}</p>
-                        </div>
-                        <div>
-                            <p className="text-gray-700">Harga Jual</p>
-                            <p className="font-semibold">{currencyFormat(selling_price)}</p>
-                        </div>
-                        <div>
-                            <p className="text-gray-700">Keuntungan</p>
-                            <p className="font-semibold text-green-600">{currencyFormat(profit)}</p>
-                        </div>
-                        <div>
-                            <p className="text-gray-700">Stok</p>
-                            <p className="font-semibold">{qty} pcs</p>
+
+                        {/* Description */}
+                        <div className="border border-gray-300 rounded-xl p-4 ">
+                            <h2 className="font-semibold mb-1">Deskripsi</h2>
+                            <p className="text-sm text-gray-700 w-full h-18">{description}</p>
                         </div>
                     </div>
-                </div>
 
-                {/* Description */}
-                <div className="border border-gray-200 rounded-xl p-4">
-                    <h2 className="font-semibold mb-1">Deskripsi</h2>
-                    <p className="text-sm text-gray-700 w-full h-18">{description}</p>
-                </div>
-            </div>
+                {/* Right Sidebar (form section) */}
+                <div className="flex flex-col gap-4 w-full lg:w-80 text-black">
+                    {/* Tanggal Info */}
+                    <div className="border border-gray-300 rounded-xl p-4 ">
+                        <p className="font-semibold">Informasi Tambahan</p>
+                        <div className="grid grid-cols-1 gap-2 text-sm mt-2">
+                            <p className="text-gray-700">
+                            Tanggal Dibuat : <span className="text-black font-semibold">{dateCreated}</span>
+                            </p>
+                            <p className="text-gray-700">
+                            Tanggal Diperbarui : <span className="text-black font-semibold">{dateUpdated}</span>
+                            </p>
+                        </div>
+                    </div>
 
-            {/* Right Sidebar (form section) */}
-            <div className="flex flex-col gap-4 w-full lg:w-80 text-black">
-                {/* Tanggal Info */}
-                <div className="border border-gray-200 rounded-xl p-4">
-                    <p className="font-semibold">Informasi Tambahan</p>
-                    <div className="grid grid-cols-1 gap-2 text-sm mt-2">
-                        <p className="text-gray-700">
-                        Tanggal Dibuat : <span className="text-black font-semibold">{dateCreated}</span>
-                        </p>
-                        <p className="text-gray-700">
-                        Tanggal Diperbarui : <span className="text-black font-semibold">{dateUpdated}</span>
-                        </p>
+                    {/* Form */}
+                    <div className="border border-gray-300 rounded-xl p-4 ">
+                    <p className="font-semibold mb-2">Form input</p>
+                    <form ref={formRef} onSubmit={handleSubmit(onSubmit)}>
+                        <div className="flex justify-center items-center gap-2 my-4">
+                        <FormRenderer<Product>
+                            formData={updatedFormData}
+                            register={register}
+                            control={control}
+                            errors={errors}
+                            gridClassname="grid grid-cols-1 md:grid-cols-2 gap-8"
+                        />
+                        </div>
+                    </form>
+                    </div>
+                    <div className="flex justify-end gap-6 mt-12">
+                        <button
+                            type="reset"
+                            onClick={onBack}
+                            className="bg-red-600 font-bold text-white px-6 py-2 rounded-lg">
+                            Batal
+                        </button>
+                        <button
+                            type="submit"
+                            onClick={handleSubmit(onSubmit)}
+                            className=" bg-green-600 font-bold text-white px-6 py-2  rounded-lg">
+                            Kirim
+                        </button>
                     </div>
                 </div>
-
-                {/* Form */}
-                <div className="border border-gray-200 rounded-xl p-4">
-                <p className="font-semibold mb-2">Form input</p>
-                <form ref={formRef} onSubmit={handleSubmit(onSubmit)}>
-                    <div className="flex justify-center items-center gap-2 my-4">
-                    <FormRenderer<Product>
-                        formData={updatedFormData}
-                        register={register}
-                        control={control}
-                        errors={errors}
-                        gridClassname="grid grid-cols-1 md:grid-cols-2 gap-8"
-                    />
-                    </div>
-                </form>
-                </div>
-                <div className="flex justify-end gap-6 mt-12">
-                    <button
-                        type="reset"
-                        onClick={onBack}
-                        className="bg-red-600 font-bold text-white px-6 py-2 rounded-lg">
-                        Batal
-                    </button>
-                    <button
-                        type="submit"
-                        onClick={handleSubmit(onSubmit)}
-                        className=" bg-green-600 font-bold text-white px-6 py-2  rounded-lg">
-                        Kirim
-                    </button>
-                    </div>
             </div>
         </div>
     );

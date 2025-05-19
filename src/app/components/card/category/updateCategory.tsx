@@ -6,6 +6,7 @@ import { useUpdateCategoryProduct } from "../../../../../lib/calledAPI/service/s
 import { formDataCategory } from "../../items/formTemplate";
 import FormRenderer from "../../items/formRender";
 import { toast } from "sonner";
+import Button from "../../items/button";
 
 type Props = {
     category : Category;
@@ -48,7 +49,7 @@ export default function UpdateCategoryPage ({category, onClose}: Props)  {
                         gridClassname=" grid gap-5"/>
 
                     <div className="flex justify-end gap-6 mt-10">
-                        <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded hover:cursor-pointer">Simpan</button>
+                        <Button title="Simpan" type="submit" variant="submit"/>
                     </div> 
                 </form>
             </div>

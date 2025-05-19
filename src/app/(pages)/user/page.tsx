@@ -13,10 +13,12 @@ import { useFetchUserById } from "../../../../lib/calledAPI/service/serviceApiUs
 import { useUpdateUser } from "../../../../lib/calledAPI/service/serviceApiUserProfile";
 import { toast } from "sonner";
 import { formatDate } from "@/app/components/items/date";
+import Button from "@/app/components/items/button";
 
 export default function UserPage() {
   const { data: session , status } = useSession();
   const router = useRouter();
+  // @ts-ignore
   const userId = session?.user?.id;
 
   const {register,handleSubmit,reset,setValue,control,formState: { errors },} = useForm<User>();
@@ -45,7 +47,6 @@ export default function UserPage() {
     catch(error){
       toast.error("Gagal memperbarui data pengguna.");
     }
-    // TODO: add update logic here
   };
   
   const handleUpdateUsername = (id: any) => {
@@ -57,18 +58,19 @@ export default function UserPage() {
   }
   return (
     <LayoutComponent title={""} subTitle={"Home / User"}>
-      <div className="p-4">
+      <div className="bg-white px-14 py-10">
         <header>
           <h1 className="text-black font-bold text-2xl">Pengaturan Akun</h1>
           <p className="text-gray-500">Preferensi Akun dan Pengaturan</p>
         </header>
-
+        
         <UserCard
           title="Informasi Pribadi"
           subTitle="Manage your profile information"
         >
           <form onSubmit={handleSubmit(onSubmit)}>
             <FormRenderer<User>
+              // @ts-ignore
               formData={formDataProfile}
               register={register}
               control={control}
@@ -79,10 +81,11 @@ export default function UserPage() {
             <div className="flex justify-start mt-5">
               <button
                 type="submit"
-                className="bg-black text-white px-4 py-2 rounded-lg hover:cursor-pointer"
+                className="bg-black font-semibold text-white px-4 py-2 rounded-lg hover:cursor-pointer"
               >
                 Simpan
               </button>
+              {/* <Button title="Simpan" type="submit" variant="submit" /> */}
             </div>
           </form>
         </UserCard>
@@ -132,7 +135,7 @@ export default function UserPage() {
             </div>
             <button
               type="button"
-              className="border bg-red-500 border-red-500 text-white text-base px-4 py-2 rounded-lg hover:cursor-pointer"
+              className="border bg-red-500 font-semibold hover:bg-red-700 text-white text-base px-4 py-2 rounded-lg hover:cursor-pointer"
             >
               Hapus Akun
             </button>
@@ -183,7 +186,7 @@ function UserCard({
   borderColor?: string;
 }) {
   return (
-    <section className={`border ${borderColor} rounded-lg p-4 mt-8 mb-4`}>
+    <section className={` ${borderColor} rounded-lg p-4 mt-8 mb-4 bg-white border`}>
       <h2 className={`${textColor} font-bold text-xl`}>{title}</h2>
       <p className="text-gray-500 text-sm mb-8 mt-1">{subTitle}</p>
       {children}

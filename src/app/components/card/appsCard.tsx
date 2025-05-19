@@ -11,7 +11,7 @@ type AppsCardProps = {
 export default function AppsCard({ title, image, text, link }: AppsCardProps) {
   return (
     <Link href={link || "#"} className="block text-black hover:opacity-50 transition">
-      <div className="flex items-center gap-4 shadow-md rounded-xl border-1 border-gray-200 p-5">
+      <div className="flex items-center gap-4 bg-white shadow-md rounded-xl border-1 border-gray-200 p-5">
         {image && (
           <Image
             src={image}

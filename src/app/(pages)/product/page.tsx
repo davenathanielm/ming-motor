@@ -8,7 +8,7 @@ export default function DisplayProductPage() {
   return (
     // @ts-ignore
     <LayoutComponent title={""} subTitle={"Home / Product"}>
-      <div className="flex flex-col min-h-screen gap-6 p-6 text-center">
+      <div className="flex flex-col min-h-screen gap-6 text-center px-28 py-12">
         {/* <h1 className="text-2xl font-bold text-center text-black">
           Choose Your Apps
         </h1> */}

@@ -4,6 +4,7 @@ import { RowDataPacket, ResultSetHeader } from "mysql2";
 export type Product = {
     name: string;
     qty: number;
+    total_qty:number;
     brand: string;
     hpp: number;
     selling_price: number;

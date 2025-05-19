@@ -6,7 +6,6 @@ import { productIcon } from "../items/image";
 export const categoryColumns = (
     onUpdate: (id: any) => void,
     onDelete: (id: any, name: string) => void,
-    onDetail: (category: Category) => void
 ): TableColumn<Category>[] => [
     {
         name: "No",

@@ -25,9 +25,19 @@ export const detailInventoryColumns = (
             <div className="text-center whitespace-normal break-words">{row.name}</div>
         )
     },
+
     {
-        name: "Jumlah",
+        name: "Jumlah Barang",
         selector: (row) => row.qty,
+        sortable: true,
+        cell: (row) => (
+            <div className="text-center whitespace-normal break-words">{row.qty}</div>
+        )
+    },
+
+    {
+        name: "Total Jumlah Barang",
+        selector: (row) => row.total_qty,
         sortable: true,
     },
 

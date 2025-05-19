@@ -56,6 +56,7 @@ export async function insertProductService(
             id_product: result,
             id_supplier: id_supplier,
             qty : product.qty,
+            total_qty: product.qty,
             hpp: product?.hpp ?? 0, 
          };
 
@@ -63,6 +64,7 @@ export async function insertProductService(
             id_product: result,
             id_inventory: id_inventory,
             qty: product.qty, 
+            total_qty: product.qty,
             movement_type : "IN",
         };
 
@@ -87,6 +89,7 @@ export async function updateProductService(
         id_product,
         id_supplier,
         qty : product.qty,
+        total_qty: product.qty,
         hpp: product?.hpp ?? 0, 
     };
 
@@ -94,6 +97,7 @@ export async function updateProductService(
         id_product,
         id_inventory,
         qty: product.qty, 
+        total_qty: product.qty,
         movement_type : "IN", 
     };
 
@@ -126,21 +130,27 @@ export async function updateProductService(
 
 export async function updateQtyProductService(id_product:number,updateData : UpdateQtyData): Promise<{success:boolean, status:number, message?:string}>{
     try{
-        const oldQty = await getProductById(id_product);
+        const product = await getProductById(id_product);
         const id_supplier = updateData.id_supplier;
         const id_inventory = updateData.id_inventory;
-        const newQty = (oldQty?.qty ?? 0) + updateData.qty; 
-        const result = await updateQtyProduct(id_product,newQty);
+
+        const qty = updateData.qty;
+        const oldQty = product?.qty ?? 0;
+
+        const totalQty = oldQty + qty; 
+        const result = await updateQtyProduct(id_product,totalQty);
         const supplierDetail: DetailSupplier = {
             id_product,
             id_supplier,
-            qty : newQty,
+            qty : qty,
+            total_qty:totalQty,
             hpp: updateData?.hpp ?? 0, 
         };
         const warehouseDetail: DetailWarehouse = {
             id_product,
             id_inventory,
-            qty: newQty, 
+            qty: qty,
+            total_qty:totalQty, 
             movement_type : "IN", 
         };
         await insertDetailSupplier(supplierDetail);

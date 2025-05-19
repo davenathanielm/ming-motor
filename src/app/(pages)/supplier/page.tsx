@@ -13,6 +13,7 @@ import SupplierDetailCard from "@/app/components/card/supplier/supplierDetailCar
 import AddSupplierPage from "@/app/components/card/supplier/addSupplierCard";
 import UpdateSupplierPage from "@/app/components/card/supplier/updateSupplierCard";
 import { toast } from "sonner";
+import Button from "@/app/components/items/button";
 
 export default function SupplierPage(){
     const {data : supplierData} = useFetchSuplier();
@@ -49,18 +50,21 @@ export default function SupplierPage(){
     }
     return (
         <LayoutComponent>
-            <div className="py-6">
-                <div className="flex  mb-3 px-2">
-                    <h1 className="text-2xl font-bold text-black">Daftar Supplier</h1>
-                    {/* <Link href={"/product/addProduct"} >
-                        <button className="px-3 bg-blue-300 text-blue-950 font-bold rounded-lg py-2 hover:cursor-pointer">+ Tambah barang</button>
-                    </Link> */}
-                    <div className="flex justify-end ml-auto gap-4">   
-                        <button className="px-3 bg-blue-300 text-blue-950 font-bold rounded-lg py-2 hover:cursor-pointer" onClick={handleAddSupplier}>+ Tambah Supplier</button>
+            <div className="px-14 py-10">
+                <div className="flex flex-col  px-2">
+                    <header className=" mb-4">
+                        <h1 className="text-black font-bold text-2xl"> Daftar Supplier</h1>
+                        <p className="text-gray-500">Preferensi Akun dan Pengaturan</p>
+                    </header>
+
+                   {/* Button */}
+                    <div className="flex justify-end ml-auto gap-4 ">   
+                        {/* <button className="px-3 bg-customBackgroundButton text-white/90 font-bold rounded-lg py-2 hover:cursor-pointer" onClick={handleAddSupplier}>+ Tambah Supplier</button> */}
+                        <Button title = "+ Tambah Supplier" onClick={handleAddSupplier}/>
                     </div>
                 </div>
 
-                <div className="rounded-xl shadow-md overflow-hidden text-black bg-white">
+                <div className="rounded-xl shadow-md overflow-hidden text-black bg-white mt-3">
                 <DataTable
                     columns={supplierColumns(handleUpdate,handleDelete,handleDetail)}
                     data={filteredData}

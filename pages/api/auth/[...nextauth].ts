@@ -26,6 +26,7 @@ export const authOptions = {
           id: user?.id_user || "",
           username: user?.username || "",
           fullName: user?.fullName || "",
+          role: user?.role || "",
         };
       },
     }),
@@ -40,7 +41,8 @@ export const authOptions = {
         console.log("JWT received user:", user);
         token.id = user.id;
         token.username = user.username;
-        token.fullName = user.fullName
+        token.fullName = user.fullName;
+        token.role = user.role;
       }
       return token;
     },
@@ -49,6 +51,7 @@ export const authOptions = {
         id: token.id,
         username: token.username,
         fullName: token.fullName,
+        role: token.role,
       };
       return session;
     },
@@ -56,6 +59,7 @@ export const authOptions = {
   secret: process.env.NEXTAUTH_SECRET,
 };
 
+// @ts-ignore
 export default NextAuth(authOptions);
 
 // How this works

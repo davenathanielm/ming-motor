@@ -1,11 +1,35 @@
 import { withAuth } from "next-auth/middleware";
+import { NextResponse } from "next/server";
 
-// Protect these routes
-export default withAuth({
-  pages: {
-    signIn: "/auth/login",
+export default withAuth(
+  function middleware(req) {
+    const { pathname } = req.nextUrl; //this is url path accessed by user
+    const role = req.nextauth.token?.role; // this is the role of user from token
+
+    
+    const ownerOnlyPaths = ["/employee", "/summary"]; // Protect specific routes for "owner" role
+
+    // this is to check if the user is trying to access a path that is only for owner
+    const isOwnerOnly = ownerOnlyPaths.some((path) => //some is javascript method to check if at least one element in the array pass the test then it will return true or false
+      pathname.startsWith(path)
+    );
+
+    if (isOwnerOnly && role !== "owner") {
+      return NextResponse.redirect(new URL("/unauthorized", req.url));
+    }
+
+    return NextResponse.next(); // Allow access
   },
-});
+  {
+    callbacks: {
+      authorized: ({ token }) => !!token, // Allow only authenticated users and if user is not authenticated redirect to signIn automatic
+    },
+    pages: {
+      signIn: "/auth/login", // Redirect to this page if not authenticated
+      error: "/auth/login", // Error page
+    },
+  }
+);
 
 export const config = {
   matcher: [
@@ -13,8 +37,12 @@ export const config = {
     "/product/:path*",
     "/supplier/:path*",
     "/warehouse/:path*",
+    "/employee/:path*",
+    "/addEmployee",
+    "/summary/:path*",
   ],
 };
+
 
 // information
 // 1. withAuth: is a function that is used to protect the routes and redirect to the login page if the user is not authenticated 

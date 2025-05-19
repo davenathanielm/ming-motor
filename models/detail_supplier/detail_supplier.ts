@@ -6,6 +6,7 @@ export type DetailSupplier = {
     id_supplier : number;
     qty : number;
     hpp : number;
+    total_qty:number;
 }
 
 export type SupplierSummary = {
@@ -16,6 +17,7 @@ export type SupplierSummary = {
     phone_number : string;
     city : string;
     qty : number;
+    total_qty : number;
     hpp : number;
     created_at : Date;
     updated_at : Date;
@@ -28,8 +30,8 @@ export async function getAllDetailSupplier(): Promise<DetailSupplier[]> {
 }
 
 export async function insertDetailSupplier(detailSupplier:DetailSupplier): Promise<number>{
-    const {id_product,id_supplier,qty,hpp} = detailSupplier;
-    const result = (await queryDatabase("INSERT INTO detail_supplier (id_product,id_supplier,qty,hpp) VALUES (?,?,?,?)",[id_product,id_supplier,qty,hpp]
+    const {id_product,id_supplier,qty,total_qty,hpp} = detailSupplier;
+    const result = (await queryDatabase("INSERT INTO detail_supplier (id_product,id_supplier,qty,total_qty,hpp) VALUES (?,?,?,?,?)",[id_product,id_supplier,qty,total_qty,hpp]
     )) as ResultSetHeader;
     return result.insertId;
 }
@@ -57,6 +59,7 @@ export async function getSupplierSummary(): Promise<SupplierSummary[]> {
             c.phone_number, 
             c.city, 
             a.qty, 
+            a.total_qty,
             a.hpp, 
             a.created_at, 
             c.updated_at, 

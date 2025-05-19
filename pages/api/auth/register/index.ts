@@ -16,11 +16,11 @@ export default async function handler (req: NextApiRequest , res : NextApiRespon
         };
         const userResult = await insertUserService(user);
         if(userResult.success){
-            return res.status(201).json({ message: "User created successfully" });
+            return res.status(201).json({ message: userResult.message});
         }
         
         else{
-            return res.status(500).json({ message: "Error creating user" });
+            return res.status(500).json({ message: userResult.message });
         }
     }
     else{

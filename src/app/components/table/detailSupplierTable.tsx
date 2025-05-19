@@ -57,11 +57,20 @@ export const detailSupplierColumns = (
         // },
 
         {
-            name : "Qty Barang",
+            name: "Jumlah Barang",
             selector: (row) => row.qty,
             sortable: true,
             cell: (row) => (
                 <div className="text-center whitespace-normal break-words">{row.qty}</div>
+            )
+        },
+
+        {
+            name : "Total Jumlah Barang",
+            selector: (row) => row.total_qty,
+            sortable: true,
+            cell: (row) => (
+                <div className="text-center whitespace-normal break-words">{row.total_qty}</div>
             )
         },
 

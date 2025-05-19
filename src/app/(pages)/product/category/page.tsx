@@ -11,6 +11,8 @@ import AddCategoryPage from "@/app/components/card/category/addCategoryCard";
 import { useDeleteCategory } from "../../../../../lib/calledAPI/service/serviceApiCategory";
 import Modal from "@/app/components/modal/modal";
 import UpdateCategoryPage from "@/app/components/card/category/updateCategory";
+import Button from "@/app/components/items/button";
+import { toast } from "sonner";
 
 
 
@@ -32,15 +34,12 @@ export default function CategoryPage(){
         setUpdateCategory(category)
     };
     const handleDelete = (id: string , name : string) => {
-        // try {
-        //       deleteProductById(id);
-        //       toast.success(`Product ${name} berhasil dihapus`);
-        // }catch(error) {
-        //     toast.error(`Product ${name} gagal dihapus`);
-        // }
-    };
-    const handleDetail = (category:Category) => {
-        // setSelectedProduct(product);
+        try {
+              deletedCategory(id);
+              toast.success(`Product ${name} berhasil dihapus`);
+        }catch(error) {
+            toast.error(`Product ${name} gagal dihapus`);
+        }
     };
     
     const handleAddCategory = () => {
@@ -49,26 +48,28 @@ export default function CategoryPage(){
 
     return (
         <LayoutComponent>
-            <div className="py-6">
-                <div className="flex  mb-3 px-2">
-                    <h1 className="text-2xl font-bold text-black">Daftar Kategori Produk</h1>
-                    {/* <Link href={"/product/addProduct"} >
-                        <button className="px-3 bg-blue-300 text-blue-950 font-bold rounded-lg py-2 hover:cursor-pointer">+ Tambah barang</button>
-                    </Link> */}
+            <div className="px-14 py-10">
+                <div className="flex flex-col px-2">
+                <header>
+                    <h1 className="text-black font-bold text-2xl">Kategori Produk</h1>
+                    <p className="text-gray-500">Preferensi kategori dan pengaturan</p>
+                </header>
                     <div className="flex justify-end ml-auto gap-4">   
-                        <button className="px-3 bg-blue-300 text-blue-950 font-bold rounded-lg py-2 hover:cursor-pointer" onClick={handleAddCategory}>+ Tambah Kategori</button>
+                        {/* <button className="px-3 bg-blue-300 text-blue-950 font-bold rounded-lg py-2 hover:cursor-pointer" onClick={handleAddCategory}>+ Tambah Kategori</button> */}
+                        <Button title="+ Tambah Kategori" onClick={handleAddCategory}/>
                     </div>
                 </div>
 
-                <div className="rounded-xl shadow-md overflow-hidden text-black bg-white">
+                <div className="rounded-xl shadow-md overflow-hidden text-black bg-white mt-3">
                 <DataTable
-                    columns={categoryColumns(handleUpdate,handleDelete,handleDetail)}
+                    columns={categoryColumns(handleUpdate,handleDelete)}
                     data={filteredData}
                     pagination
                     highlightOnHover
                     striped
                     persistTableHead
                     defaultSortFieldId={1}
+                    // @ts-ignore
                     customStyles={customStyles}
                 />
                 </div>

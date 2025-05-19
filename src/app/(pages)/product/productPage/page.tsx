@@ -14,6 +14,7 @@ import { Product } from "../../../../../models/productModel/productModel";
 import { set } from "react-hook-form";
 import { useProductAlert } from "@/app/utils/alertUtils";
 import { toast } from "sonner";
+import Button from "@/app/components/items/button";
 
 export default function ProductPage() {
 
@@ -50,20 +51,17 @@ export default function ProductPage() {
   }
 
   return (
-    <LayoutComponent>
-      <div className="py-6">
-        <div className="flex  mb-3 px-2">
+    <LayoutComponent subTitle={"Product / Product List"}>
+      <div className="px-14 py-10">
+        <div className="flex flex-col  mb-3 px-2">
           <header>
               <h1 className="text-black font-bold text-2xl">Daftar Produk</h1>
               <p className="text-gray-500">List produk dalam toko</p>
           </header>
-            {/* <Link href={"/product/addProduct"} >
-                <button className="px-3 bg-blue-300 text-blue-950 font-bold rounded-lg py-2 hover:cursor-pointer">+ Tambah barang</button>
-            </Link> */}
+           
+           {/* button */}
             <div className="flex justify-end ml-auto gap-4">   
-              <Link href={"/product/barcodeProduct"} >
-                  <button className="px-3 bg-blue-300 text-blue-950 font-bold rounded-lg py-2 hover:cursor-pointer">+ Tambah barang</button>
-              </Link>
+              <Button title="+ Tambah Barang" href="/product/barcodeProduct" />
             </div>
         </div>
 

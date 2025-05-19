@@ -14,6 +14,7 @@ import EmployeeDetailCard from "@/app/components/card/employee/detailEmployeeCar
 import AddEmployeePage from "@/app/components/card/employee/addEmployeeCard";
 import UpdateEmployeePage from "@/app/components/card/employee/updateEmployeeCard";
 import { useDeleteEmployee } from "../../../../lib/calledAPI/service/serviceApiEmployee";
+import Button from "@/app/components/items/button";
 
 
 export default function EmployeePage() {
@@ -45,24 +46,18 @@ const handleAddEmployee = () => {
 
     return (
         <LayoutComponent title={``} subTitle={`Home / Employee`} >
-         <div className="py-6">
-                <div className="flex mb-3 px-2">
+         <div className="px-14 py-10">
+                <div className="flex-col px-2">
                 <header>
                     <h1 className="text-black font-bold text-2xl">Daftar Pegawai</h1>
                     <p className="text-gray-500">Tambah dan Ubah data pegawai anda</p>
                 </header> 
                     <div className="flex justify-end ml-auto gap-4 items-center">   
-                        <button className="px-3 bg-blue-300 text-blue-950 font-bold rounded-lg py-2 hover:cursor-pointer" onClick={handleAddEmployee}>+ Tambah Pegawai</button>
+                        <Button title="+ Tambah Pegawai" onClick={handleAddEmployee}/>
                     </div>
-                    {/* <Link href={"/product/addProduct"} >
-                        <button className="px-3 bg-blue-300 text-blue-950 font-bold rounded-lg py-2 hover:cursor-pointer">+ Tambah barang</button>
-                    </Link> */}
-                    {/* <div className="flex justify-end ml-auto gap-4">   
-                        <button className="px-3 bg-blue-300 text-blue-950 font-bold rounded-lg py-2 hover:cursor-pointer" onClick={handleAddSupplier}>+ Tambah Supplier</button>
-                    </div> */}
                 </div>
 
-                <div className="rounded-xl shadow-md overflow-hidden text-black bg-white">
+                <div className="rounded-xl shadow-md overflow-hidden text-black bg-white mt-3">
                 <DataTable
                     columns={employeeColumns(handleUpdate, handleDelete,handleDetail)}
                     data={employeeData}
@@ -71,6 +66,7 @@ const handleAddEmployee = () => {
                     striped
                     persistTableHead
                     defaultSortFieldId={1}
+                    // @ts-ignore
                     customStyles={customStyles}
                 />
                 </div>

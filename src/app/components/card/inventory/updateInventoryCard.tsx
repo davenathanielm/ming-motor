@@ -6,6 +6,7 @@ import { useUpdateInventory } from "../../../../../lib/calledAPI/service/service
 import { formDataInventory } from "../../items/formTemplate";
 import FormRenderer from "../../items/formRender";
 import { toast } from "sonner";
+import Button from "../../items/button";
 
 type Props = {
     inventory: Inventory;
@@ -38,10 +39,11 @@ export default function UpdateInventoryPage ({inventory, onClose}: Props) {
 
     return (
         <div className="text-black">
-            <h2 className="text-xl font-bold mb-4">Update Inventory</h2>
+            <h2 className="text-xl font-bold mb-4">Perbarui Data Gudang</h2>
             <div className="mt-6">
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <FormRenderer<Inventory> 
+                        // @ts-ignore
                         formData={formDataInventory} 
                         register={register} 
                         control={control} 
@@ -49,7 +51,8 @@ export default function UpdateInventoryPage ({inventory, onClose}: Props) {
                         setValue={setValue} 
                         gridClassname=" grid gap-5"/>
                     <div className="flex justify-end gap-6 mt-10">
-                        <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded hover:cursor-pointer">Simpan</button>
+                        <Button title="Batal" onClick={reset} variant="delete"/>
+                        <Button title="Simpan" type="submit" variant="submit"/>
                     </div> 
                 </form>
             </div>

@@ -14,6 +14,7 @@ export default function BarcodeProductPage() {
     const handleBarcodeResult = (result : {status: number; data: Product; barcode: string}) => {
         setScannedBarcode(result.barcode);
         if (result.status === 200 || result.status === 201) {
+            // @ts-ignore
             setProductData(result.data.data!);
             setflowStep("qty");
         } else if (result.status === 404) {
@@ -25,12 +26,12 @@ export default function BarcodeProductPage() {
     }
 
     return (
-        <div>
-            <LayoutComponent>
-                {flowStep === "scanner" && <ScannerProductPage onResult={handleBarcodeResult}/>}
-                {flowStep === "qty" && productData && <UpdateQtyProductPage product={productData} onBack={() => setflowStep("scanner")}/>}
-                {flowStep === "add" && scannedBarcode && <AddProductPageBarcode defaultBarcode={scannedBarcode} onBack={() => setflowStep("scanner")}/>}
+            <LayoutComponent title={" "} subTitle={" Home / Scanner "}>
+                <div className="px-14 py-10">
+                        {flowStep === "scanner" && <ScannerProductPage onResult={handleBarcodeResult}/>}
+                        {flowStep === "qty" && productData && <UpdateQtyProductPage product={productData} onBack={() => setflowStep("scanner")}/>}
+                        {flowStep === "add" && scannedBarcode && <AddProductPageBarcode defaultBarcode={scannedBarcode} onBack={() => setflowStep("scanner")}/>}
+                </div>
             </LayoutComponent>
-        </div>
     );
 }
