@@ -6,17 +6,19 @@ import { barcodeImage } from "@/app/components/items/image";
 import { useSearchBarcodeProduct } from "../../../../../lib/calledAPI/service/serviceApiProduct";
 import Image from "next/image";
 import Button from "@/app/components/items/button";
+import { useSession } from "next-auth/react";
 
 export default function ScannerProductPage({onResult}: { onResult: (result:any) => void}) {
     const {register, handleSubmit, reset, setValue, control, formState: {errors}} = useForm<Barcode>();
-    const mutationInsertBarcode = useSearchBarcodeProduct();
+    const {data : session} = useSession();
+    const mutationInsertBarcode = useSearchBarcodeProduct(session?.user?.role);
 
 
     const onSubmit = async (barcode : Barcode)=>{
-        console.log("barcode yang masuk : ", barcode);
+        // console.log("barcode yang masuk : ", barcode);
         try {
             const response = await mutationInsertBarcode.mutateAsync(barcode);
-            console.log("response barcode : ", response);
+            // console.log("response barcode : ", response);
             onResult({
                 status: response.status,
                 data: response.data, 
@@ -25,7 +27,6 @@ export default function ScannerProductPage({onResult}: { onResult: (result:any) 
             })
             
         } catch (error) {
-            console.error("Error inserting product:", error);
             toast.error("Terjadi kesalahan silahkan coba lagi");
         }
     }

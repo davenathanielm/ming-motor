@@ -3,9 +3,10 @@ import React, { useState, useEffect } from "react";
 interface currencyInputProps {
     value: number;
     onChange: (value: number) => void;
+    readOnly?: boolean;
 }
 
-const CurrencyInput : React.FC<currencyInputProps> = ({value, onChange}) => {
+const CurrencyInput : React.FC<currencyInputProps> = ({value, onChange, readOnly = false}) => {
     const[inputValue, setInputValue] = useState<string>(value.toString());
     const[isFocused, setIsFocused] = useState<boolean>(false);
 
@@ -58,6 +59,7 @@ const CurrencyInput : React.FC<currencyInputProps> = ({value, onChange}) => {
                 onChange={handleChange}
                 onBlur={handleBlur}
                 onFocus={handleFocus}
+                readOnly= {readOnly}
                 className="w-full p-2 rounded-xl bg-gray-100 border-1 border-gray-300 text-sm"
                 placeholder="0.00"
             />

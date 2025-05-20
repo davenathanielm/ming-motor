@@ -30,8 +30,13 @@ export type UpdateQtyData = {
     hpp: number;
 }
 
-export async function getAllProduct(): Promise<Product[]> {
+export async function getAllProductByOwner(): Promise<Product[]> {
     const result = (await queryDatabase("SELECT * FROM product WHERE deleted_at IS NULL")) as Product[]
+    return result;
+}
+
+export async function getAllProduct(): Promise<Product[]> {
+    const result = (await queryDatabase("SELECT id_product, name, qty, brand, selling_price, barcode, description , image, status, id_category, created_at, updated_at , deleted_at FROM `product` WHERE deleted_at IS NULL")) as Product[]
     return result;
 }
 
@@ -41,15 +46,30 @@ export async function getCategoryByProduct() : Promise<{category_name : string}[
     return result;
 }
 
-export async function getProductById(id:number) : Promise<Product | null>{
+export async function getProductByIdOwner(id:number) : Promise<Product | null>{
     const result = (await queryDatabase("SELECT * FROM product WHERE id_product = ?", [id]  
     )) as RowDataPacket;
     return result.length > 0 ? (result[0] as Product):null;
 }
 
-export async function searchBarcodeProduct(barcode : string): Promise<Product | null>{
+export async function getProductById(id:number) : Promise<Product | null>{
+    const result = (await queryDatabase("SELECT id_product, name, qty, brand, selling_price, barcode, description , image, status, id_category, created_at, updated_at , deleted_at FROM `product` WHERE deleted_at IS NULL and id_product = ?;", [id]  
+    )) as RowDataPacket;
+    return result.length > 0 ? (result[0] as Product):null;
+}
+
+
+export async function searchBarcodeProductByOwner(barcode : string): Promise<Product | null>{
     const result = (await queryDatabase(
         "SELECT * FROM product WHERE barcode = ?",
+         [barcode]  
+    )) as RowDataPacket;
+
+    return result.length > 0 ? (result[0] as Product):null;
+}
+export async function searchBarcodeProduct(barcode : string): Promise<Product | null>{
+    const result = (await queryDatabase(
+        "SELECT id_product, name, qty, brand, selling_price, barcode, description , image, status, id_category, created_at, updated_at , deleted_at FROM product WHERE barcode = ?",
          [barcode]  
     )) as RowDataPacket;
 
@@ -65,6 +85,14 @@ export async function insertProduct(product: Product): Promise<number> {
 }
 
 export async function updateProduct(id:number, product: Product) : Promise<boolean>{
+    const { name, qty, brand, hpp, selling_price,barcode,description,image, status,id_category} = product;
+    const result = (await queryDatabase("UPDATE product SET name = ?, qty = ?, brand = ? , selling_price = ?, barcode = ?, description = ? , image = ?, status = ?, id_category = ? WHERE id_product = ?" , 
+        [name, qty, brand, selling_price,barcode,description,image, status,id_category , id]
+    ))as ResultSetHeader;
+    return result.affectedRows > 0;
+}
+
+export async function updateProductOwner(id:number, product: Product) : Promise<boolean>{
     const { name, qty, brand, hpp, selling_price,barcode,description,image, status,id_category} = product;
     const result = (await queryDatabase("UPDATE product SET name = ?, qty = ?, brand = ? , hpp = ?, selling_price = ?, barcode = ?, description = ? , image = ?, status = ?, id_category = ? WHERE id_product = ?" , 
         [name, qty, brand, hpp, selling_price,barcode,description,image, status,id_category , id]

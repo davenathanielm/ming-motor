@@ -11,12 +11,15 @@ import { toast } from "sonner";
 import { useUpdateQtyProduct } from "../../../../../lib/calledAPI/service/serviceApiProduct";
 import { formatDate } from "@/app/components/items/date";
 import { currencyFormat } from "@/app/components/items/date";
+import { useSession } from "next-auth/react";
+import { displayPrice } from "@/app/utils/roleFilter";
 
 export default function UpdateQtyProductPage({product, onBack} : {product : Product; onBack : () => void}){
 const {register, handleSubmit, reset, setValue, control, formState: {errors}} = useForm<Product>();    
     const{barcode , name, selling_price,hpp,qty ,description,id_product} = product
     const {data : supplierData} = useFetchSuplier();
     const {data : inventoryData} = useFetchInventory();
+    const {data : session} = useSession();
     const mutationUpdateQtyProduct = useUpdateQtyProduct(id_product);
     const profit = selling_price - hpp;
 
@@ -79,7 +82,7 @@ const {register, handleSubmit, reset, setValue, control, formState: {errors}} = 
                 {/* Product Info */}
                     <div className="flex flex-col gap-4 flex-1 w-full text-black">
                         {/* Info */}    
-                        <div className="border border-gray-300 rounded-xl p-4 ">
+                        <div className="border bg-white shadow-md rounded-xl p-4 ">
                             <h2 className="font-semibold mb-2 text-lg">Informasi Produk</h2>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4 mt-6 text-sm">
                                     <div>
@@ -92,7 +95,8 @@ const {register, handleSubmit, reset, setValue, control, formState: {errors}} = 
                                     </div>
                                     <div>
                                         <p className="text-gray-700">Harga Beli</p>
-                                        <p className="font-semibold">{currencyFormat(hpp)}</p>
+                                        {/* @ts-ignore */}
+                                        <p className="font-semibold">{displayPrice(session?.user?.role , hpp)}</p>
                                     </div>
                                     <div>
                                         <p className="text-gray-700">Harga Jual</p>
@@ -100,7 +104,8 @@ const {register, handleSubmit, reset, setValue, control, formState: {errors}} = 
                                     </div>
                                     <div>
                                         <p className="text-gray-700">Keuntungan</p>
-                                        <p className="font-semibold text-green-600">{currencyFormat(profit)}</p>
+                                        {/* @ts-ignore */}
+                                        <p className="font-semibold text-green-700">{displayPrice(session?.user?.role , profit)}</p>
                                     </div>
                                     <div>
                                         <p className="text-gray-700">Stok</p>
@@ -110,16 +115,16 @@ const {register, handleSubmit, reset, setValue, control, formState: {errors}} = 
                         </div>
 
                         {/* Description */}
-                        <div className="border border-gray-300 rounded-xl p-4 ">
+                        <div className="border bg-white shadow-md rounded-xl p-4 ">
                             <h2 className="font-semibold mb-1">Deskripsi</h2>
-                            <p className="text-sm text-gray-700 w-full h-18">{description}</p>
+                            <p className="text-sm text-gray-700 w-full h-16">{description}</p>
                         </div>
                     </div>
 
                 {/* Right Sidebar (form section) */}
                 <div className="flex flex-col gap-4 w-full lg:w-80 text-black">
                     {/* Tanggal Info */}
-                    <div className="border border-gray-300 rounded-xl p-4 ">
+                    <div className="border bg-white shadow-md rounded-xl p-4 ">
                         <p className="font-semibold">Informasi Tambahan</p>
                         <div className="grid grid-cols-1 gap-2 text-sm mt-2">
                             <p className="text-gray-700">
@@ -132,11 +137,12 @@ const {register, handleSubmit, reset, setValue, control, formState: {errors}} = 
                     </div>
 
                     {/* Form */}
-                    <div className="border border-gray-300 rounded-xl p-4 ">
+                    <div className="bord`er bg-white shadow-md rounded-xl p-4 ">
                     <p className="font-semibold mb-2">Form input</p>
                     <form ref={formRef} onSubmit={handleSubmit(onSubmit)}>
                         <div className="flex justify-center items-center gap-2 my-4">
                         <FormRenderer<Product>
+                            // @ts-ignore
                             formData={updatedFormData}
                             register={register}
                             control={control}

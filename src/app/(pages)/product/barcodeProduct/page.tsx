@@ -5,11 +5,13 @@ import UpdateQtyProductPage from "./updateQtyProduct";
 import AddProductPageBarcode from "./addProductPage";
 import LayoutComponent from "@/app/components/layout/layoutComponent";
 import { Product } from "../../../../../models/productModel/productModel";
+import { useSession } from "next-auth/react";
 
 export default function BarcodeProductPage() {
     const [flowStep, setflowStep] = useState<"scanner"|"qty"|"add">("scanner");
     const[productData, setProductData] = useState<Product|null> (null);
     const[scannedBarcode, setScannedBarcode] = useState<string | null>(null);
+    const {data:session} = useSession();
     
     const handleBarcodeResult = (result : {status: number; data: Product; barcode: string}) => {
         setScannedBarcode(result.barcode);
@@ -30,7 +32,7 @@ export default function BarcodeProductPage() {
                 <div className="px-14 py-10">
                         {flowStep === "scanner" && <ScannerProductPage onResult={handleBarcodeResult}/>}
                         {flowStep === "qty" && productData && <UpdateQtyProductPage product={productData} onBack={() => setflowStep("scanner")}/>}
-                        {flowStep === "add" && scannedBarcode && <AddProductPageBarcode defaultBarcode={scannedBarcode} onBack={() => setflowStep("scanner")}/>}
+                        {flowStep === "add" && scannedBarcode && <AddProductPageBarcode defaultBarcode={scannedBarcode} onBack={() => setflowStep("scanner")} role = {session?.user?.role}/>}
                 </div>
             </LayoutComponent>
     );

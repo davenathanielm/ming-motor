@@ -15,6 +15,8 @@
   import { useUpdateProduct } from "../../../../../../lib/calledAPI/service/serviceApiProduct";
   import { useRouter } from "next/navigation";
   import { toast } from "sonner";
+  import { useSession } from "next-auth/react";
+  import Button from "@/app/components/items/button";
 
   export default function UpdateProductPage() {
     const params = useParams();
@@ -22,8 +24,10 @@
     const id = typeof params?.id === "string" ? params.id : undefined;
     
     // hooks should always be called and hook posisition must be at the top of the component
+    const {data:session} = useSession();
     const {register, handleSubmit, reset, setValue,control, formState: {errors}} = useForm<Product>();
-    const {data : productData,isLoading : isLoadingProduct,isError : isErrorProduct } = useFetchProductById(id);
+    // @ts-ignore
+    const {data : productData,isLoading : isLoadingProduct,isError : isErrorProduct } = useFetchProductById(id , session?.user.role);
     const {data : categoryData, isLoading : isLoadingCategory, isError : isErrorCategory} = useFetchCategoryProduct();
     const {data : supplierData, isLoading : isLoadingSupplier, isError : isErrorSupplier} = useFetchSuplier();
     const {data : inventoryData, isLoading : isLoadingInventory, isError : isErrorInventory} = useFetchInventory();
@@ -44,11 +48,22 @@
     })) || []; 
     
     const updatedForm = useMemo(()=>{
-      return injectMultipleOptionsForm(formDataProduct, [
+      // @ts-ignore
+      const formWithOption =  injectMultipleOptionsForm(formDataProduct, [
         { name: "id_category", options : categories},
         {name : "id_supplier", options : suppliers}, 
         {name : "id_inventory", options : inventory},
       ]);
+
+      return formWithOption.map((field => {
+        if(field.name === "barcode" && productData?.data.barcode){
+          return {...field, readOnly : true};
+        }
+        if(field.name === "hpp" && session?.user?.role !== "owner"){
+          return {...field, readOnly : true};
+        }
+        return field;
+      }))
     }, [categories, suppliers, inventory]); // this function will run if one of these dependecies data changes
      
     const oldProduct = productData?.data;
@@ -60,7 +75,7 @@
       }
     },[oldProduct, reset]);
 
-    const mutationUpdateProduct = useUpdateProduct(id);
+    const mutationUpdateProduct = useUpdateProduct(id , session?.user?.role);
 
    useEffect(()=>{
     if (isErrorProduct) toast.error("Gagal memuat data produk.");
@@ -83,7 +98,7 @@
     const onSubmit = (data: Product) => {
     mutationUpdateProduct.mutate(data, {
       onSuccess: () => {
-        router.push(`/product?toast=update-success&name=${encodeURIComponent(data.name)}`);
+        router.push(`/product/productPage`);
       },
     });
   };
@@ -91,11 +106,19 @@
 
     return (
       <LayoutComponent>
-        <div className="text-black">
-          <h1 className="text-2xl font-bold text-black mb-3">Perbarui Produk</h1>
-          <div className="bg-white rounded-xl shadow-md p-8">
+        <div className="text-black px-14 py-10">
+          <header className="mb-3">
+              <h1 className="text-black font-bold text-2xl">Perbarui Data Produk</h1>
+              <p className="text-gray-500">Silahkan mengisi form data produk untuk perbarui data</p>
+          </header>
+          {/* Button */}
+          <div className="flex justify-end">
+                <Button title="perbarui status" href="/product/barcodeProduct" />
+          </div>
+          <div className="bg-white/85 rounded-xl shadow-md p-8 mt-3">
             <form onSubmit={handleSubmit(onSubmit)}>
                 <FormRenderer<Product>
+                  // @ts-ignore
                     formData={updatedForm}
                     register={register}
                     errors={errors}
@@ -105,16 +128,8 @@
 
                 {/* Submit Button */}
                 <div className="flex justify-end gap-6 mt-12">
-                    <button
-                        type="reset"
-                        className="bg-red-600 font-bold text-white px-6 py-2 rounded-lg">
-                        Batal
-                    </button>
-                    <button
-                        type="submit"
-                        className=" bg-green-600 font-bold text-white px-6 py-2  rounded-lg">
-                        Kirim
-                    </button>
+                    <Button title="Batal" onClick={reset} variant="delete"/>
+                    <Button title="Simpan" type="submit" variant="submit"/>
                 </div>
             </form>
           </div>

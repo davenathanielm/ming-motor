@@ -17,7 +17,7 @@ export const formDataProduct = [
         label :"Nama Produk",
         type :"text",
         placeholder :"text",
-        spanClass :"col-span-1",
+        spanClass :"col-span-2",
         required : true,
     },
     
@@ -70,14 +70,14 @@ export const formDataProduct = [
     //     options : []
     // },
 
-    {
-        name :"status",
-        label :"Status",
-        type :"radio",
-        spanClass :"col-span-1 ",
-        options : ["Terima", "Tolak"],
-        required : true,
-    },
+    // {
+    //     name :"status",
+    //     label :"Status",
+    //     type :"radio",
+    //     spanClass :"col-span-1 ",
+    //     options : ["Terima", "Tolak"],
+    //     required : true,
+    // },
     
    
     {
@@ -435,7 +435,7 @@ export const getStatusColor = (status:string) => {
         case "Tolak":
             return "bg-red-300 text-red-900 font-bold p-2 rounded-2xl text-center";
         default:
-            return "bg-gray-300 text-gray-900 font-bold p-2 rounded-2xl text-center";
+            return "bg-yellow-300 text-yellow-900 font-bold p-2 rounded-2xl text-center";
     }
 };
 

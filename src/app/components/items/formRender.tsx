@@ -18,14 +18,14 @@ interface Field {
   spanClass?: string;
   required?: boolean;
   options?: SelectOption[] | string[];
-  customComponent?: ComponentType<{
-    value: number;
-    onChange: (value: number) => void;
-  }>;
   value?: any;
   readOnly?: boolean;
   validate?: (value: any, watch?: UseFormWatch<any>) => string | boolean;
   validateWithWatchField?: string; // NEW
+  customComponent?: ComponentType<{
+    value: number;
+    onChange: (value: number) => void;
+  }>;
 }
 
 interface Props<T extends FieldValues> {
@@ -128,6 +128,7 @@ export default function FormRenderer<T extends FieldValues>({
                   <item.customComponent
                     value={field.value || 0}
                     onChange={item.readOnly ? () => {} : field.onChange}
+                    readOnly={item.readOnly}
                   />
                 )}
               />

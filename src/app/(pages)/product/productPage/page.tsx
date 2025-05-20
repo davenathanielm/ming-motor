@@ -11,18 +11,20 @@ import { useDeleteProduct } from "../../../../../lib/calledAPI/service/serviceAp
 import Modal from "@/app/components/modal/modal";
 import ProductDetailCard from "@/app/components/card/product/productDetailCard";
 import { Product } from "../../../../../models/productModel/productModel";
-import { set } from "react-hook-form";
 import { useProductAlert } from "@/app/utils/alertUtils";
 import { toast } from "sonner";
 import Button from "@/app/components/items/button";
+import { useSession } from "next-auth/react";
 
 export default function ProductPage() {
 
    useProductAlert();
 
+  const {data: session} = useSession();
+  //  @ts-ignore
+  const {data} = useFetchProducts(session?.user.role);
   const [search, setSearch] = useState("");
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-  const {data} = useFetchProducts();
   const products = data?.data || [];
   const router = useRouter();
   const { mutate: deleteProductById } = useDeleteProduct();
@@ -33,6 +35,7 @@ export default function ProductPage() {
     [item.name, item.brand, item.barcode]
       .some((field) => field.toLowerCase().includes(search.toLowerCase()))
   );
+  console.log("ini data yang diambil" ,filteredData);
 
   const handleUpdate = (id: string) => {
     router.push(`/product/updateProduct/${id}`);
@@ -53,7 +56,7 @@ export default function ProductPage() {
   return (
     <LayoutComponent subTitle={"Product / Product List"}>
       <div className="px-14 py-10">
-        <div className="flex flex-col  mb-3 px-2">
+        <div className="flex flex-col mb-3 px-2">
           <header>
               <h1 className="text-black font-bold text-2xl">Daftar Produk</h1>
               <p className="text-gray-500">List produk dalam toko</p>
@@ -67,20 +70,22 @@ export default function ProductPage() {
 
         <div className="rounded-xl shadow-md overflow-hidden text-black bg-white">
           <DataTable
-            columns={Productcolumns(handleUpdate,handleDelete,handleDetail)}
+          // @ts-ignore
+            columns={Productcolumns(handleUpdate,handleDelete,handleDetail , session?.user.role)}
             data={filteredData}
             pagination
             highlightOnHover
             striped
             persistTableHead
             defaultSortFieldId={1}
+          // @ts-ignore
             customStyles={customStyles}
           />
         </div>
 
         {/* check if selectedProduct = null (falsy) return isOpen false or selectedProduct = Product (thruthy) return isOpen true */}
         <Modal isOpen={!!selectedProduct} onClose={() => setSelectedProduct(null)}>
-          {selectedProduct && <ProductDetailCard product={selectedProduct} />}
+          {selectedProduct && <ProductDetailCard product={selectedProduct} role = {session?.user?.role} />}
         </Modal>
       </div>
     </LayoutComponent>

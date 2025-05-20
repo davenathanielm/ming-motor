@@ -3,13 +3,15 @@ import { TableColumn } from "react-data-table-component";
 import { getStatusColor } from "../items/formTemplate";
 import { formatCurrency } from "./customDesignTable";
 import { productIcon } from "../items/image";
+import { roleFilterOwner } from "@/app/utils/roleFilter";
 import Image from "next/image";
 
 // Columns definition
 export const Productcolumns = (
   onUpdate: (id: any) => void,
   onDelete: (id: any, name: string) => void,
-  onDetail: (product: Product) => void
+  onDetail: (product: Product) => void,
+  role : string
 ): TableColumn<Product>[] => [
   {
     name: "No",
@@ -37,9 +39,12 @@ export const Productcolumns = (
   },
   {
     name: "HPP",
-    cell: (row) => formatCurrency(row.hpp),
     selector: (row) => Number(row.hpp),
-    sortable: true
+    sortable: true,
+    cell: (row) => {
+      if(!roleFilterOwner(role)) return "***************";
+      return formatCurrency(row.hpp)
+    }
   },
   {
     name: "Harga Jual",
@@ -57,7 +62,7 @@ export const Productcolumns = (
     selector: (row) => row.status,
     sortable: true,
     cell: (row) => (
-      <div className={getStatusColor(row.status)}>{row.status}</div>
+      <div className={getStatusColor(row.status)}>{row.status || "Menunggu"}</div>
     )
   },
   {

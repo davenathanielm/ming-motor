@@ -2,12 +2,15 @@ import { Product } from "../../../../../models/productModel/productModel";
 import { currencyFormat, formatDate } from "../../items/date";
 import { Card } from "../cardComponent";
 import { Item } from "../cardComponent";
+import { roleFilterOwner } from "@/app/utils/roleFilter";
 
 type Props = {
   product: Product;
+  role?: string;
 };
 
-export default function ProductDetailCard({ product }: Props) {
+export default function ProductDetailCard({ product , role }: Props) {
+  console.log("ini product detail card", role);
   return (
     <div className="text-black">
       {/* <h2 className="text-xl font-bold mb-4">Detail Produk</h2>
@@ -37,7 +40,8 @@ export default function ProductDetailCard({ product }: Props) {
 
           {/* Price Info */}
           <Card title="Harga" color="text-green-500">
-            <Item label="HPP" value={currencyFormat(product.hpp) ?? "Rp0"} />
+            {/* <Item label="HPP" value={currencyFormat(product.hpp) ?? "Rp0"} /> */}
+            <Item label="HPP" value={roleFilterOwner(role)? currencyFormat(product.hpp) : "***************"} />
             <Item label="Harga Jual" value={currencyFormat(product.selling_price) ?? "Rp0"} />
           </Card>
 

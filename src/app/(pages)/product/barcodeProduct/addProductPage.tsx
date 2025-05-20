@@ -12,8 +12,9 @@ import { injectOptionForm } from "@/app/utils/formUtils";
 import { injectMultipleOptionsForm } from "@/app/utils/formUtils";
 import { useInsertProduct } from "../../../../../lib/calledAPI/service/serviceApiProduct";
 import { toast } from "sonner";
+import Button from "@/app/components/items/button";
 
-export default function AddProductPageBarcode({defaultBarcode, onBack}: {defaultBarcode : string; onBack : () => void;}){
+export default function AddProductPageBarcode({defaultBarcode, onBack, role}: {defaultBarcode : string; onBack : () => void; role : string;}){
         const [isScanning, setIsScanning] = useState(true);
         const inputRef = useRef<HTMLInputElement>(null);
         const {register, handleSubmit, reset, setValue, control, formState: {errors}} = useForm<Product>();
@@ -39,8 +40,6 @@ export default function AddProductPageBarcode({defaultBarcode, onBack}: {default
             value: item.id_inventory,
         })) || [];
     
-        console.log("supplier terbaru :", supplier);
-    
         const updatedFormData = useMemo(() => {
             const formWithOptions = injectMultipleOptionsForm(formDataProduct, [
                 { name: "id_category", options: categories },
@@ -53,10 +52,12 @@ export default function AddProductPageBarcode({defaultBarcode, onBack}: {default
                 if (field.name === "barcode" && defaultBarcode) {
                     return { ...field, readOnly: true };
                 }
+                if (field.name === "hpp" && role !== "owner") {
+                    return { ...field, readOnly: true };
+                }
                 return field;
             });
         }, [categories, supplier, inventory, defaultBarcode]);
-        console.log("Updated Form Data:", updatedFormData);
         
       
         const mutationInsertProduct = useInsertProduct();
@@ -89,15 +90,20 @@ export default function AddProductPageBarcode({defaultBarcode, onBack}: {default
     
         return(
             <div>
-                <div className="bg-white rounded-xl shadow-md p-8">
-                    <header>
-                        <h1 className="text-black font-bold text-2xl">Tambah Produk</h1>
-                        <p className="text-gray-500">Preferensi Akun dan Pengaturan</p>
-                    </header>
+                <header className="mb-3">
+                    <h1 className="text-black font-bold text-2xl">Tambah Data Produk</h1>
+                    <p className="text-gray-500">Silahkan mengisi form data produk untuk menambah data</p>
+                </header>
+                {/* Button */}
+                <div className="flex justify-end">
+                    <Button title="perbarui status" href="/product/barcodeProduct" />
+                </div>
+                <div className="bg-white/85 rounded-xl shadow-md p-8 mt-3">
                     <form onSubmit={handleSubmit(onSubmit)} className="text-black">
                         <div className="">
                             {/* because generic value T then it is become product */}
                             <FormRenderer<Product>
+                            // @ts-ignore
                                 formData = {updatedFormData}
                                 register = {register}
                                 control={control}
@@ -106,25 +112,23 @@ export default function AddProductPageBarcode({defaultBarcode, onBack}: {default
                             />
                         </div>
                         <span className="">
-                            <button
+                            {/* <button
                                 type="button"
                                 onClick={onBack}
                                 className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 mt-6"
                             >
                                 Kembali
-                            </button>
+                            </button> */}
                             {/* Submit Button */}
                             <div className="flex justify-end gap-6 mt-12">
-                                <button
-                                    type="reset"
-                                    className="bg-red-600 font-bold text-white px-6 py-2 rounded-lg">
-                                    Batal
-                                </button>
-                                <button
+                                <Button title="Batal" onClick={reset} variant="delete"/>
+
+                                {/* <button
                                     type="submit"
                                     className=" bg-green-600 font-bold text-white px-6 py-2  rounded-lg">
                                     Kirim
-                                </button>
+                                </button> */}
+                                <Button title="Simpan" type="submit" variant="submit"/>
                             </div>
                         </span>
                     </form>
