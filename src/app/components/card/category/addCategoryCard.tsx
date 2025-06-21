@@ -39,6 +39,7 @@ export default function AddCategoryPage() {
                         gridClassname=" grid gap-5"/>
 
                     <div className="flex justify-end gap-6 mt-10">
+                        <Button title="Batal" type= "reset" variant="delete"/>
                         <Button title="Simpan" type="submit" variant="submit"/>
                     </div> 
                 </form>

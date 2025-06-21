@@ -20,7 +20,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             const {name, qty,brand,hpp,selling_price,barcode, description,image,status,id_category,id_supplier,id_inventory} = req.body;
             // @ts-ignore
             const product : Product = {name, qty,brand,hpp,selling_price,barcode, description,image,status,id_category};
-            const result = await updateProductService(productId,product,id_supplier,id_inventory,role as string);
+            const result = await updateProductService(productId,product,role as string);
             return res.status(result.status).json({success: result.success, message: result.message});
         }
 

@@ -32,11 +32,21 @@ export const Productcolumns = (
     )
   },
   {
+    name: "Category",
+    // @ts-ignore
+    selector: (row) => row.category_name,
+    sortable: true,
+    cell: (row) => (
+      <div className="text-center whitespace-normal break-words">{row.category_name}</div>
+    )
+  },
+  {
     name: "Jumlah",
     selector: (row) => row.qty,
     sortable: true,
     minWidth: "50px"
   },
+
   {
     name: "HPP",
     selector: (row) => Number(row.hpp),
@@ -46,6 +56,14 @@ export const Productcolumns = (
       return formatCurrency(row.hpp)
     }
   },
+
+  // {
+  //   name: "HPP",
+  //   cell: (row) => formatCurrency(row.hpp),
+  //   selector: (row) => Number(row.hpp),
+  //   sortable: true
+  // },
+
   {
     name: "Harga Jual",
     cell: (row) => formatCurrency(row.selling_price),

@@ -4,6 +4,8 @@ import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
 import { profilePicture } from "../items/image";
+import Button from "../items/button";
+import Link from "next/link";
 
 type Props = {
     title: any,
@@ -28,19 +30,25 @@ export default function Topbar({title,subTitle , username = "Guest" ,onToggleMen
             <header className="">
                 <h1 className="text-black font-bold text-2xl ">{title ?? ""}</h1>
             </header>
-            <p className="text-customBackgroundButton text-sm  font-semibold">{subTitle ?? ""}</p>
+            <p className="text-customBackgroundButton text-sm font-semibold">{subTitle ?? ""}</p>
         
             {/* Notification + profile */}
             <div className="flex ml-auto items-center">
-
-                <div className=" mr-6">
+                
+                <div className="mr-10 text-sm">
+                    <Link href={"/displayApps"}>
+                        <Button title="Tampil Menu" />
+                    </Link>
+                </div>
+                
+                {/* <div className=" mr-6">
                      <FontAwesomeIcon
                         icon={faBell}
                         className="text-customBackgroundButton text-xl hover:cursor-pointer hover:text-customBackgroundButton/70"
                     />
-                </div>
+                </div> */}
 
-                <div className="flex items-center p-2 border border-customBackgroundButton rounded-lg">
+                <div className="flex flex-col  p-2  border-customBackgroundButton rounded-lg">
                     {/* <div className="border-2 rounded-full hover:shadow-lg">
                         <Image
                             src={profilePicture.image}
@@ -48,7 +56,9 @@ export default function Topbar({title,subTitle , username = "Guest" ,onToggleMen
                             className="rounded-full w-8"
                         />
                     </div> */}
-                    <p className=" text-customBackgroundButton text-sm font-semibold ">{username}</p> 
+                   
+                    <p className="text-customBackgroundButton text-sm font-semibold">{username}</p> 
+                    {/* <p className="text-gray-600 text-sm font-semibold">owner</p>  */}
                 </div>
             </div>
         </div>

@@ -113,21 +113,81 @@ export const formDataProduct = [
     },
 ]
 
+export const formUpdateProduct = [
+    {
+        name :"barcode",
+        label :"Barcode",
+        type :"text",
+        placeholder :"scan barcode...",
+        spanClass :"col-span-2",
+        required : true,
+    },
+  
+    {
+        name :"name",
+        label :"Nama Produk",
+        type :"text",
+        placeholder :"text",
+        spanClass :"col-span-2",
+        required : true,
+    },
+    
+    {
+        name :"id_category",  //THIS must match your API key
+        label :"Kategori",
+        type :"select",
+        placeholder :"Select Category",
+        spanClass :"col-span-2",
+        options: [],
+        required : true,
+    },
+    
+    {
+        name :"hpp",
+        label :"Harga Pokok Penjualan",
+        type :"custom",
+        customComponent: CurrencyInput,
+        placeholder :"angka",
+        spanClass :"col-span-1",
+        reqired : false,
+    },
+    
+    {
+        name :"selling_price",
+        label :"Harga Jual",
+        type :"custom",
+        customComponent: CurrencyInput,
+        placeholder :"angka",
+        spanClass :"col-span-1",
+        required : true,
+    },
+
+    {
+        name :"description",
+        label :"Deskripsi Produk",
+        type :"text",
+        placeholder :"deskripsi produk  ",
+        spanClass :"col-span-2",
+        reqired : false,
+
+    },
+]
+
 export const formDataUpdateProduct = [
     {
         name :"id_supplier",  //THIS must match your API key
         label :"Supplier",
         type :"select",
-        placeholder :"Select Supplier",
+        placeholder :"pilih supplier",
         spanClass :"col-span-1",
         options: [],
         required : true,
     },
     {
         name :"id_inventory",  //THIS must match your API key
-        label :"Inventory",
+        label :"Gudang",
         type :"select",
-        placeholder :"Select Inventory",
+        placeholder :"pilih gudang",
         spanClass :"col-span-1",
         options: [],
         required : true,
@@ -378,7 +438,7 @@ export const formDataEmployee= [
         label :"Nama Lengkap",
         type :"text",
         placeholder : "masukkan nama lengkap anda",
-        spanClass :"col-span-1",
+        spanClass :"col-span-2",
         required : true,
     },
 
@@ -396,7 +456,7 @@ export const formDataEmployee= [
         label :"Alamat Lengkap",
         type :"text",
         placeholder : "masukkan alamat lengkap pegawai",
-        spanClass :"col-span-2",
+        spanClass :"col-span-1",
         required : true,
     },
 
@@ -420,19 +480,41 @@ export const formDataEmployee= [
     },
 ]
 
-// export const formDataDisplayQty = [
-//     {
-//         title : "Product",
-//         value : 
-//     }
-// ] 
+export const formDataUpdateStatus = [
+     {
+        name :"status",
+        label :"Status",
+        type :"select",
+        spanClass :"col-span-1 ",
+        options : ["Diterima", "Ditolak"],
+        required : true,
+    },
+]
+
+export const formBarcodeTransaction = [
+     {
+        name :"transactionBarcode",
+        label :"Barcode",
+        type :"combobox",
+        spanClass :"col-span-5 ",
+        required : true,
+        options : [],
+    },
+    {
+        name :"qty",
+        label :"Qty",
+        type :"number",
+        spanClass :"col-span-1 ",
+        required : true,
+    },
+] 
 
 
 export const getStatusColor = (status:string) => {
     switch (status) {
-        case "Terima":
+        case "Disetujui":
             return "bg-green-300 text-green-900 font-bold p-2 rounded-2xl text-center";
-        case "Tolak":
+        case "Ditolak":
             return "bg-red-300 text-red-900 font-bold p-2 rounded-2xl text-center";
         default:
             return "bg-yellow-300 text-yellow-900 font-bold p-2 rounded-2xl text-center";

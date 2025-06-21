@@ -96,7 +96,7 @@ export default function AddProductPageBarcode({defaultBarcode, onBack, role}: {d
                 </header>
                 {/* Button */}
                 <div className="flex justify-end">
-                    <Button title="perbarui status" href="/product/barcodeProduct" />
+                    {/* <Button title="perbarui status" href="/product/barcodeProduct" /> */}
                 </div>
                 <div className="bg-white/85 rounded-xl shadow-md p-8 mt-3">
                     <form onSubmit={handleSubmit(onSubmit)} className="text-black">

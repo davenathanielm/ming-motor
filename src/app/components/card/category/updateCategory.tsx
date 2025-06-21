@@ -37,10 +37,11 @@ export default function UpdateCategoryPage ({category, onClose}: Props)  {
 
     return (
         <div className="text-black">
-            <h2 className="text-xl font-bold mb-4">Update Kategori</h2>
+            <h2 className="text-xl font-bold mb-4">Perbarui Data Kategori</h2>
             <div className="mt-6">
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <FormRenderer<Category> 
+                    // @ts-ignore
                         formData={formDataCategory} 
                         register={register} 
                         control={control} 
@@ -49,6 +50,7 @@ export default function UpdateCategoryPage ({category, onClose}: Props)  {
                         gridClassname=" grid gap-5"/>
 
                     <div className="flex justify-end gap-6 mt-10">
+                        <Button title="Batal" type= "reset" variant="delete" onClick={onClose}/>
                         <Button title="Simpan" type="submit" variant="submit"/>
                     </div> 
                 </form>

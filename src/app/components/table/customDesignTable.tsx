@@ -9,9 +9,10 @@ export const customStyles = {
     headCells: {
       style: {
         fontWeight: "bold",
+        // backgroundColor: "#eff1f5",
         fontSize: "13px",
         justifyContent: "center",
-       
+       borderTop: "1px solid #E5E7EB",
       },
     },
     cells: {

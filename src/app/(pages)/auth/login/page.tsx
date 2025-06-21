@@ -37,7 +37,7 @@ const onSubmit = async (formData: User) => {
     console.log("res nya", res);
     if (res?.ok) {
       toast.success("Logged in successfully!");
-      router.push("/dashboard");
+      router.push("/displayApps");
     } else if (res?.status === 401) {
       toast.error("Username atau password salah");
     } else {
@@ -76,10 +76,10 @@ const onSubmit = async (formData: User) => {
             >
               {loading ? "Logging in..." : "Masuk"}
             </button>
-            <div className="flex gap-1 text-sm text-gray-500 mt-4 justify-center">
+            {/* <div className="flex gap-1 text-sm text-gray-500 mt-4 justify-center">
                 <p>Belum punya akun ?</p> 
                 <a href="/auth/register" className="text-blue-500 hover:underline">Daftar disini</a>
-            </div>
+            </div> */}
           </form>
     </AuthLayout>
   );

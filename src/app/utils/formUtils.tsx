@@ -19,7 +19,7 @@ export function injectOptionForm(
     options : {label : string; value : string | number}[]
 ): FormField[]{
     return formData.map((item) => {
-        if(item.name === key && item.type === "select"){
+        if(item.name === key && item.type === "select" || item.type === "combobox") {
             return {
                 ...item,
                 options : options,
@@ -34,7 +34,7 @@ export function injectMultipleOptionsForm(
   injections: { name: string; options: SelectOption[] }[]
 ): FormField[] {
   return formData.map((field) => {
-    const injection = injections.find((inj) => inj.name === field.name && field.type === "select");
+    const injection = injections.find((inj) => inj.name === field.name && field.type === "select" || field.type === "combobox");
     if (injection) {
       return {
         ...field,

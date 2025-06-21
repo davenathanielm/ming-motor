@@ -23,7 +23,7 @@ export default function EmployeeDetailCard({ employee }: Props) {
                 </Card>
 
                 <Card title="Tanggal Bergabung" color="text-green-500">
-                    <Item label="Tanggal Bergabung" value={formatDate(employee.join_date.toString())} />
+                    <Item label="Tanggal Bergabung" value={formatDate(employee?.join_date)} />
                     <Item label="Tanggal Dibuat" value={formatDate(employee.created_at.toString())} />
                     <Item label="Tanggal Diperbarui" value={formatDate(employee.updated_at.toString())} />
                 </Card>

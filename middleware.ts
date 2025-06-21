@@ -1,11 +1,11 @@
 import { withAuth } from "next-auth/middleware";
 import { NextResponse } from "next/server";
+import { getToken } from "next-auth/jwt";
 
 export default withAuth(
   function middleware(req) {
     const { pathname } = req.nextUrl; //this is url path accessed by user
     const role = req.nextauth.token?.role; // this is the role of user from token
-
     
     const ownerOnlyPaths = ["/employee", "/summary"]; // Protect specific routes for "owner" role
 
@@ -40,6 +40,7 @@ export const config = {
     "/employee/:path*",
     "/addEmployee",
     "/summary/:path*",
+    "/auth/register/:path*",
   ],
 };
 

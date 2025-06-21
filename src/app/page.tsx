@@ -5,9 +5,10 @@ import Navbar from "./components/layout/navbar";
 import LayoutComponent from "./components/layout/layoutComponent";
 import Dashboard from "./(pages)/dashboard/page";
 import LoginPage from "./(pages)/auth/login/page";
+import DisplayAllApps from "./(pages)/displayApps/page";
 
 export default function Home() {
   return (
-      <Dashboard/>
+      <DisplayAllApps/>
   );
 }

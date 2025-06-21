@@ -29,14 +29,15 @@ export default function ProductPage() {
   const router = useRouter();
   const { mutate: deleteProductById } = useDeleteProduct();
 
+  
 
   // Filter data based on search input
   const filteredData = products.filter((item :any) =>
-    [item.name, item.brand, item.barcode]
+    [item.name || "", item.brand || "", item.barcode || ""]
       .some((field) => field.toLowerCase().includes(search.toLowerCase()))
   );
-  console.log("ini data yang diambil" ,filteredData);
-
+ 
+console.log("filteredData Produk :", filteredData);
   const handleUpdate = (id: string) => {
     router.push(`/product/updateProduct/${id}`);
   };
@@ -63,10 +64,26 @@ export default function ProductPage() {
           </header>
            
            {/* button */}
-            <div className="flex justify-end ml-auto gap-4">   
+            <div className="flex justify-end items-center ml-auto gap-4">   
               <Button title="+ Tambah Barang" href="/product/barcodeProduct" />
             </div>
         </div>
+
+        {/* <div className="flex justify-end items-center mb-2">
+          
+          <div className="flex gap-4">   
+            <Button title="+ Tambah Barang" href="/product/barcodeProduct" />
+          </div>
+
+          <input
+            type="text"
+            placeholder="Cari produk..."
+            className="border border-gray-300 rounded-lg px-3 py-2 w-1/4"
+            value={search ?? ""}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+           
+        </div> */}
 
         <div className="rounded-xl shadow-md overflow-hidden text-black bg-white">
           <DataTable
@@ -80,11 +97,22 @@ export default function ProductPage() {
             defaultSortFieldId={1}
           // @ts-ignore
             customStyles={customStyles}
+            subHeader
+            subHeaderComponent = {
+              <input
+                type="text"
+                placeholder="Cari produk..."
+                className="p-2 w-1/4 my-3 border border-gray-300 text-black rounded-lg"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+            }
           />
         </div>
 
         {/* check if selectedProduct = null (falsy) return isOpen false or selectedProduct = Product (thruthy) return isOpen true */}
         <Modal isOpen={!!selectedProduct} onClose={() => setSelectedProduct(null)}>
+          {/* @ts-ignore */}
           {selectedProduct && <ProductDetailCard product={selectedProduct} role = {session?.user?.role} />}
         </Modal>
       </div>

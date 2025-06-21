@@ -69,8 +69,8 @@ export const detailInventoryColumns = (
   
     {
         name: "Tanggal Dibuat",
-        selector: (row) =>
-            new Date(row.created_at).toLocaleDateString("id-ID")
+        selector: (row) => new Date(row.created_at).toLocaleDateString("id-ID"),
+        sortable: true
     },
     {
         name : "Action",

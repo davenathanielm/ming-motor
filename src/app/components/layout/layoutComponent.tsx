@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -50,7 +49,8 @@ const LayoutComponent = ({ children, title, subTitle }: LayoutProps) => {
               exit={{ x: "-100%" }}
               transition={{ type: "tween", duration: 0.3 }}
             >
-              <Navbar onToggleMenu={() => setSidebarOpen(false)} />
+              {/* @ts-ignore */}
+              <Navbar onToggleMenu={() => setSidebarOpen(false)} role={session?.user?.role} />
             </motion.div>
           </>
         )}

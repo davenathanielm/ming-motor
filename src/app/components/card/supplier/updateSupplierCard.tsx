@@ -39,7 +39,7 @@ export default function UpdateSupplierPage({supplier , onClose} : Props){
 
     return(
         <div className="text-black">
-            <h2 className="text-xl font-bold mb-4">Update Supplier</h2>
+            <h2 className="text-xl font-bold mb-4">Perbarui Data Supplier</h2>
             <div className="mt-6">
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <FormRenderer<Supplier>

@@ -4,6 +4,7 @@ import "./globals.css";
 import Providers from "../../lib/provider";
 import { Toaster } from "sonner";
 
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],

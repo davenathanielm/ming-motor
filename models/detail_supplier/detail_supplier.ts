@@ -73,6 +73,32 @@ export async function getSupplierSummary(): Promise<SupplierSummary[]> {
     return result;
 }
 
+export async function getSupplierSummaryToday(): Promise<SupplierSummary[]> {
+    const query = `
+        SELECT 
+            a.id_detail_supplier, 
+            b.barcode, 
+            b.name, 
+            c.supplier_name, 
+            c.phone_number, 
+            c.city, 
+            a.qty, 
+            a.total_qty,
+            a.hpp, 
+            a.created_at, 
+            c.updated_at, 
+            b.description 
+        FROM detail_supplier a 
+        INNER JOIN product b ON a.id_product = b.id_product 
+        INNER JOIN supplier c ON a.id_supplier = c.id_supplier
+        WHERE a.created_at >= CURDATE()
+        AND a.created_at < CURDATE() + INTERVAL 1 DAY
+    `;
+
+    const result = (await queryDatabase(query)) as SupplierSummary[];
+    return result;
+}
+
 
 
 // information

@@ -71,3 +71,10 @@ export async function deleteEmployee(id: number) : Promise <boolean>{
 
     return result.affectedRows > 0;
 }
+
+export async function countEmployees(): Promise<Employee | null>{
+    const result = (await queryDatabase(
+        "SELECT COUNT(*) AS value FROM employees"
+    )) as RowDataPacket[];
+    return result.length > 0 ? (result[0] as Employee) : null;
+}

@@ -23,8 +23,9 @@ export default function InventoryPage(){
     const [search, setSearch] = useState("");
     const inventories = inventoryData || [];
     const {mutate: deleteInventoryById} = useDeleteInventory();
+
     const filteredData = inventories.filter((item :Inventory) =>
-    [item.location, item.description]
+    [item.location ?? "", item.description ?? ""]
         .some((field) => field.toLowerCase().includes(search.toLowerCase()))
     );
 
@@ -49,7 +50,7 @@ export default function InventoryPage(){
             <div className="px-14 py-10">
                 <div className="flex flex-col px-2">
                 <header>
-                    <h1 className="text-black font-bold text-2xl">Pengaturan Gudang</h1>
+                    <h1 className="text-black font-bold text-2xl">Daftar Gudang</h1>
                     <p className="text-gray-500">Preferensi Gudang dan Pengaturan</p>
                 </header>
                     <div className="flex justify-end ml-auto gap-4">   
@@ -66,18 +67,29 @@ export default function InventoryPage(){
                         striped
                         persistTableHead
                         defaultSortFieldId={1}
+                        // @ts-ignore
                         customStyles={customStyles}
+                        subHeader
+                        subHeaderComponent={
+                            <input
+                                type="text"
+                                placeholder="Cari gudang..."
+                                className="p-2 w-1/4 my-3 border border-gray-300 text-black rounded-lg"
+                                value={search ?? ""}
+                                onChange={(e) => setSearch(e.target.value)}
+                            />
+                        }
                     />
                 </div>
 
                 {/* check if selectedInventory = null (falsy) return isOpen false or selectedInventory = Product (thruthy) return isOpen true */}
                 <Modal isOpen={!!addedInventory} onClose={() => setAddedInventory(null)}>
-                {addedInventory && <AddInventoryPage/>}
+                    {addedInventory && <AddInventoryPage/>}
                 </Modal>
 
 
                 <Modal isOpen={!!updatedInventory} onClose={() => setUpdatedInventory(null)}>
-                {updatedInventory && <UpdateInventoryPage inventory = {updatedInventory} onClose = {() => setUpdatedInventory(null)} />}
+                    {updatedInventory && <UpdateInventoryPage inventory = {updatedInventory} onClose = {() => setUpdatedInventory(null)} />}
                 </Modal>
             </div>
         </LayoutComponent>

@@ -29,7 +29,7 @@ export default function RegisterPage(){
     setLoading(true);
     try {
       await mutationUser.mutateAsync(formData)
-      router.push("/auth/login")
+      router.push("/employee")
       toast.success("Registered successfully!");
     } catch (err) {
       toast.error("Registration failed");
@@ -75,10 +75,10 @@ export default function RegisterPage(){
                     >
                       {loading ? "Loading..." : "Register"}
                     </button>
-                      <div className="flex gap-1 text-sm text-gray-500 mt-4 justify-center">
+                      {/* <div className="flex gap-1 text-sm text-gray-500 mt-4 justify-center">
                           <p>Sudah Punya Akun ?</p> 
                           <a href="/auth/login" className="text-blue-500 hover:underline">Masuk disini</a>
-                      </div>
+                      </div> */}
                   </form>
                 </div>
             </div>

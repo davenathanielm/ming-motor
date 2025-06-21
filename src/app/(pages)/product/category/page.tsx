@@ -71,6 +71,16 @@ export default function CategoryPage(){
                     defaultSortFieldId={1}
                     // @ts-ignore
                     customStyles={customStyles}
+                    subHeader
+                    subHeaderComponent={
+                        <input
+                            type="text"
+                            placeholder="Cari kategori..."
+                            className="p-2 w-1/4 my-3 border border-gray-300 text-black rounded-lg"
+                            value={search ?? ""}
+                            onChange={(e) => setSearch(e.target.value)}
+                        />
+                    }
                 />
                 </div>
 
@@ -78,8 +88,7 @@ export default function CategoryPage(){
                 <Modal isOpen={!!addedCategory} onClose={() => setAddedCategory(null)}>
                 {addedCategory && <AddCategoryPage/>}
                 </Modal>
-
-
+                
                 <Modal isOpen={!!updateCategory} onClose={() => setUpdateCategory(null)}>
                 {updateCategory && <UpdateCategoryPage category = {updateCategory} onClose = {() => setUpdateCategory(null)}/>}
                 </Modal>

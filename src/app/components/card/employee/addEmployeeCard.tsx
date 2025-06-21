@@ -24,7 +24,7 @@ export default function AddEmployeePage() {
 
     return(
         <div className="text-black">
-            <h2 className="text-xl font-bold mb-4">Tambah Pekerja</h2>
+            <h2 className="text-xl font-bold mb-4">Tambah Pegawai</h2>
             <div className="mt-6">
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <FormRenderer<Employee> 

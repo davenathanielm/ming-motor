@@ -33,7 +33,11 @@ export const authOptions = {
   ],
   session: {
     strategy: "jwt",
-    maxAge : 60 *60 *2, // 2 hours
+    maxAge : 60 *10, // 2 hours
+  },
+  jwt: {
+    maxAge : 60 * 10, // 2 hours
+
   },
   callbacks: {
     async jwt({ token, user } :{ token: any; user: any }) {
@@ -44,6 +48,7 @@ export const authOptions = {
         token.fullName = user.fullName;
         token.role = user.role;
       }
+      console.log("JWT token nya adalah :", token);
       return token;
     },
     async session({ session, token } : { session: any; token: any }) {

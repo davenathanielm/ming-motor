@@ -39,7 +39,7 @@ export default function UpdateEmployeePage({ employee, onClose }: Props) {
 
     return(
         <div className="text-black">
-            <h2 className="text-xl font-bold mb-4">Update Pekerja</h2>
+            <h2 className="text-xl font-bold mb-4">Perbarui Pegawai</h2>
             <div className="mt-6">
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <FormRenderer<Employee> 

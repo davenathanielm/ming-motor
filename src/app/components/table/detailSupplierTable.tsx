@@ -83,8 +83,8 @@ export const detailSupplierColumns = (
      
         {
             name: "Tanggal Laporan Dibuat",
-            selector: (row) =>
-                new Date(row.created_at).toLocaleDateString("id-ID")
+            selector: (row) =>new Date(row.created_at).toLocaleDateString("id-ID"),
+            sortable: true,
         },
         {
             name : "Action",

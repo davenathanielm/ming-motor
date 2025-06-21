@@ -30,13 +30,18 @@ export type UpdateQtyData = {
     hpp: number;
 }
 
+export interface ProductTransaction {
+    id_product: number;
+    qty: number;
+}
+
 export async function getAllProductByOwner(): Promise<Product[]> {
-    const result = (await queryDatabase("SELECT * FROM product WHERE deleted_at IS NULL")) as Product[]
+    const result = (await queryDatabase("SELECT a.id_product, a.name ,b.category_name,a.qty, a.brand, a.hpp,a.selling_price, a.barcode, a.description, a.image, a.status, a.id_category, a.created_at, a.updated_at, a.deleted_at FROM product a INNER JOIN category b ON (a.id_category = b.id_category) where a.deleted_at is NULL;")) as Product[]
     return result;
 }
 
 export async function getAllProduct(): Promise<Product[]> {
-    const result = (await queryDatabase("SELECT id_product, name, qty, brand, selling_price, barcode, description , image, status, id_category, created_at, updated_at , deleted_at FROM `product` WHERE deleted_at IS NULL")) as Product[]
+    const result = (await queryDatabase("SELECT a.id_product, a.name ,b.category_name,a.qty, a.brand,a.selling_price, a.barcode, a.description, a.image, a.status, a.id_category, a.created_at, a.updated_at, a.deleted_at FROM product a INNER JOIN category b ON (a.id_category = b.id_category) where a.deleted_at is NULL;")) as Product[]
     return result;
 }
 
@@ -58,7 +63,6 @@ export async function getProductById(id:number) : Promise<Product | null>{
     return result.length > 0 ? (result[0] as Product):null;
 }
 
-
 export async function searchBarcodeProductByOwner(barcode : string): Promise<Product | null>{
     const result = (await queryDatabase(
         "SELECT * FROM product WHERE barcode = ?",
@@ -67,6 +71,7 @@ export async function searchBarcodeProductByOwner(barcode : string): Promise<Pro
 
     return result.length > 0 ? (result[0] as Product):null;
 }
+
 export async function searchBarcodeProduct(barcode : string): Promise<Product | null>{
     const result = (await queryDatabase(
         "SELECT id_product, name, qty, brand, selling_price, barcode, description , image, status, id_category, created_at, updated_at , deleted_at FROM product WHERE barcode = ?",
@@ -74,6 +79,14 @@ export async function searchBarcodeProduct(barcode : string): Promise<Product | 
     )) as RowDataPacket;
 
     return result.length > 0 ? (result[0] as Product):null;
+}
+
+export async function fetchAllBarcode(): Promise<Product[]>{
+    const result = (await queryDatabase(
+        "SELECT barcode,selling_price,qty,id_product,name FROM product WHERE deleted_at IS NULL", 
+    )) as Product[];
+
+    return result;
 }
 
 export async function insertProduct(product: Product): Promise<number> {
@@ -107,6 +120,13 @@ export async function updateQtyProduct(id:number, qty: number) : Promise<boolean
     return result.affectedRows > 0;
 }
 
+export async function updateStatus (id : any , status : string) : Promise<boolean>{
+    const result = (await queryDatabase("UPDATE product SET status = ? WHERE id_product = ? and deleted_at IS NULL" ,
+        [status , id]
+    ))as ResultSetHeader;
+    return result.affectedRows > 0;
+}
+
 export async function deleteProduct(id: number): Promise<boolean> {
     const date = new Date();
     const result = (await queryDatabase(
@@ -115,4 +135,18 @@ export async function deleteProduct(id: number): Promise<boolean> {
     )) as ResultSetHeader;
 
     return result.affectedRows > 0; 
+}
+
+export async function sumQtyProduct(): Promise<Product | null> {
+    const result = (await queryDatabase(
+        "SELECT SUM(qty) AS value FROM detail_supplier WHERE created_at >= CURDATE() AND created_at < CURDATE() + INTERVAL 1 DAY"
+    )) as RowDataPacket[];
+    return result.length > 0 ? (result[0] as Product): null;
+}
+
+export async function sumBuyProduct(): Promise<Product | null> {
+    const result = (await queryDatabase(
+        "SELECT SUM(hpp) AS value FROM detail_supplier WHERE created_at >= CURDATE() AND created_at < CURDATE() + INTERVAL 1 DAY"
+    )) as RowDataPacket[];
+    return result.length > 0 ? (result[0] as Product): null;
 }

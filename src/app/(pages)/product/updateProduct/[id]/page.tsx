@@ -8,15 +8,17 @@
   import { useFetchSuplier } from "../../../../../../lib/calledAPI/service/serviceApiSupplier";
   import { useFetchInventory } from "../../../../../../lib/calledAPI/service/serviceApiInventory";
   import FormRenderer from "@/app/components/items/formRender";
-  import { formDataProduct } from "@/app/components/items/formTemplate";
-  import { injectOptionForm } from "@/app/utils/formUtils";
+  import { formUpdateProduct } from "@/app/components/items/formTemplate";
+  import { formDataUpdateStatus } from "@/app/components/items/formTemplate";
   import { injectMultipleOptionsForm } from "@/app/utils/formUtils";
   import { Product } from "../../../../../../models/productModel/productModel";
   import { useUpdateProduct } from "../../../../../../lib/calledAPI/service/serviceApiProduct";
+  import { useUpdateStatusProduct } from "../../../../../../lib/calledAPI/service/serviceApiProduct";
   import { useRouter } from "next/navigation";
   import { toast } from "sonner";
   import { useSession } from "next-auth/react";
   import Button from "@/app/components/items/button";
+  import StatusDropdownButton from "@/app/components/items/dropDownButton";
 
   export default function UpdateProductPage() {
     const params = useParams();
@@ -49,10 +51,8 @@
     
     const updatedForm = useMemo(()=>{
       // @ts-ignore
-      const formWithOption =  injectMultipleOptionsForm(formDataProduct, [
+      const formWithOption =  injectMultipleOptionsForm(formUpdateProduct, [
         { name: "id_category", options : categories},
-        {name : "id_supplier", options : suppliers}, 
-        {name : "id_inventory", options : inventory},
       ]);
 
       return formWithOption.map((field => {
@@ -67,6 +67,7 @@
     }, [categories, suppliers, inventory]); // this function will run if one of these dependecies data changes
      
     const oldProduct = productData?.data;
+    console.log("oldProduct daftarnya : ", oldProduct);
      
      // this part that do auto fill to the form when the page is loaded
     useEffect(() =>{
@@ -76,32 +77,32 @@
     },[oldProduct, reset]);
 
     const mutationUpdateProduct = useUpdateProduct(id , session?.user?.role);
+    const mutationUpdateStatusProduct = useUpdateStatusProduct(id);
 
-   useEffect(()=>{
-    if (isErrorProduct) toast.error("Gagal memuat data produk.");
-    if (isErrorCategory) toast.error("Gagal memuat data kategori.");
-    if (isErrorSupplier) toast.error("Gagal memuat data supplier.");
-    if (isErrorInventory) toast.error("Gagal memuat data gudang.");
-   },[isErrorProduct, isErrorCategory, isErrorSupplier, isErrorInventory]);
+    useEffect(()=>{
+      if (isErrorProduct) toast.error("Gagal memuat data produk.");
+      if (isErrorCategory) toast.error("Gagal memuat data kategori.");
+      if (isErrorSupplier) toast.error("Gagal memuat data supplier.");
+      if (isErrorInventory) toast.error("Gagal memuat data gudang.");
+    },[isErrorProduct, isErrorCategory, isErrorSupplier, isErrorInventory]);
 
-    // const onSubmit = async (data: Product) => {
-    //     console.log("Product updated:", data);
-    //     try{
-    //         await mutationUpdateProduct.mutateAsync(data);
-    //         router.push(`/product?toast=update-success&name=${encodeURIComponent(data.name)}`)
-            
-    //     }catch(error){
-    //         toast.error(`Gagal memperbarui produk: ${"Maaf terjadi kesalahan silahkan refresh dan coba kembali."}`);
-    //     }
-    // };
-
-    const onSubmit = (data: Product) => {
-    mutationUpdateProduct.mutate(data, {
-      onSuccess: () => {
+    const onSubmitUpdateStatus = async (status: string) => {
+      try{
+        await mutationUpdateStatusProduct.mutateAsync(status);
+        toast.success("Status produk berhasil diperbarui");
         router.push(`/product/productPage`);
-      },
-    });
-  };
+      }catch(error){
+        toast.error("Status produk gagal diperbarui");
+      }
+    }
+
+      const onSubmit = (data: Product) => {
+      mutationUpdateProduct.mutate(data, {
+        onSuccess: () => {
+          router.push(`/product/productPage`);
+        },
+      });
+    };
 
 
     return (
@@ -113,7 +114,8 @@
           </header>
           {/* Button */}
           <div className="flex justify-end">
-                <Button title="perbarui status" href="/product/barcodeProduct" />
+                {/* <Button title="perbarui status" href="/product/barcodeProduct" /> */}
+                <StatusDropdownButton onSelect={onSubmitUpdateStatus} />
           </div>
           <div className="bg-white/85 rounded-xl shadow-md p-8 mt-3">
             <form onSubmit={handleSubmit(onSubmit)}>
@@ -137,6 +139,7 @@
       </LayoutComponent>
     );
   }
+
 
   // information
     //   useEffect(() =>{

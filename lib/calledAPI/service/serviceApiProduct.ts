@@ -14,6 +14,11 @@ export const fetchProductById = async (id:any , role : any) =>{
     return response.data;
 };
 
+export const fetchBarcodeProduct = async() => {
+    const response = await API.get("/api/products/barcode");
+    return response.data;
+}
+
 export const searchBarcodeProduct = async (barcode: any , role :any) => {
   try {
     const response = await API.post(`/api/products/barcode/?role=${role}`, barcode); 
@@ -41,17 +46,26 @@ export const updateQtyProduct = async(id : any, updateQtyData : UpdateQtyData)=>
     return response.data;
 };
 
+export const updateStatusProduct = async(id : any, status : string) => {
+    const response = await API.put(`/api/products/status/${id}`, {status}); // this {} function so sent data will as object like status : diterima not just diterima
+    return response.data;
+}
+
 export const deleteProduct = async(id:any) => {
     const response = await API.delete(`/api/products/${id}`);
     return response.data;
 };
 
+
+
+
 // ----------------------------------------------------- custom hook to call data from API ------------------------------------------------------------------------
 
 export const useFetchProducts = (role : any) => { 
     return useQuery({
-        queryKey: ["product"],
+        queryKey: ["product", role],
         queryFn:() => fetchProduct(role),
+        enabled: !!role, // only run the query if role is truthy
     });
 };
 
@@ -73,6 +87,13 @@ export const useSearchBarcodeProduct = (role : string) => {
         },
     });
 };
+
+export const useFetchBarcodeProduct = () => {
+    return useQuery({
+        queryKey: ["barcode"],
+        queryFn: fetchBarcodeProduct,
+    });
+}
 
 export const useInsertProduct = () => {
     const queryClient = useQueryClient();
@@ -105,6 +126,19 @@ export const useUpdateQtyProduct = (id : any) => {
         },
         onError: (error: any) => {
             toast.error(error.message || "Gagal memperbarui qty produk");
+        },
+    });
+}
+
+export const useUpdateStatusProduct = (id : any) => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn : (status: string) => updateStatusProduct(id,status),
+        onSuccess:() =>{
+            queryClient.invalidateQueries({ queryKey: ["product"] });
+        },
+        onError: (error: any) => {
+            toast.error(error.message || "Gagal memperbarui status produk");
         },
     });
 }

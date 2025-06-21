@@ -1,4 +1,4 @@
-import { DetailSupplier , getAllDetailSupplier, updateDetailSupplier, insertDetailSupplier ,deleteDetailSupplier, getSupplierSummary } from "../models/detail_supplier/detail_supplier";
+import { DetailSupplier , getAllDetailSupplier, updateDetailSupplier, insertDetailSupplier ,deleteDetailSupplier, getSupplierSummary, getSupplierSummaryToday } from "../models/detail_supplier/detail_supplier";
 
 export async function getAllDetailSupplierService(): Promise<{ success: boolean; data?: DetailSupplier[]; message?: string }> {
     try {
@@ -47,6 +47,16 @@ export async function deleteDetailSupplierService(id_detail_supplier:number): Pr
 export async function getSupplierSummaryService(): Promise<{ success: boolean; data?: any[]; message?: string;}> {
     try{
         const result = await getSupplierSummary();
+        return {success: true, data: result}
+    }
+    catch(error:any){
+        return {success: false, message:error.message}
+    }
+}
+
+export async function getSupplierSummaryTodayService(): Promise<{ success: boolean; data?: any[]; message?: string;}> {
+    try{
+        const result = await getSupplierSummaryToday();
         return {success: true, data: result}
     }
     catch(error:any){

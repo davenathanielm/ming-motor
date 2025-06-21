@@ -43,6 +43,12 @@ export const getSupplierSummary = async () => {
     return supplierSummaryResponse.data;
 }
 
+export const fetchSupplierSummaryToday = async () => {
+    const response = await API.get("/api/summarySupplier/dashboard");
+    const result = response.data;
+    return result.data;
+}
+
 
 // ----------------------------------------------------- custom hook to call data from API ------------------------------------------------------------------------
 
@@ -107,3 +113,10 @@ export const useFetchSupplierSummary = () => {
         queryFn: getSupplierSummary,
     });
 };
+
+export const useFetchSupplierSummaryToday = () => {
+    return useQuery({
+        queryKey: ["supplierSummaryToday"],
+        queryFn: fetchSupplierSummaryToday,
+    });
+}

@@ -1,3 +1,4 @@
+"use client";
 import {
   UseFormRegister,
   FieldErrors,
@@ -9,11 +10,14 @@ import {
 } from "react-hook-form";
 import { ComponentType } from "react";
 import { SelectOption } from "@/app/utils/formUtils";
+import FormCombobox from "./formCombobox";
+import { useState } from "react";
+import { Eye, EyeOff } from "lucide-react";
 
 interface Field {
   name: string;
   label: string;
-  type: "text" | "number" | "select" | "file" | "radio" | "custom" | "password";
+  type: "text" | "number" | "select" | "file" | "radio" | "custom" | "password" | "combobox";
   placeholder?: string;
   spanClass?: string;
   required?: boolean;
@@ -45,6 +49,16 @@ export default function FormRenderer<T extends FieldValues>({
   gridClassname,
   watch,
 }: Props<T>) {
+
+  const [visiblePasswords, setVisiblePasswords] = useState<Record<string, boolean>>({});
+
+  const togglePasswordVisibility = (name: string) => {
+    setVisiblePasswords((prev) => ({
+      ...prev,
+      [name]: !prev[name],
+    }));
+  };
+
   return (
     <div className={gridClassname}>
       {formData.map((item) => {
@@ -125,6 +139,7 @@ export default function FormRenderer<T extends FieldValues>({
                 control={control}
                 rules={validationRules}
                 render={({ field }) => (
+                  // @ts-ignore
                   <item.customComponent
                     value={field.value || 0}
                     onChange={item.readOnly ? () => {} : field.onChange}
@@ -132,7 +147,44 @@ export default function FormRenderer<T extends FieldValues>({
                   />
                 )}
               />
-            ) : (
+            ) : item.type === "combobox"? (
+              <Controller
+                name={item.name as Path<T>}
+                control={control}
+                rules={validationRules}
+                render={({ field }) => (
+                  <FormCombobox
+                    label={item.label}
+                    name={item.name}
+                    value={(item.options as SelectOption[])?.find(
+                      (opt) => opt.value === field.value
+                    ) || null}
+                    options={item.options as SelectOption[]}
+                    onChange={(selected) => field.onChange(selected?.value)}
+                    disabled={item.readOnly}
+                />
+                )}
+              />
+            ): item.type === "password"?(
+              <div className="relative">
+                <input
+                  id={item.name}
+                  type={visiblePasswords[item.name] ? "text" : "password"}
+                  placeholder={item.placeholder}
+                  readOnly={item.readOnly}
+                  defaultValue={item.value}
+                  {...register(item.name as Path<T>, validationRules)}
+                  className={`${inputClass} pr-10`}
+                />
+                <button
+                  type="button"
+                  onClick={() => togglePasswordVisibility(item.name)}
+                  className="absolute right-2 top-2 text-gray-500"
+                >
+                  {visiblePasswords[item.name] ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
+            ):(
               <input
                 id={item.name}
                 type={item.type}

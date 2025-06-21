@@ -17,11 +17,11 @@ module.exports = {
         customBackgroundButton : '#245560',
         customBackgroundServices:'#1c1924',
         customBackgroundNavBar : '#322152',
+        customGreen :'#17343b', 
         
 
         customHoverNavigation : '#1565d8',
         customTextNavigation : '#A0B5B9',
-        customGreen :'#2b6471',
         customRocket: '#d5153c',
         customBackgroundProject :'#232323',
         customLanguage : '#d896ff',

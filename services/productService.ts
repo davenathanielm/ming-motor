@@ -1,10 +1,15 @@
-import { Product , getAllProduct , getAllProductByOwner , getProductById, getProductByIdOwner , insertProduct, updateProduct,updateProductOwner,deleteProduct, searchBarcodeProduct, searchBarcodeProductByOwner , updateQtyProduct} from "../models/productModel/productModel";
+import { Product , getAllProduct , getAllProductByOwner , getProductById, getProductByIdOwner , insertProduct, updateProduct,updateProductOwner,deleteProduct, searchBarcodeProduct, searchBarcodeProductByOwner , updateQtyProduct, updateStatus} from "../models/productModel/productModel";
 import { insertDetailSupplier,updateDetailSupplier } from "../models/detail_supplier/detail_supplier";
 import { insertDetailWarehouse,updateDetailWarehouse } from "../models/detail_warehouse/detail_warehouse";
-import { DetailSupplier } from "../models/detail_supplier/detail_supplier";
+import { DetailSupplier, getSupplierSummaryToday } from "../models/detail_supplier/detail_supplier";
 import { DetailWarehouse } from "../models/detail_warehouse/detail_warehouse";
 import { UpdateQtyData } from "../models/productModel/productModel";
 import { RowDataPacket, ResultSetHeader } from "mysql2"; 
+import { sumQtyProduct, sumBuyProduct } from "../models/productModel/productModel";
+import { countEmployees } from "../models/employeeModel/employeeModel";
+import { ProductTransaction } from "../models/productModel/productModel";
+import { fetchAllBarcode } from "../models/productModel/productModel";
+import { sumTotalTransaction, sumTotalAmountTransaction } from "../models/transactionModel/transactionModel";
 
 export async function getAllProductService(role:string): Promise<{ success: boolean; data?: Product[]; message?: string }> {
     try {
@@ -70,6 +75,15 @@ export async function searchBarcodeProductService(barcode : string , role : stri
     }
 }
 
+export async function fetchAllBarcodeService() : Promise<{success:boolean, data?: Product[], message?: string}> {
+    try {
+        const barcodes = await fetchAllBarcode();
+        return {success: true, data : barcodes, message: "Barcodes fetched successfully"};
+    } catch (error: any) {
+        return {success: false, message: error.message};
+    }
+}
+
 export async function insertProductService(
     product:Product,
     id_supplier : any,
@@ -105,8 +119,6 @@ export async function insertProductService(
 export async function updateProductService(
   id_product: number,
   product: Product,
-  id_supplier: number,
-  id_inventory: number,
   role :string
 ): Promise<{ success: boolean; status: number; message?: string }> {
   try {
@@ -121,36 +133,6 @@ export async function updateProductService(
             return { success: false, message: "Product not found", status: 404 };
           }
     }
-    const supplierDetail: DetailSupplier = {
-        id_product,
-        id_supplier,
-        qty : product.qty,
-        total_qty: product.qty,
-        hpp: product?.hpp ?? 0, 
-    };
-
-    const warehouseDetail: DetailWarehouse = {
-        id_product,
-        id_inventory,
-        qty: product.qty, 
-        total_qty: product.qty,
-        movement_type : "IN", 
-    };
-
-    
-
-    const supplierUpdated = await updateDetailSupplier(supplierDetail);
-    const warehouseUpdated = await updateDetailWarehouse(warehouseDetail);
-
-    if (!supplierUpdated || !warehouseUpdated) {
-      return {
-        success: false,
-        message: !supplierUpdated
-          ? "Supplier detail not found"
-          : "Warehouse detail not found",
-        status: 404,
-      };
-    }
 
     return {
       success: true,
@@ -160,6 +142,19 @@ export async function updateProductService(
   } catch (e: any) {
     return { success: false, message: e.message, status: 500 };
   }
+}
+
+export async function updateStatusProductService(id_product:number, status:string): Promise<{success:boolean, status:number, message?:string}>{
+    try{
+        const result = await updateStatus(id_product, status);
+        if(result){
+            return {success:true, message:"Product status updated successfully", status:201}
+        }else{
+            return {success:false, message:"Product not found", status:404}
+        }
+    }catch(e:any){
+        return {success:false, message:e.message, status:500}
+    }
 }
 
 export async function updateQtyProductService(id_product:number,updateData : UpdateQtyData): Promise<{success:boolean, status:number, message?:string}>{
@@ -200,6 +195,36 @@ export async function updateQtyProductService(id_product:number,updateData : Upd
     }
 }
 
+export async function transactionService(items : ProductTransaction[]): Promise<{success:boolean, status:number, message?:string}>{
+    try{
+        for (const item of items) {
+            const product = await getProductById(item.id_product);
+            const qty = item.qty;
+            const oldQty = product?.qty ?? 0;
+            
+            const totalQty = oldQty - qty; 
+            if (totalQty < 0) {
+                return {
+                  success: false,
+                  status: 400,
+                  message: `Insufficient stock for product ID ${item.id_product}`,
+                };
+              }
+            const result =  await updateQtyProduct(item.id_product,totalQty);        
+            if (!result) {
+                return {
+                  success: false,
+                  status: 404,
+                  message: `Product ID ${item.id_product} not found`,
+                };
+              }
+        }
+        return {success:true, message:"Product updated successfully", status:201}   
+    }catch(e:any){
+            return { success: false, message: e.message, status: 500 };
+    }
+}
+
 export async function deleteProductService(id_product:number): Promise<{success:boolean, status:number, message?:string}>{
     try{
         const result = await deleteProduct(id_product);
@@ -210,5 +235,34 @@ export async function deleteProductService(id_product:number): Promise<{success:
         }
     }catch(e:any){
         return {success:false, message:e.message, status:500}
+    }
+}
+
+export async function getDashboardSummaryService() : Promise <{success:boolean, status: number, data?: {totalProduct: any, totalBuy:any , totalEmployee:any , totalEarning : any, totalAmount: any}, message?: string}> {
+    try {
+        const totalQtyProduct = await sumQtyProduct();
+        const totalBuy = await sumBuyProduct();
+        const totalEmployee = await countEmployees();
+        const totalEarnings = await sumTotalTransaction();
+        const totalAmount = await sumTotalAmountTransaction();
+        return {
+            success: true,
+            status: 201,
+            data: {
+                totalProduct: totalQtyProduct,
+                totalBuy: totalBuy,
+                totalEmployee: totalEmployee,
+                totalEarning: totalEarnings ? totalEarnings : 0,
+                totalAmount: totalAmount ? totalAmount : 0
+            },
+            message: "Dashboard summary retrieved successfully"
+        };
+    }
+    catch (error: any) {
+        return {
+            success: false,
+            status: 500,
+            message: error.message
+        };
     }
 }

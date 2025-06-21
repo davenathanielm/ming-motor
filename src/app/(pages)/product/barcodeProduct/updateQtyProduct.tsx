@@ -13,6 +13,7 @@ import { formatDate } from "@/app/components/items/date";
 import { currencyFormat } from "@/app/components/items/date";
 import { useSession } from "next-auth/react";
 import { displayPrice } from "@/app/utils/roleFilter";
+import Button from "@/app/components/items/button";
 
 export default function UpdateQtyProductPage({product, onBack} : {product : Product; onBack : () => void}){
 const {register, handleSubmit, reset, setValue, control, formState: {errors}} = useForm<Product>();    
@@ -68,7 +69,7 @@ const {register, handleSubmit, reset, setValue, control, formState: {errors}} = 
     }
     
     return(
-        <div className="p-5">
+        <div className="">
             <header>
                 <h1 className="text-black font-bold text-xl">Update Qty Product</h1>
                 <p className="text-gray-500 text-base">Preferensi Akun dan Pengaturan</p>
@@ -153,18 +154,20 @@ const {register, handleSubmit, reset, setValue, control, formState: {errors}} = 
                     </form>
                     </div>
                     <div className="flex justify-end gap-6 mt-12">
-                        <button
+                        {/* <button
                             type="reset"
                             onClick={onBack}
                             className="bg-red-600 font-bold text-white px-6 py-2 rounded-lg">
                             Batal
-                        </button>
-                        <button
+                        </button> */}
+                        {/* <button
                             type="submit"
                             onClick={handleSubmit(onSubmit)}
                             className=" bg-green-600 font-bold text-white px-6 py-2  rounded-lg">
                             Kirim
-                        </button>
+                        </button> */}
+                        <Button title="Batal" onClick={onBack} variant="delete"/>
+                        <Button title="Simpan" onClick={handleSubmit(onSubmit)}/>
                     </div>
                 </div>
             </div>

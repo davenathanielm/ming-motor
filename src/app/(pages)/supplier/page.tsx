@@ -49,12 +49,12 @@ export default function SupplierPage(){
         setAddSupplier(true);
     }
     return (
-        <LayoutComponent>
+        <LayoutComponent subTitle="Home / Product / Supplier">
             <div className="px-14 py-10">
                 <div className="flex flex-col  px-2">
                     <header className=" mb-4">
                         <h1 className="text-black font-bold text-2xl"> Daftar Supplier</h1>
-                        <p className="text-gray-500">Preferensi Akun dan Pengaturan</p>
+                        <p className="text-gray-500">Preferensi Supplier dan Pengaturan</p>
                     </header>
 
                    {/* Button */}
@@ -73,7 +73,18 @@ export default function SupplierPage(){
                     striped
                     persistTableHead
                     defaultSortFieldId={1}
+                    // @ts-ignore
                     customStyles={customStyles}
+                    subHeader
+                    subHeaderComponent={
+                        <input
+                            type="text"
+                            placeholder="Cari supplier..."
+                            className="p-2 w-1/4 my-3 border border-gray-300 text-black rounded-lg"
+                            value={search ?? ""}
+                            onChange={(e) => setSearch(e.target.value)}
+                        />
+                    }
                 />
                 </div>
 
@@ -91,8 +102,6 @@ export default function SupplierPage(){
                 <Modal isOpen={!!updateSupplier} onClose={() => setUpdateSupplier(null)}>
                 {updateSupplier && <UpdateSupplierPage supplier = {updateSupplier} onClose={() => setUpdateSupplier(null)} />}
                  </Modal>
-
-
             </div>
         </LayoutComponent>
     );

@@ -28,45 +28,53 @@ import warehouse1 from '../../../../public/images/auth/warehouse1.jpeg';
 import warehouse2 from '../../../../public/images/auth/warehouse2.jpeg';
 import warehouse3 from '../../../../public/images/auth/warehouse3.jpeg';
 import warehouse4 from '../../../../public/images/auth/warehouse4.jpeg';
+import { VscGraph, VscPackage, VscChecklist, VscPieChart, VscAccount } from "react-icons/vsc";
 
 const menuIcon = [
     {
+        name :"dashboard",
         title :"Dashboard",
         image: menu,
-        link:"dashboard"
+        icon : VscGraph,
+        link:"dashboard",
+        hidden : ""
     },
     {
+        name :"product",
         title :"Produk",
         image: product,
-        link : "product"
-
+        icon : VscPackage,
+        link : "product",   
+        hidden : ""
     },
     {
-        title :"User Profile",
-        image: profileUser,
-        link : "user"
-
-    },
-    {
-        title :"Laporan",
-        image: pieChart,
-        link : "summary"
-    },
-    {
-        title :"Notification",
-        image: notification,
-        link : "notification"
-
-    },
-    {
+        name :"employee",
         title :"Pegawai",
         image: checklist,
-        link : "employee"
+        icon : VscChecklist,
+        link : "employee",
+        hidden : ""
     },
     {
-        title :"Logout",
-        image: checklist,
-        link : "logout"
+        name : "summary",
+        title :"Laporan",
+        image: pieChart,
+        icon : VscPieChart,
+        link : "summary",
+        hidden : ""
+    },
+    // {
+    //     name : "notification",
+    //     title :"Notification",
+    //     image: notification,
+    //     link : "notification"
+    // },
+    {
+        name : "profile",
+        title :"User Profile",
+        image: profileUser,
+        icon : VscAccount,
+        link : "user"
     }
 ];
 

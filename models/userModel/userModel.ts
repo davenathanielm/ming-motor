@@ -1,5 +1,6 @@
 import { queryDatabase } from "../../lib/query";
 import { RowDataPacket, ResultSetHeader } from "mysql2"; // Import MySQL types
+import { Employee } from "../employeeModel/employeeModel";
 
 export type User = {
     id_user: string;
@@ -103,6 +104,8 @@ export async function updateRole(id_user : string , role: string):Promise<number
 
     return result.affectedRows; 
 }
+
+
 
 
 

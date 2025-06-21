@@ -16,33 +16,40 @@ import UpdateEmployeePage from "@/app/components/card/employee/updateEmployeeCar
 import { useDeleteEmployee } from "../../../../lib/calledAPI/service/serviceApiEmployee";
 import Button from "@/app/components/items/button";
 
-
 export default function EmployeePage() {
     const { data: employeeData } = useFetchEmployee();
+    const employees = employeeData || [];
     const mutationDelete = useDeleteEmployee();
     const[selectedEmployee, setEmployee] = useState<Employee | null>(null);
     const[addedEmployee, setAddedEmployee] = useState<boolean | null>(null);
     const [updatedEmployee , setUpdatedEmployee] = useState<any | null>(null);
-const handleUpdate = (employee: Employee) => {
-  console.log(employee);
-  setUpdatedEmployee(employee);
-}
-const handleDelete = (id: string, name: string) => {
-    try{
-        mutationDelete.mutate(id);
-        toast.success(`Pekerja ${name} berhasil dihapus`);
-    }
-    catch(error){
-        toast.error(`Pekerja ${name} gagal dihapus`);
-    }
-}
-const handleDetail = (employee: any) => {
-  setEmployee(employee);
-}
+    const [search, setSearch] = useState("");
+    
+    const filteredData = employees.filter((item :Employee) =>
+        [item.full_name ?? "", item.address ?? "" , item.position ?? "" , item.phone ?? ""]
+            .some((field) => field.toLowerCase().includes(search.toLowerCase()))
+    );
 
-const handleAddEmployee = () => {
-    setAddedEmployee(true);
-}
+    const handleUpdate = (employee: Employee) => {
+    console.log(employee);
+    setUpdatedEmployee(employee);
+    }
+    const handleDelete = (id: string, name: string) => {
+        try{
+            mutationDelete.mutate(id);
+            toast.success(`Pekerja ${name} berhasil dihapus`);
+        }
+        catch(error){
+            toast.error(`Pekerja ${name} gagal dihapus`);
+        }
+    }
+    const handleDetail = (employee: any) => {
+    setEmployee(employee);
+    }
+
+    const handleAddEmployee = () => {
+        setAddedEmployee(true);
+    }
 
     return (
         <LayoutComponent title={``} subTitle={`Home / Employee`} >
@@ -53,6 +60,7 @@ const handleAddEmployee = () => {
                     <p className="text-gray-500">Tambah dan Ubah data pegawai anda</p>
                 </header> 
                     <div className="flex justify-end ml-auto gap-4 items-center">   
+                        <Button title="Register Akun" href="/auth/register"/>
                         <Button title="+ Tambah Pegawai" onClick={handleAddEmployee}/>
                     </div>
                 </div>
@@ -60,7 +68,7 @@ const handleAddEmployee = () => {
                 <div className="rounded-xl shadow-md overflow-hidden text-black bg-white mt-3">
                 <DataTable
                     columns={employeeColumns(handleUpdate, handleDelete,handleDetail)}
-                    data={employeeData}
+                    data={filteredData}
                     pagination
                     highlightOnHover
                     striped
@@ -68,6 +76,16 @@ const handleAddEmployee = () => {
                     defaultSortFieldId={1}
                     // @ts-ignore
                     customStyles={customStyles}
+                    subHeader
+                    subHeaderComponent = {
+                        <input
+                            type="text"
+                            placeholder="Cari pegawai..."
+                            className="p-2 w-1/4 my-3 border border-gray-300 text-black rounded-lg"
+                            value={search ??""}
+                            onChange={(e) => setSearch(e.target.value) } // Placeholder for search functionality
+                        />
+                    }
                 />
                 </div>
 
