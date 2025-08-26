@@ -1,9 +1,13 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { getCategoryByIdService, updateCategoryService,deleteCategoryService } from "../../../services/categoryService";
 import { Category } from "../../../models/categoryModel/categoryModel";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../auth/[...nextauth]";
+import { withAuth , AuthenticatedNextApiRequest } from "../../../lib/auth/helperAuth";
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+async function handler(req: AuthenticatedNextApiRequest, res: NextApiResponse) {
     try{
+        const userId = req?.user?.id;
         const {id} = req.query;
         const categoryId = Number(id);
         if(isNaN(categoryId)){
@@ -17,12 +21,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         if(req.method === "PUT"){
             const {category_name, description} = req.body;
             const category: Category = {category_name, description};
-            const result = await updateCategoryService(categoryId, category);
+            const result = await updateCategoryService(categoryId, category,userId);
             return res.status(result.status).json({success:result.success,message:result.message});
         }
 
         if(req.method === "DELETE"){
-            const result = await deleteCategoryService(categoryId);
+            const result = await deleteCategoryService(categoryId, userId);
             return res.status(result.status).json({success:result.success,message:result.message});
         }
 
@@ -31,3 +35,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(500).json({success:false,message:error.message});
     }
 }
+
+export default withAuth(handler);

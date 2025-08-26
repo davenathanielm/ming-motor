@@ -2,7 +2,7 @@ import { Transaction } from "../../../../models/transactionModel/transactionMode
 import { TableColumn } from "react-data-table-component";
 import { formatCurrency } from "./customDesignTable";
 import { IconButtonTable } from "./productTable";
-import { productIcon } from "../items/image";
+import { productIcon } from "../items/menuIcon";
 import Image from "next/image";
 
 export const summaryTransactionColumns = (

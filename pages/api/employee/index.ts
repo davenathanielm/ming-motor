@@ -1,8 +1,9 @@
 import { NextApiRequest , NextApiResponse } from "next";
 import { getAllEmployeeService , insertEmployeeService } from "../../../services/employeService";
 import { Employee } from "../../../models/employeeModel/employeeModel";
+import { AuthenticatedNextApiRequest , withAuth } from "../../../lib/auth/helperAuth";
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+async function handler(req: AuthenticatedNextApiRequest, res: NextApiResponse) {
     try {
         if (req.method === "GET") {
             const result = await getAllEmployeeService();
@@ -23,3 +24,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(500).json({ success: false, message: error.message });
     }
 }
+
+export default withAuth(handler);

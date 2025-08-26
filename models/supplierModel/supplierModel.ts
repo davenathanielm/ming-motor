@@ -2,13 +2,13 @@ import { queryDatabase } from "../../lib/query";
 import { RowDataPacket, ResultSetHeader } from "mysql2"; // Import MySQL types
 
 export type Supplier = {
-    id_supplier : number;
-    supplier_name : string;
-    phone_number : string;
-    city : string;
-    comment : string;
-    created_at : Date;
-    updated_at : Date;
+    id_supplier ?: number;
+    supplier_name ?: string;
+    phone_number ?: string;
+    city ?: string;
+    comment ?: string;
+    created_at ?: Date;
+    updated_at ?: Date;
 };
 
 

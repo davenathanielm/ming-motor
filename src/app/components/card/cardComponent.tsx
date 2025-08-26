@@ -1,9 +1,9 @@
 // 🔹 Reusable Card Component
 function Card({ title, color, children, className = "" }: { title: string; color ?: string; children: React.ReactNode; className?: string }) {
   return (
-    <div className={`border border-gray-300 rounded-xl p-4 ${className}`}>
+    <div className={` rounded-xl p-4 ${className}`}>
       <h2 className={`${color} mb-3 font-semibold`}>{title}</h2>
-      <div className="flex flex-col gap-3">{children}</div>
+      <div className=" flex flex-col gap-3">{children}</div>
     </div>
   );
 }

@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import { User } from "../../../../../models/userModel/userModel";
 import FormRenderer from "@/app/components/items/formRender";
 import { formRegister } from "@/app/components/items/formTemplate";
-import { authImage } from "@/app/components/items/image";
+import { authImage } from "@/app/components/items/menuIcon";
 import { useRegisterUser } from "../../../../../lib/calledAPI/service/serviceApiUserProfile";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -75,10 +75,10 @@ export default function RegisterPage(){
                     >
                       {loading ? "Loading..." : "Register"}
                     </button>
-                      {/* <div className="flex gap-1 text-sm text-gray-500 mt-4 justify-center">
-                          <p>Sudah Punya Akun ?</p> 
-                          <a href="/auth/login" className="text-blue-500 hover:underline">Masuk disini</a>
-                      </div> */}
+                      <div className="flex gap-1 text-sm text-gray-500 mt-4 justify-center">
+                          <p> kembali ke halaman sebelumnya?</p> 
+                          <a href="/employee" className="text-blue-700 hover:underline">klik disini</a>
+                      </div>
                   </form>
                 </div>
             </div>

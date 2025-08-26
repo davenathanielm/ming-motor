@@ -18,6 +18,7 @@ module.exports = {
         customBackgroundServices:'#1c1924',
         customBackgroundNavBar : '#322152',
         customGreen :'#17343b', 
+        customLightGreen :'#368091', 
         
 
         customHoverNavigation : '#1565d8',
@@ -31,7 +32,9 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    require('tailwind-scrollbar-hide'),
+  ],
 }
 
 // information

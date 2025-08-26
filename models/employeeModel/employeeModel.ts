@@ -2,17 +2,17 @@ import { queryDatabase } from "../../lib/query";
 import { RowDataPacket , ResultSetHeader } from "mysql2";
 
 export type Employee = {
-    full_name: string;
-    phone : string;
-    address: string;
-    position: string;
-    id_user: any;
-    join_date : any;
-    created_at: any;
-    updated_at: any;
-    deleted_at: any;
-    image_url: string;
-    id : any;
+    full_name ?: string;
+    phone ?: string;
+    address ?: string;
+    position ?: string;
+    id_user ?: any;
+    join_date ?: any;
+    created_at ?: any;
+    updated_at ?: any;
+    deleted_at ?: any;
+    image_url ?: string;
+    id ?: any;
 };
 
 export async function getAllEmployee() : Promise<Employee[]>{

@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import { User } from "../../../../../models/userModel/userModel";
 import FormRenderer from "@/app/components/items/formRender";
 import { formLogin } from "@/app/components/items/formTemplate";
-import { authImage } from "@/app/components/items/image";
+import { authImage } from "@/app/components/items/menuIcon";
 import AuthLayout from "@/app/components/card/user/authCard";
 import { useRouter } from "next/navigation";
 import {signIn} from "next-auth/react";
@@ -34,7 +34,6 @@ const onSubmit = async (formData: User) => {
       password: formData.password, //this is match with credentials in [...nextAuth].ts
     });
 
-    console.log("res nya", res);
     if (res?.ok) {
       toast.success("Logged in successfully!");
       router.push("/displayApps");

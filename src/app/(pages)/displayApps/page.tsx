@@ -18,11 +18,11 @@ export default function DisplayAllApps(){
                             key = {index}
                             // @ts-ignore
                             title = {app.title}
-                            image = {app.image}
                             text = {app.text}
                             link = {app.link}
                             iconName = {app.iconName}
                             iconCoba={app.iconCoba}
+                            icon={app.icon} 
                         />
                     ))}
                 </div>

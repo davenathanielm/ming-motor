@@ -63,6 +63,8 @@ const LayoutComponent = ({ children, title, subTitle }: LayoutProps) => {
           subTitle={subTitle}
           // @ts-ignore
           username={session?.user?.fullName || "Guest"}
+          // @ts-ignore
+          userId={session?.user?.id}
           onToggleMenu={() => setSidebarOpen((prev) => !prev)}
         />
         <main className="flex-1  overflow-y-auto">

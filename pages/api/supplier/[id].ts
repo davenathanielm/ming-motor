@@ -1,8 +1,9 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { getSupplierByIdService,updateSupplierService,deleteSupplierService } from "../../../services/supplierServices";
 import { Supplier } from "../../../models/supplierModel/supplierModel";
+import { AuthenticatedNextApiRequest , withAuth } from "../../../lib/auth/helperAuth";
 
-export default async function handler(req : NextApiRequest, res:NextApiResponse){
+     async function handler(req : AuthenticatedNextApiRequest, res:NextApiResponse){
     try{
         const {id} = req.query;
         const supplierId = Number(id); 
@@ -31,6 +32,8 @@ export default async function handler(req : NextApiRequest, res:NextApiResponse)
         return res.status(500).json({success:false,message:error.message});
     }
 }
+
+export default withAuth(handler);
 
 // rules
 // 1. why always need to use const {id} because it match with file name

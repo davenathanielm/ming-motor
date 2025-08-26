@@ -2,10 +2,10 @@ import { queryDatabase } from "../../lib/query";
 import { RowDataPacket, ResultSetHeader } from "mysql2";
 
 export type Category = {
-    category_name: string;
-    description : string;
-    created_at: Date;
-    id_category: number;
+    category_name ?: string;
+    description ?: string;
+    created_at ?: Date;
+    id_category ?: number;
 };
 
 export async function getAllCategory(): Promise<Category[]> {

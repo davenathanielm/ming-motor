@@ -1,4 +1,4 @@
-import {getAllUsers,getUserById,insertUser, updateUser, deleteUser, updateUsername, updatePassword} from "../models/userModel/userModel";
+import {getAllUsers,getUserById,insertUser, updateUser, deleteUser, updateUsername, updatePassword , updateNotificationLastSeen} from "../models/userModel/userModel";
 import {User} from "../models/userModel/userModel";
 import { checkPassword, checkUsername } from "../models/userModel/userModel";
 import { comparePassword } from "../lib/auth/hash";
@@ -87,6 +87,15 @@ export async function updateUserService(id:number,user: User): Promise<{success:
     }
 }
 
+export async function updateNotificationLastSeenService(userId : any): Promise<{success: boolean; message?: string}>{
+    try{
+       await updateNotificationLastSeen(userId);
+        return {success: true , message: "User last notification seen updated successfully"};
+    } catch (error: any) {
+        return {success: false, message: error.message};
+    }
+}
+
 export async function deleteUserService(id:number): Promise<{success: boolean; message?: string; status?: number}>{
     try{
         const result = await deleteUser(id);
@@ -130,3 +139,4 @@ export async function updateRoleService(id: string, role: string): Promise<{ suc
         return { success: false, message: error.message, status: 500 };
     }
 }
+

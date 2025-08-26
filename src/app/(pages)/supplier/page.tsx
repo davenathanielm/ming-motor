@@ -18,7 +18,6 @@ import Button from "@/app/components/items/button";
 export default function SupplierPage(){
     const {data : supplierData} = useFetchSuplier();
     const [search, setSearch] = useState("");
-
     const [selectedSupplier, setSelectedSupplier] = useState<Supplier | null>(null);
     const [addSupplier, setAddSupplier] = useState<boolean | null>(false );
     const [updateSupplier, setUpdateSupplier] = useState<Supplier | null>(null);
@@ -28,7 +27,7 @@ export default function SupplierPage(){
 
     const filteredData = suppliers.filter((item :Supplier) =>
     [item.supplier_name, item.phone_number, item.city]
-      .some((field) => field.toLowerCase().includes(search.toLowerCase()))
+      .some((field) => field?.toLowerCase().includes(search.toLowerCase()))
   );
 
     const handleUpdate = (supplier: Supplier) => {
@@ -95,7 +94,7 @@ export default function SupplierPage(){
                 
                 {/* check if modal addsupplier falsy or not  */}
                 <Modal isOpen={!!addSupplier} onClose={() => setAddSupplier(null)}>
-                {addSupplier && <AddSupplierPage />}
+                {addSupplier && <AddSupplierPage/>}
                  </Modal>
 
                 {/* check if modal updateSupplier falsy or not if falsy or it means null then it will return null */}

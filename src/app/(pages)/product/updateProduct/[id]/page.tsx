@@ -59,6 +59,7 @@
         if(field.name === "barcode" && productData?.data.barcode){
           return {...field, readOnly : true};
         }
+        // @ts-ignore
         if(field.name === "hpp" && session?.user?.role !== "owner"){
           return {...field, readOnly : true};
         }
@@ -67,7 +68,6 @@
     }, [categories, suppliers, inventory]); // this function will run if one of these dependecies data changes
      
     const oldProduct = productData?.data;
-    console.log("oldProduct daftarnya : ", oldProduct);
      
      // this part that do auto fill to the form when the page is loaded
     useEffect(() =>{
@@ -75,10 +75,11 @@
         reset(oldProduct);
       }
     },[oldProduct, reset]);
-
-    const mutationUpdateProduct = useUpdateProduct(id , session?.user?.role);
-    const mutationUpdateStatusProduct = useUpdateStatusProduct(id);
-
+// @ts-ignore
+    const mutationUpdateProduct = useUpdateProduct(id , session?.user?.role, session?.user?.id);
+    // @ts-ignore
+    const mutationUpdateStatusProduct = useUpdateStatusProduct(id , session?.user?.id);
+    
     useEffect(()=>{
       if (isErrorProduct) toast.error("Gagal memuat data produk.");
       if (isErrorCategory) toast.error("Gagal memuat data kategori.");

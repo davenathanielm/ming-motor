@@ -181,7 +181,7 @@ export default function FormRenderer<T extends FieldValues>({
                   onClick={() => togglePasswordVisibility(item.name)}
                   className="absolute right-2 top-2 text-gray-500"
                 >
-                  {visiblePasswords[item.name] ? <EyeOff size={18} /> : <Eye size={18} />}
+                  {visiblePasswords[item.name] ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
               </div>
             ):(

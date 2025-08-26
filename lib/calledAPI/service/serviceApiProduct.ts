@@ -31,33 +31,30 @@ export const searchBarcodeProduct = async (barcode: any , role :any) => {
   }
 };
 
-export const insertProduct = async(productData:any) => {
-    const response = await API.post("/api/products", productData);
+export const insertProduct = async(productData:any , userId?: any) => {
+    const response = await API.post(`/api/products`, productData);
     return response.data;
 };
 
-export const updateProduct = async(id:any, productData:any , role: any) => {
-    const response = await API.put(`/api/products/${id}?role=${role}`, productData);
+export const updateProduct = async(id:any, productData:any , role: any, userId: any) => {
+    const response = await API.put(`/api/products/${id}`, productData);
     return response.data;
 };
 
-export const updateQtyProduct = async(id : any, updateQtyData : UpdateQtyData)=>{
+export const updateQtyProduct = async(id : any, updateQtyData : UpdateQtyData , userId : any)=>{
     const response = await API.put(`/api/products/qtyProduct/${id}`, updateQtyData);
     return response.data;
 };
 
-export const updateStatusProduct = async(id : any, status : string) => {
+export const updateStatusProduct = async(id : any, status : string , userId : any) => {
     const response = await API.put(`/api/products/status/${id}`, {status}); // this {} function so sent data will as object like status : diterima not just diterima
     return response.data;
 }
 
-export const deleteProduct = async(id:any) => {
+export const deleteProduct = async(id:any , userId : any) => {
     const response = await API.delete(`/api/products/${id}`);
     return response.data;
 };
-
-
-
 
 // ----------------------------------------------------- custom hook to call data from API ------------------------------------------------------------------------
 
@@ -95,20 +92,20 @@ export const useFetchBarcodeProduct = () => {
     });
 }
 
-export const useInsertProduct = () => {
+export const useInsertProduct = (userId?:any ) => {
     const queryClient = useQueryClient();
     return useMutation ({
-        mutationFn: insertProduct,
+        mutationFn: (productData: any) => insertProduct(productData, userId),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["product"] });
         },
     });
 }
 
-export const useUpdateProduct = (id:any , role: any) => {
+export const useUpdateProduct = (id:any , role: any, userId : any) => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn : (productData: Product) => updateProduct(id, productData , role),
+        mutationFn : (productData: Product) => updateProduct(id, productData , role, userId),
         onSuccess:() =>{
             queryClient.invalidateQueries({ queryKey: ["product"] });
         },
@@ -117,10 +114,10 @@ export const useUpdateProduct = (id:any , role: any) => {
         },
     });
 }
-export const useUpdateQtyProduct = (id : any) => {
+export const useUpdateQtyProduct = (id : any , userId:any) => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn : (productData: any) => updateQtyProduct(id,productData),
+        mutationFn : (productData: any) => updateQtyProduct(id,productData, userId),
         onSuccess:() =>{
             queryClient.invalidateQueries({ queryKey: ["product"] });
         },
@@ -130,10 +127,10 @@ export const useUpdateQtyProduct = (id : any) => {
     });
 }
 
-export const useUpdateStatusProduct = (id : any) => {
+export const useUpdateStatusProduct = (id : any , userId :any) => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn : (status: string) => updateStatusProduct(id,status),
+        mutationFn : (status: string) => updateStatusProduct(id,status, userId),
         onSuccess:() =>{
             queryClient.invalidateQueries({ queryKey: ["product"] });
         },
@@ -143,10 +140,10 @@ export const useUpdateStatusProduct = (id : any) => {
     });
 }
 
-export const useDeleteProduct = () => {
+export const useDeleteProduct = (userId : any) => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: (id:string) => deleteProduct(id),
+        mutationFn: (id:string) => deleteProduct(id, userId),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["product"] });
         },

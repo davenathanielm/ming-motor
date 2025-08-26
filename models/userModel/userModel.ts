@@ -105,9 +105,14 @@ export async function updateRole(id_user : string , role: string):Promise<number
     return result.affectedRows; 
 }
 
+export async function updateNotificationLastSeen(userId: string): Promise<number> {
+    const result = (await queryDatabase(
+        "UPDATE users SET last_notification_seen = NOW() WHERE id_user = ?",
+        [userId]
+    )) as ResultSetHeader;
 
-
-
+    return result.affectedRows;
+}
 
 // export async function deleteUser(id: number): Promise<boolean> {
 //     const result = (await queryDatabase(

@@ -1,5 +1,7 @@
 // components/StatusDropdownButton.tsx
 import { useState } from "react";
+import Button from "./button";
+import { Menu } from '@headlessui/react'
 
 export default function StatusDropdownButton({ onSelect }: { onSelect: (status: string) => void }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -13,13 +15,15 @@ export default function StatusDropdownButton({ onSelect }: { onSelect: (status: 
     <div className="relative inline-block text-left">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="inline-flex justify-center items-center w-full rounded-md bg-customBackgroundButton hover:bg-customBackgroundButton/80 px-4 py-2 text-sm font-bold text-white "
+        className="inline-flex justify-center items-center w-full rounded-md bg-customBackgroundButton hover:bg-customBackgroundButton/80 px-4 py-2 text-base font-bold text-white "
       >
         Ubah Status
         <svg className="ml-2 -mr-1 h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
         </svg>
       </button>
+
+    
 
       {isOpen && (
         <div className="absolute z-10 mt-2  w-44 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5">

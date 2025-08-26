@@ -1,7 +1,8 @@
 import { NextApiRequest , NextApiResponse } from "next";
 import { getDashboardSummaryService } from "../../../services/productService";
+import { AuthenticatedNextApiRequest, withAuth } from "../../../lib/auth/helperAuth";
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+ async function handler(req: AuthenticatedNextApiRequest, res: NextApiResponse) {
     try{
         if(req.method === "GET"){
             const summary = await getDashboardSummaryService();
@@ -12,3 +13,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(500).json({success:false,message:error.message});
     }
 }
+
+export default withAuth(handler);

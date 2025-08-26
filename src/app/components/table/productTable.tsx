@@ -2,7 +2,7 @@ import { Product } from "../../../../models/productModel/productModel";
 import { TableColumn } from "react-data-table-component";
 import { getStatusColor } from "../items/formTemplate";
 import { formatCurrency } from "./customDesignTable";
-import { productIcon } from "../items/image";
+import { productIcon } from "../items/menuIcon";
 import { roleFilterOwner } from "@/app/utils/roleFilter";
 import Image from "next/image";
 
@@ -73,7 +73,8 @@ export const Productcolumns = (
   {
     name: "Tanggal Dibuat",
     selector: (row) =>
-      new Date(row.created_at).toLocaleDateString("id-ID")
+      new Date(row.created_at).toLocaleDateString("id-ID"),
+    sortable : true
   },
   {
     name: "Status",

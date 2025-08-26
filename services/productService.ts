@@ -10,6 +10,7 @@ import { countEmployees } from "../models/employeeModel/employeeModel";
 import { ProductTransaction } from "../models/productModel/productModel";
 import { fetchAllBarcode } from "../models/productModel/productModel";
 import { sumTotalTransaction, sumTotalAmountTransaction } from "../models/transactionModel/transactionModel";
+import { insertNotificationService } from "./notificationService";
 
 export async function getAllProductService(role:string): Promise<{ success: boolean; data?: Product[]; message?: string }> {
     try {
@@ -18,7 +19,7 @@ export async function getAllProductService(role:string): Promise<{ success: bool
             const product = await getAllProductByOwner();
             return {success: true, data: product}; 
         }
-        console.log("ini role", role);
+        
         const product = await getAllProduct();
         return {success: true, data: product}; 
     } catch (error: any) {
@@ -87,7 +88,8 @@ export async function fetchAllBarcodeService() : Promise<{success:boolean, data?
 export async function insertProductService(
     product:Product,
     id_supplier : any,
-    id_inventory : any
+    id_inventory : any,
+    userId ?:any
 ) : Promise<{success: boolean; data?:Product; message?:string}>{
     try{
         const result = await insertProduct(product);
@@ -110,16 +112,27 @@ export async function insertProductService(
         await insertDetailSupplier(supplierDetail);
         await insertDetailWarehouse(warehouseDetail);
         
-        return {success:true, message:"Product inserted successfully"}
+            const notification = {
+                id_user: userId,
+                message: `memasukkan data produk ${product.name} sejumlah ${product.qty} `,
+                type: "insert product",
+                table_name: "products",
+                entity_name: `${product.name}`,
+                action: "insert",
+            };
+            await insertNotificationService(notification, userId); 
+        
+        return {success:true, message:"Product inserted successfully", data : userId};
     }catch(error:any){
-        return {success:false, message:error.message}
+        return {success:false, message:error.message};
     }
 }
 
 export async function updateProductService(
   id_product: number,
   product: Product,
-  role :string
+  role :string,
+  userId : any
 ): Promise<{ success: boolean; status: number; message?: string }> {
   try {
     if (role === "owner"){
@@ -134,6 +147,16 @@ export async function updateProductService(
           }
     }
 
+     const notification = {
+                id_user: userId,
+                message: `mengubah data produk ${product.name} berjumlah ${product.qty}`,
+                type: "update product",
+                table_name: "products",
+                entity_name: `${product.name}`,
+                action: "update",
+            };
+            await insertNotificationService(notification, userId);
+
     return {
       success: true,
       message: "Product and related data updated successfully",
@@ -144,10 +167,20 @@ export async function updateProductService(
   }
 }
 
-export async function updateStatusProductService(id_product:number, status:string): Promise<{success:boolean, status:number, message?:string}>{
+export async function updateStatusProductService(id_product:number, status:string , userId :any): Promise<{success:boolean, status:number, message?:string}>{
     try{
         const result = await updateStatus(id_product, status);
-        if(result){
+        const product = await getProductById(id_product);
+        if(result && product){
+            const notification = {
+                id_user: userId,
+                message: `mengubah status produk ${product.name} menjadi ${status}`,
+                type: "update status product",
+                table_name: "products",
+                entity_name: `${product.name}`,
+                action : "update status"
+            }
+            await insertNotificationService(notification, userId);
             return {success:true, message:"Product status updated successfully", status:201}
         }else{
             return {success:false, message:"Product not found", status:404}
@@ -157,7 +190,7 @@ export async function updateStatusProductService(id_product:number, status:strin
     }
 }
 
-export async function updateQtyProductService(id_product:number,updateData : UpdateQtyData): Promise<{success:boolean, status:number, message?:string}>{
+export async function updateQtyProductService(id_product:number,updateData : UpdateQtyData, userId : any): Promise<{success:boolean, status:number, message?:string}>{
     try{
         const product = await getProductById(id_product);
         const id_supplier = updateData.id_supplier;
@@ -186,6 +219,15 @@ export async function updateQtyProductService(id_product:number,updateData : Upd
         await insertDetailWarehouse(warehouseDetail);
 
         if(result){
+             const notification = {
+                id_user: userId,
+                message: `menambah stok produk ${product?.name} berjumlah ${qty}`,
+                type: "update qty product",
+                table_name: "products",
+                entity_name: `${product?.name}`,
+                action: "update",
+            };
+            await insertNotificationService(notification, userId);
             return {success:true, message:"Product updated successfully", status:201}
         }else{
             return {success:false, message:"Product not found", status:404}
@@ -225,10 +267,20 @@ export async function transactionService(items : ProductTransaction[]): Promise<
     }
 }
 
-export async function deleteProductService(id_product:number): Promise<{success:boolean, status:number, message?:string}>{
+export async function deleteProductService(id_product:number ,userId : any): Promise<{success:boolean, status:number, message?:string}>{
     try{
+        const product = await getProductById(id_product);
         const result = await deleteProduct(id_product);
-        if(result){
+        if(result && product){
+            const notification = {
+                id_user: userId,
+                message: `menghapus data produk ${product.name} berjumlah ${product?.qty}`,
+                type: "delete product",
+                table_name: "products",
+                entity_name: `${product?.name}`,
+                action: "delete",
+            };
+            await insertNotificationService(notification, userId);
             return {success:true, message:"Product deleted successfully", status:201}
         }else{
             return {success:false, message:"Product not found", status:404}

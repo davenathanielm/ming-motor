@@ -2,7 +2,7 @@ import { InventorySummary } from "../../../../models/detail_warehouse/detail_war
 import { TableColumn } from "react-data-table-component";
 import { formatCurrency } from "./customDesignTable";
 import { IconButtonTable } from "./productTable";
-import { productIcon } from "../items/image";
+import { productIcon } from "../items/menuIcon";
 
 export const detailInventoryColumns = (
     onDetail: (inventory: InventorySummary) => void

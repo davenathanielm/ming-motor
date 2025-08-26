@@ -27,9 +27,9 @@ export default function ProductPage() {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const products = data?.data || [];
   const router = useRouter();
-  const { mutate: deleteProductById } = useDeleteProduct();
-
-  
+ const userId = session?.user?.id;
+  // ini session nya gatau kenapa gabisa masuk
+  const { mutate: deleteProductById } = useDeleteProduct(userId);  
 
   // Filter data based on search input
   const filteredData = products.filter((item :any) =>
@@ -37,13 +37,13 @@ export default function ProductPage() {
       .some((field) => field.toLowerCase().includes(search.toLowerCase()))
   );
  
-console.log("filteredData Produk :", filteredData);
+
   const handleUpdate = (id: string) => {
     router.push(`/product/updateProduct/${id}`);
   };
   const handleDelete =  (id: string , name : string) => {
     try {
-          deleteProductById(id);
+          deleteProductById(id , userId);
           toast.success(`Product ${name} berhasil dihapus`);
         
     }catch(error) {

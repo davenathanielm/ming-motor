@@ -14,7 +14,8 @@ import { useInsertProduct } from "../../../../../lib/calledAPI/service/serviceAp
 import { toast } from "sonner";
 import Button from "@/app/components/items/button";
 
-export default function AddProductPageBarcode({defaultBarcode, onBack, role}: {defaultBarcode : string; onBack : () => void; role : string;}){
+export default function AddProductPageBarcode({defaultBarcode, onBack, role , userId}: {defaultBarcode : string; onBack : () => void; role : string; userId : string;}){
+        console.log("id user yang masuk adalah : ", userId)
         const [isScanning, setIsScanning] = useState(true);
         const inputRef = useRef<HTMLInputElement>(null);
         const {register, handleSubmit, reset, setValue, control, formState: {errors}} = useForm<Product>();
@@ -60,7 +61,7 @@ export default function AddProductPageBarcode({defaultBarcode, onBack, role}: {d
         }, [categories, supplier, inventory, defaultBarcode]);
         
       
-        const mutationInsertProduct = useInsertProduct();
+        const mutationInsertProduct = useInsertProduct(userId);
 
         useEffect(() => {
             if (defaultBarcode) {
@@ -75,7 +76,6 @@ export default function AddProductPageBarcode({defaultBarcode, onBack, role}: {d
       }, [isScanning]);
     
         const onSubmit = async (data: Product) => {
-            console.log("Product yang dimasukin:", data);
             try{
                 await mutationInsertProduct.mutateAsync(data);
                 toast.success(`Product ${data.name} berhasil ditambahkan`)
@@ -88,6 +88,7 @@ export default function AddProductPageBarcode({defaultBarcode, onBack, role}: {d
             }
         };
     
+
         return(
             <div>
                 <header className="mb-3">

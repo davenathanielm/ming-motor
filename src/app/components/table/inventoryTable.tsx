@@ -1,7 +1,7 @@
 import { TableColumn } from "react-data-table-component";
 import { Inventory } from "../../../../models/inventoryModel/inventoryModel";
 import { IconButtonTable } from "./productTable";
-import { productIcon } from "../items/image";
+import { productIcon } from "../items/menuIcon";
 
 export const inventoryColumns = (
     onUpdate: (id: any) => void,

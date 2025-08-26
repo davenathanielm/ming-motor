@@ -1,9 +1,13 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { getAllInventoryService, insertInventoryService } from "../../../services/inventoryService";
 import { Inventory } from "../../../models/inventoryModel/inventoryModel";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../auth/[...nextauth]";
+import { AuthenticatedNextApiRequest , withAuth } from "../../../lib/auth/helperAuth";
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+async function handler(req: AuthenticatedNextApiRequest, res: NextApiResponse) {
     try{
+        const userId = req?.user?.id;
         if(req.method === "GET"){
             const inventories = await getAllInventoryService();
             return res.status(inventories.success ? 201 : 500).json(inventories);
@@ -12,7 +16,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         if(req.method === "POST"){
             const {location , description} = req.body;
             const inventory: Inventory = {location , description};
-            const result = await insertInventoryService(inventory);
+            const result = await insertInventoryService(inventory , userId);
             return res.status(result.success ? 201 : 500).json(result);
         }
         return res.status(405).json({success:false,message:"Method not allowed"});
@@ -20,3 +24,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(500).json({success:false,message:error.message});
     }
 }
+
+export default withAuth(handler);

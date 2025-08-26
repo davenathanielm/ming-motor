@@ -1,7 +1,7 @@
 import { TableColumn } from "react-data-table-component";
 import { Supplier } from "../../../../models/supplierModel/supplierModel";
 import { IconButtonTable } from "./productTable";
-import { productIcon } from "../items/image";
+import { productIcon } from "../items/menuIcon";
 
 export const supplierColumns = (
     onUpdate: (id: any) => void,

@@ -3,6 +3,7 @@ import { Supplier } from "../../../models/supplierModel/supplierModel";
 import { DetailSupplier } from "../../../models/detail_supplier/detail_supplier";
 import { SupplierSummary } from "../../../models/detail_supplier/detail_supplier";
 import API from "../axios";
+import { insertNotification } from "../../../models/notificationModel/notificationModel";
 
 export const fetchSupplier = async() => {
     const response = await API.get ("/api/supplier");
@@ -17,8 +18,8 @@ export const fetchDetailSupplier = async() => {
 }
 
 export const insertSupplier = async(supplier: Supplier) => {
-    const response = await API.post("/api/supplier", supplier);
-    return response;
+    const response = await API.post(`/api/supplier`, supplier);
+    return response.data;
 }
 
 export const insertDetailSupplier = async(detailSupplier: DetailSupplier) => {
@@ -69,7 +70,7 @@ export const useFetchDetailSupplier = () =>{
 export const useInsertSupplier = () =>{
     const queryClient = useQueryClient();
     return useMutation ({
-        mutationFn : insertSupplier,
+        mutationFn : (supplier: Supplier) => insertSupplier(supplier),
         onSuccess: ()=>{
              queryClient.invalidateQueries({ queryKey: ["supplier"] });
         }

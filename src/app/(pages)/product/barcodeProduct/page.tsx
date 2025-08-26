@@ -31,8 +31,8 @@ export default function BarcodeProductPage() {
             <LayoutComponent title={" "} subTitle={" Home / Scanner "}>
                 <div className="px-14 py-10">
                         {flowStep === "scanner" && <ScannerProductPage onResult={handleBarcodeResult}/>}
-                        {flowStep === "qty" && productData && <UpdateQtyProductPage product={productData} onBack={() => setflowStep("scanner")}/>}
-                        {flowStep === "add" && scannedBarcode && <AddProductPageBarcode defaultBarcode={scannedBarcode} onBack={() => setflowStep("scanner")} role = {session?.user?.role}/>}
+                        {flowStep === "qty" && productData && <UpdateQtyProductPage product={productData} onBack={() => setflowStep("scanner")} userId={session?.user?.id}/>}
+                        {flowStep === "add" && scannedBarcode && <AddProductPageBarcode defaultBarcode={scannedBarcode} onBack={() => setflowStep("scanner")} role = {session?.user?.role} userId={session?.user?.id} />}
                 </div>
             </LayoutComponent>
     );

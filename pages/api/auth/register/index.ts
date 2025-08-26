@@ -5,7 +5,6 @@ import { User } from "../../../../models/userModel/userModel";
 
 export default async function handler (req: NextApiRequest , res : NextApiResponse) {
     if(req.method == "POST"){
-
         const {username, password, phone_number, fullName} = req.body;
         const hashedPassword = await hashPassword(password);
         const user : any= {

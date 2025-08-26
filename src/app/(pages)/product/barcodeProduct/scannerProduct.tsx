@@ -2,7 +2,7 @@
 import { useForm } from "react-hook-form";
 import { Barcode } from "../../../../../models/productModel/productModel";
 import { toast } from "sonner";
-import { barcodeImage } from "@/app/components/items/image";
+import { barcodeImage } from "@/app/components/items/menuIcon";
 import { useSearchBarcodeProduct } from "../../../../../lib/calledAPI/service/serviceApiProduct";
 import Image from "next/image";
 import Button from "@/app/components/items/button";

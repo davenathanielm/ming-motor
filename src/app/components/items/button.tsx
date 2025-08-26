@@ -35,7 +35,7 @@ const Button: React.FC<ButtonProps> = ({
   type = "button",
   variant = "default",
 }) => {
-  const baseStyle ="px-3 py-2  font-bold rounded-lg hover:cursor-pointer";
+  const baseStyle ="px-3 py-2 font-bold rounded-lg hover:cursor-pointer";
   const variantStyle = getVariantStyle(variant);
 
   if (href) {

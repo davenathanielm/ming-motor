@@ -2,14 +2,19 @@ import jwt from "jsonwebtoken";
 
 const JWT_SECRET = process.env.JWT_SECRET!;
 
+export interface JwtPayload {
+  id: any;   // assuming you store user id as "id" in the token
+  // add other fields if needed
+}
+
 export const signToken = (payload: object, expiresIn = "15m") => 
 {
   // @ts-ignore
   return jwt.sign(payload, JWT_SECRET, { expiresIn });
 };
 
-export const verifyToken = (token: string) => {
-  return jwt.verify(token, JWT_SECRET);
+export const verifyToken = (token: string) : JwtPayload => {
+  return jwt.verify(token, JWT_SECRET) as JwtPayload;
 };
 
 // information 

@@ -18,7 +18,7 @@ export default function ProductDetailCard({ product , role }: Props) {
 
       <div className="flex flex-col gap-6">
         {/* Image Placeholder */}
-        {/* <div className="w-full h-40 bg-gray-200 rounded-xl flex items-center justify-center text-gray-500 text-sm">
+        {/* <div className="w-full h-72 bg-gray-200 rounded-xl flex items-center justify-center text-gray-500 text-sm">
           Masukkan Gambar
         </div> */}
 
@@ -28,31 +28,41 @@ export default function ProductDetailCard({ product , role }: Props) {
         {/* Product Info Grid */}
         <div className="grid lg:grid-cols-2 grid-cols-1 gap-4">
           {/* Product Info */}
-          <Card title="Product Info" color="text-blue-500">
-            <Item label="Brand" value={product.brand ?? "Astra"} />
-            <Item label="Barcode" value={product.barcode ?? "-"} />
+          <Card title="Info Produk" color="text-black" className="bg-white/90 col-span-2">
+            <div className="flex justify-between">
+              <div className="flex flex-col gap-2">
+                <Item label="Name" value={product.name ?? "Astra"} /> 
+                <Item label="Barcode" value={product.barcode ?? "-"} />
+              </div>
+              <div className="flex flex-col gap-2 pr-10">
+                {/* <Item label="Brand" value={product.brand ?? "Astra"} /> 
+                <Item label="Stock" value={`${product.qty ?? 0} units`} className="text-lg"/> */}
+                 <Item label="HPP" value={roleFilterOwner(role)? currencyFormat(product.hpp) : "***************"} />
+                 <Item label="Harga Jual" value={currencyFormat(product.selling_price) ?? "Rp0"} />
+              </div>
+            </div>
           </Card>
 
           {/* Stock Info */}
-          <Card title="Stock Info" color="text-yellow-500">
-            <Item label="Stock" value={`${product.qty ?? 0} units`} className="text-lg" />
-          </Card>
+          {/* <Card title="Stock Info" color="text-black" className="bg-white/90">
+            <Item label="Stock" value={`${product.qty ?? 0} units`} className="text-lg"/>
+          </Card> */}
 
           {/* Price Info */}
-          <Card title="Harga" color="text-green-500">
+          <Card title="Harga" color="text-black" className="bg-white/90">
             {/* <Item label="HPP" value={currencyFormat(product.hpp) ?? "Rp0"} /> */}
             <Item label="HPP" value={roleFilterOwner(role)? currencyFormat(product.hpp) : "***************"} />
             <Item label="Harga Jual" value={currencyFormat(product.selling_price) ?? "Rp0"} />
           </Card>
 
           {/* Tanggal Info */}
-          <Card title="Informasi Tambahan" color="text-purple-500" className="">
+          <Card title="Informasi Tambahan" color="text-black" className="bg-white/90">
             <Item label="Tanggal dibuat" value={formatDate(product.created_at.toString())} />
             <Item label="Terakhir diupdate" value={formatDate(product.updated_at.toString())} />
           </Card>
 
           {/* Description */}
-          <Card title="Deskripsi" className="sm:col-span-2" color="text-blue-500">
+          <Card title="Deskripsi" className="sm:col-span-2 bg-white/90" color="text-black">
             <p className="text-gray-700 text-sm">{product.description || "-"}</p>
           </Card>
         </div>

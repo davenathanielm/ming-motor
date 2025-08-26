@@ -98,9 +98,7 @@ export const formDataProduct = [
         placeholder :"angka",
         spanClass :"col-span-1",
         required : true,
-    },
-
-    
+    }, 
     
     {
         name :"description",

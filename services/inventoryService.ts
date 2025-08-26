@@ -1,4 +1,6 @@
 import { getAllInventory, getInventoryById , updateInventory, deleteInventory , insertInventory, Inventory} from "../models/inventoryModel/inventoryModel";
+import { Notification } from "../models/notificationModel/notificationModel";
+import { insertNotificationService } from "./notificationService";
 
 export async function getAllInventoryService(): Promise<{ success: boolean; data?: Inventory[]; message?: string }> {
     try {
@@ -24,19 +26,35 @@ export async function getInventoryByIdService(id_inventory : number) : Promise<{
     }
 }
 
-export async function insertInventoryService(inventory:Inventory) : Promise<{success: boolean; data?:Inventory; message?:string}>{
+export async function insertInventoryService(inventory:Inventory, userId : any) : Promise<{success: boolean; data?:Inventory; message?:string}>{
     try{
-        const result = await insertInventory(inventory);
+        await insertInventory(inventory);
+        const notification : Notification = {
+            id_user: userId,
+            message: `memasukkan data inventory ${inventory.location}`,
+            type: "insert inventory",
+            table_name: "inventory",
+            entity_name: `${inventory?.location}`
+        }
+        await insertNotificationService(notification, userId);
         return {success:true, message:"Inventory inserted successfully"}
     }catch(error:any){
         return {success:false, message:error.message}
     }
 }
 
-export async function updateInventoryService(id_inventory:number, inventory:Inventory): Promise<{success: boolean; status: number, message?:string}>{
+export async function updateInventoryService(id_inventory:number, inventory:Inventory , userId : any): Promise<{success: boolean; status: number, message?:string}>{
     try{
         const result = await updateInventory(id_inventory,inventory);
         if(result){
+            const notification: Notification = {
+                id_user: userId,
+                message: `mengubah data inventory ${inventory.location}`,
+                type: "update inventory",
+                table_name: "inventory",
+                entity_name: `${inventory?.location}`
+            }
+            await insertNotificationService(notification, userId);
             return {success: true , message: "Inventory Updated Successfully", status:201}
         } else{
             return {success:false, message:"Inventory not found", status:404}
@@ -46,10 +64,19 @@ export async function updateInventoryService(id_inventory:number, inventory:Inve
     }
 }
 
-export async function deleteInventoryService(id_inventory:number): Promise<{success:boolean, status:number, message?:string}>{
+export async function deleteInventoryService(id_inventory:number,  userId : any): Promise<{success:boolean, status:number, message?:string}>{
     try{
         const result = await deleteInventory(id_inventory);
+        const category = await getInventoryById(id_inventory);
         if(result){
+            const notification: Notification = {
+                id_user: userId,
+                message: `menghapus data inventory ${category?.location}`,
+                type: "delete inventory",
+                table_name: "inventory",
+                entity_name: `${category?.location}`
+            }
+            await insertNotificationService(notification, userId);
             return {success:true, message:"Inventory deleted successfully", status:201}
         }else{
             return {success:false, message:"Inventory not found", status:404}

@@ -2,7 +2,7 @@ import { Employee } from "../../../../models/employeeModel/employeeModel";
 import { TableColumn } from "react-data-table-component";
 import { formatDate } from "../items/date";
 import { IconButtonTable } from "./productTable";
-import { productIcon } from "../items/image";
+import { productIcon } from "../items/menuIcon";
 
 export const employeeColumns = (
     onUpdate : (id:any) => void,

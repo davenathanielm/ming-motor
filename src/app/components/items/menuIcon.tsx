@@ -29,13 +29,20 @@ import warehouse2 from '../../../../public/images/auth/warehouse2.jpeg';
 import warehouse3 from '../../../../public/images/auth/warehouse3.jpeg';
 import warehouse4 from '../../../../public/images/auth/warehouse4.jpeg';
 import { VscGraph, VscPackage, VscChecklist, VscPieChart, VscAccount } from "react-icons/vsc";
+import { FiLogOut , FiSettings  , FiUser  } from "react-icons/fi";
+import { FaUser , FaRegUser, FaBook } from "react-icons/fa";
+import { IoLogOut } from "react-icons/io5";
+import { FaBox, FaUserTie,FaCashRegister } from "react-icons/fa6";
+import { MdSpaceDashboard, MdQrCodeScanner } from "react-icons/md";
+
+
 
 const menuIcon = [
     {
         name :"dashboard",
         title :"Dashboard",
         image: menu,
-        icon : VscGraph,
+        icon : MdSpaceDashboard,
         link:"dashboard",
         hidden : ""
     },
@@ -43,7 +50,7 @@ const menuIcon = [
         name :"product",
         title :"Produk",
         image: product,
-        icon : VscPackage,
+        icon : FaBox,
         link : "product",   
         hidden : ""
     },
@@ -51,7 +58,7 @@ const menuIcon = [
         name :"employee",
         title :"Pegawai",
         image: checklist,
-        icon : VscChecklist,
+        icon : FaUserTie ,
         link : "employee",
         hidden : ""
     },
@@ -59,24 +66,41 @@ const menuIcon = [
         name : "summary",
         title :"Laporan",
         image: pieChart,
-        icon : VscPieChart,
+        icon : FaBook,
         link : "summary",
         hidden : ""
     },
-    // {
-    //     name : "notification",
-    //     title :"Notification",
-    //     image: notification,
-    //     link : "notification"
-    // },
     {
-        name : "profile",
-        title :"User Profile",
-        image: profileUser,
-        icon : VscAccount,
-        link : "user"
-    }
+        name : "transaction",
+        title :"Transaksi",
+        image: pieChart,
+        icon : FaCashRegister,
+        link : "transaction",
+        hidden : ""
+    },
+    {
+        name : "scanner",
+        title :"Scanner",
+        image: pieChart,
+        icon : MdQrCodeScanner,
+        link : "product/barcodeProduct",
+        hidden : ""
+    },
 ];
+
+export const menuTopbar = [
+    {
+        name : "Profile",
+        icon : FaRegUser,
+        link : "user",
+        rounded : "rounded-t-lg",
+    },
+    {
+        name : "Settings",
+        icon : FiSettings,
+        link : "user",
+    },
+]
 
 const profilePicture = {
     image: profilePic
@@ -110,5 +134,9 @@ export const authImage = {
     warehouse3 : warehouse3,
     warehouse4 : warehouse4
 }
+
+export const topbarMenu = [
+    
+]
 
 export {menuIcon , profilePicture , barcodeImage , productIcon};

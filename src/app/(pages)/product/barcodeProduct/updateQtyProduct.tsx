@@ -15,16 +15,15 @@ import { useSession } from "next-auth/react";
 import { displayPrice } from "@/app/utils/roleFilter";
 import Button from "@/app/components/items/button";
 
-export default function UpdateQtyProductPage({product, onBack} : {product : Product; onBack : () => void}){
+export default function                                                                                                                                                                                                 UpdateQtyProductPage({product, onBack, userId} : {product : Product; onBack : () => void; userId: any}){
 const {register, handleSubmit, reset, setValue, control, formState: {errors}} = useForm<Product>();    
     const{barcode , name, selling_price,hpp,qty ,description,id_product} = product
     const {data : supplierData} = useFetchSuplier();
     const {data : inventoryData} = useFetchInventory();
     const {data : session} = useSession();
-    const mutationUpdateQtyProduct = useUpdateQtyProduct(id_product);
+    const mutationUpdateQtyProduct = useUpdateQtyProduct(id_product , userId);
     const profit = selling_price - hpp;
 
-   
     const dateCreated = formatDate(product.created_at.toString());
     const dateUpdated = formatDate(product.updated_at.toString());
 

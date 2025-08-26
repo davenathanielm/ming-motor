@@ -2,7 +2,7 @@ import { SupplierSummary } from "../../../../models/detail_supplier/detail_suppl
 import { TableColumn } from "react-data-table-component";
 import { formatCurrency } from "./customDesignTable";
 import { IconButtonTable } from "./productTable";
-import { productIcon } from "../items/image";
+import { productIcon } from "../items/menuIcon";
 
 export const detailSupplierColumns = (
     onDetail: (supplier: SupplierSummary) => void
