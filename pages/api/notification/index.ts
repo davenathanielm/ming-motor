@@ -4,16 +4,18 @@ import { Notification } from "../../../models/notificationModel/notificationMode
 import { updateNotificationLastSeenService } from "../../../services/userService";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]";
+import { AuthenticatedNextApiRequest, withAuth } from "../../../lib/auth/helperAuth";
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+ async function handler(req: AuthenticatedNextApiRequest, res: NextApiResponse) {
     try{
-        const session = await getServerSession(req, res, authOptions);
-        const userId = session?.user?.id;
+        const userId = req?.user?.id;
+        const role = req?.user?.role;
+        const id_role = req?.user?.id_role;
         // const {userId} = req.query;
         const statusNotification = '';
 
         if(req.method === "GET"){
-            const notifications = await getAllNotificationService(userId);
+            const notifications = await getAllNotificationService(userId , id_role);
             return res.status(notifications.success ? 201 : 500).json(notifications);
         }
  
@@ -34,3 +36,4 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(500).json({success:false,message:error.message});
     }
 }
+export default withAuth(handler);

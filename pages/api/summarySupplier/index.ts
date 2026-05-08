@@ -1,8 +1,9 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { getSupplierSummaryService } from "../../../services/detailSupplierService";
 import { SupplierSummary } from "../../../models/detail_supplier/detail_supplier";
+import { AuthenticatedNextApiRequest, withAuth } from "../../../lib/auth/helperAuth";
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+async function handler(req: AuthenticatedNextApiRequest, res: NextApiResponse) {
     try {
         if (req.method === "GET") {
             const result = await getSupplierSummaryService();
@@ -14,3 +15,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(500).json({ success: false, message: error.message });
     }
 }
+
+export default withAuth(handler);

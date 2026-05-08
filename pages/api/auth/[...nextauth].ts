@@ -27,6 +27,7 @@ export const authOptions = {
           username: user?.username || "",
           fullName: user?.fullName || "",
           role: user?.role || "",
+          id_role: user?.id_role || "",
         };
       },
     }),
@@ -47,6 +48,7 @@ export const authOptions = {
         token.username = user.username;
         token.fullName = user.fullName;
         token.role = user.role;
+        token.id_role = user.id_role;
       }
       console.log("JWT token nya adalah :", token);
       return token;
@@ -57,6 +59,7 @@ export const authOptions = {
         username: token.username,
         fullName: token.fullName,
         role: token.role,
+        id_role: token.id_role,
       };
       return session;
     },

@@ -1,10 +1,11 @@
-import { getAllNotification,getNotificationById,insertNotification,insertUserNotification,Notification,markNotificationAsRead, NotificationUser, countNotificationUnread} from "../models/notificationModel/notificationModel";
+import { getAllNotification,getNotificationById,insertNotification,insertUserNotification,Notification,markNotificationAsRead, NotificationUser, countNotificationUnread, NotificationReceiver, insertNotificationReceiver, insertNotificationRole ,getAllRoles, insertNotificationUser, getAllUsers} from "../models/notificationModel/notificationModel";
 
-export async function getAllNotificationService(userId : any , statusNotification ?: any ): Promise<{ success: boolean; data?: any; message?: string; status : number}> {
+export async function getAllNotificationService(userId : any , roleId ?: any , statusNotification ?: any): Promise<{ success: boolean; data?: any; message?: string; status : number}> {
     try {
-        const notification = await getAllNotification(userId,1,10,statusNotification);
+        const roletry = 1;
+        const notification = await getAllNotification(userId,roleId,1,10,statusNotification);
         const count = await countNotificationUnread(userId);
-        return {success: true, data: {notification, count}, status: 200}; 
+        return {success: true, data: {notification, count , roleId}, status: 200}; 
     } catch (error: any) {
         return {success: false, message: error.message, status: 500}; 
     }
@@ -25,17 +26,51 @@ export async function getNotificationByIdService(id_notification : number) : Pro
     }
 }
 
-export async function insertNotificationService(notification:Notification , userId : any) : Promise<{success: boolean; data?:Notification; message?:string}>{
+export async function insertNotificationService(notification:Notification , userId : any) : Promise<{success: boolean; data?:any; message?:string}>{
     try{
         const result = await insertNotification(notification);
-        if(result){
-            // @ts-ignore
-            const notificationUser: NotificationUser = {id_notification: result, id_user: notification.id_user , triggered_by: userId};
-            await insertUserNotification(notificationUser)
-            return {success:true, message:"Notification inserted successfully"}
+        // if(result){
+        //     // @ts-ignore
+        //     const notificationUser: NotificationUser = {id_notification: result, id_user: notification.id_user , triggered_by: userId};
+        //     await insertUserNotification(notificationUser)
+        // }
+        return {success:true, message:"Notification inserted successfully" ,  data: result}
+        // else {
+        //     return {success:false, message:"Failed to insert user notification"}
+        // }
+    }catch(error:any){
+        return {success:false, message:error.message}
+    }
+}
+
+export async function insertNotificationReceiverService(id_notification : any, notificationReceiver : NotificationReceiver[] , type ?: string) : Promise<{success: boolean; data?:Notification; message?:string}>{
+    try{
+        if(type === "role"){
+            const result = await insertNotificationRole(id_notification,notificationReceiver);
+            if(result){
+                return {success:true, message:"Notification Receiver inserted successfully"} 
+            }
+            else {
+                return {success:false, message:"Failed to insert Notification Receiver"}
+            }
         }
-        else {
-            return {success:false, message:"Failed to insert user notification"}
+        else if(type === "user"){
+            const result = await insertNotificationUser(id_notification,notificationReceiver);
+            if(result){
+                return {success:true, message:"Notification Receiver inserted successfully"} 
+            }
+            else {
+                return {success:false, message:"Failed to insert Notification Receiver"}
+            }
+        }
+        else{
+            const result = await insertNotificationReceiver(id_notification,notificationReceiver);
+            if(result){
+                return {success:true, message:"Notification Receiver inserted successfully"} 
+            }
+            else {
+                return {success:false, message:"Failed to insert Notification Receiver"}
+            }
         }
     }catch(error:any){
         return {success:false, message:error.message}
@@ -62,6 +97,25 @@ export async function countNotificationUnreadService(userId:any): Promise<{succe
         return {success: true, data: count, status: 200};
     } catch(e:any){
         return {success: false, message:e.message, status:500};
+    }
+}
+
+export async function getAllRolesService(): Promise<{ success: boolean; data?: any[]; message?: string; status: number }> {
+    try {
+        const roles = await getAllRoles();
+        const roleId = roles.map(role =>(role.id_role))
+        return { success: true, data: roleId, status: 200 };
+    } catch (e: any) {
+        return { success: false, message: e.message, status: 500 };
+    }
+}
+export async function getAllUsersService(): Promise<{ success: boolean; data?: any[]; message?: string; status: number }> {
+    try {
+        const users = await getAllUsers();
+        const userId = users.map(user =>(user.id_user))
+        return { success: true, data: userId, status: 200 };
+    } catch (e: any) {
+        return { success: false, message: e.message, status: 500 };
     }
 }
 

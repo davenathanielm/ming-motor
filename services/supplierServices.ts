@@ -1,5 +1,7 @@
 import { getAllSupplier, getSupplierById, insertSupplier,updateSupplier,deleteSupplier,Supplier } from "../models/supplierModel/supplierModel";
-import { insertNotificationService } from "./notificationService";
+import { insertNotificationService , insertNotificationReceiverService } from "./notificationService";
+import { getAllRoles } from "../models/notificationModel/notificationModel";
+import { getAllRolesService, getAllUsersService } from "./notificationService";
 
 export async function getAllSupplierService(): Promise<{ success: boolean; data?: Supplier[]; message?: string }> {
     try {
@@ -25,7 +27,7 @@ export async function getSupplierByIdService(id_supplier : number) : Promise<{ s
     }
 }
 
-export async function insertSupplierService(supplier:Supplier, userId : any) : Promise<{success: boolean; data?:Supplier; message?:string}>{
+export async function insertSupplierService(supplier:Supplier, userId : any) : Promise<{success: boolean; data?:any; message?:string}>{
     try{
         await insertSupplier(supplier);
         const notification = {
@@ -35,16 +37,23 @@ export async function insertSupplierService(supplier:Supplier, userId : any) : P
             table_name : "supplier",
             entity_name :`${supplier?.supplier_name}`
         }
-        await insertNotificationService(notification, userId);
+        const notificationResult = await insertNotificationService(notification, userId);
+        const notificationId = notificationResult.data;
+        const type = 'role';
+        const allRoles = await getAllRolesService();
+        const notificationReceiver = allRoles?.data?.map((role : any) => ({
+            id_receiver : role,
+            notification_type : "role"
+        }))
+        await insertNotificationReceiverService(notificationId,notificationReceiver , type);
         return {success:true, message:"Supplier inserted successfully"}
     }catch(error:any){
         return {success:false, message:error.message}
     }
 }
 
-export async function updateSupplierService(id_supplier:number, supplier:Supplier): Promise<{success: boolean; status: number, message?:string}>{
+export async function updateSupplierService(id_supplier:number, supplier:Supplier , userId : any): Promise<{success: boolean; status: number, message?:string}>{
     try{
-        const userId = 5;
         const result = await updateSupplier(id_supplier,supplier);
         if(result){
             const notification = {
@@ -54,8 +63,16 @@ export async function updateSupplierService(id_supplier:number, supplier:Supplie
                 table_name : "supplier",
                 entity_name :`${supplier?.supplier_name}`
             }
-            await insertNotificationService(notification, userId);
-            return {success: true , message: "Supplier Updated Successfully", status:201}
+            const notificationResult = await insertNotificationService(notification, userId);
+            const notificationId = notificationResult.data;
+            const type = 'user';
+            const allUsers = await getAllUsersService();
+            const notificationReceiver = allUsers?.data?.map((user : any) => ({
+                id_receiver : user,
+                notification_type : "user"
+            }))
+             await insertNotificationReceiverService(notificationId,notificationReceiver , type);
+            return {success: true , message: `allUsers ${allUsers?.data}`, status:201}
         } else{
             return {success:false, message:"Supplier not found", status:404}
         }
@@ -64,9 +81,9 @@ export async function updateSupplierService(id_supplier:number, supplier:Supplie
     }
 }
 
-export async function deleteSupplierService(id_supplier:number): Promise<{success:boolean, status:number, message?:string}>{
+export async function deleteSupplierService(id_supplier:number , userId : any): Promise<{success:boolean, status:number, message?:string}>{
     try{
-        const userId = 5;
+
         const supplier = await getSupplierById(id_supplier);
         const result = await deleteSupplier(id_supplier);
         if(result){
@@ -77,7 +94,15 @@ export async function deleteSupplierService(id_supplier:number): Promise<{succes
                 table_name : "supplier",
                 entity_name :`${supplier?.supplier_name}`
             }
-            await insertNotificationService(notification, userId);
+            const notificationResult = await insertNotificationService(notification, userId);
+            const notificationId = notificationResult.data;
+            const type = 'role';
+            const allRoles = await getAllRolesService();
+            const notificationReceiver = allRoles?.data?.map((role : any) => ({
+                id_receiver : role,
+                notification_type : "role"
+            }))
+            await insertNotificationReceiverService(notificationId,notificationReceiver , type);
             return {success:true, message:"Supplier deleted successfully", status:201}
         }else{
             return {success:false, message:"Supplier not found", status:404}

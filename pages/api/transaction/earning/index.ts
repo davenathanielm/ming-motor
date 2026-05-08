@@ -3,9 +3,9 @@ import { fetchAllTransactionsService } from "../../../../services/transactionSer
 import { fetchTotalTransactionService } from "../../../../services/transactionService";
 import { UpdateQtyData } from "../../../../models/productModel/productModel";
 import { ProductTransaction } from "../../../../models/productModel/productModel";
+import { AuthenticatedNextApiRequest, withAuth } from "../../../../lib/auth/helperAuth";
 
-
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+async function handler(req: AuthenticatedNextApiRequest, res: NextApiResponse) {
     try {
         if (req.method === "GET") {
             const result = await fetchTotalTransactionService();
@@ -19,3 +19,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(500).json({ success: false, message: error.message });
     }
 }
+
+export default withAuth(handler);

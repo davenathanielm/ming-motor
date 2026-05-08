@@ -1,6 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { getInventorySummaryService } from "../../../services/detailWarehouseService";
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+import { AuthenticatedNextApiRequest, withAuth } from "../../../lib/auth/helperAuth";
+
+async function handler(req: AuthenticatedNextApiRequest, res: NextApiResponse) {
     try {
         if (req.method === "GET") {
             const result = await getInventorySummaryService();
@@ -12,3 +14,4 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(500).json({ success: false, message: error.message });
     }
 }
+export default withAuth(handler);

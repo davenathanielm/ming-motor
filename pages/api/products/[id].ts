@@ -4,12 +4,12 @@ import { Product } from "../../../models/productModel/productModel";
 import { injectOptionForm } from "@/app/utils/formUtils";
 import { authOptions } from "../auth/[...nextauth]";
 import { getServerSession } from "next-auth";
+import { AuthenticatedNextApiRequest , withAuth } from "../../../lib/auth/helperAuth";
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+async function handler(req: AuthenticatedNextApiRequest, res: NextApiResponse) {
     try{
-        const session = await getServerSession(req , res, authOptions);
-        const userId = session?.user?.id;
-        const role = session?.user?.role;
+        const userId = req?.user?.id;
+        const role = req?.user?.role;
         const {id} = req.query;
         const productId = Number(id); 
         if (isNaN(productId)) {
@@ -38,6 +38,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(500).json({success:false,message:error.message});
     }
 }
+export default withAuth(handler);
 
 // information
 // 1. if you want to pass from req.query it means it pass on api routes and use  const response = await API.get(`/api/products/${id}?role=${role}`); in axios to pass by routes

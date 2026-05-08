@@ -11,6 +11,7 @@ import { ProductTransaction } from "../models/productModel/productModel";
 import { fetchAllBarcode } from "../models/productModel/productModel";
 import { sumTotalTransaction, sumTotalAmountTransaction } from "../models/transactionModel/transactionModel";
 import { insertNotificationService } from "./notificationService";
+import { getAllRolesService, getAllUsersService , insertNotificationReceiverService } from "./notificationService";
 
 export async function getAllProductService(role:string): Promise<{ success: boolean; data?: Product[]; message?: string }> {
     try {
@@ -120,7 +121,16 @@ export async function insertProductService(
                 entity_name: `${product.name}`,
                 action: "insert",
             };
-            await insertNotificationService(notification, userId); 
+            const notificationResult = await insertNotificationService(notification, userId);
+            const notificationId = notificationResult.data;
+            const type = 'role';
+            const allRoles = await getAllRolesService();
+            const notificationReceiver = allRoles?.data?.map((role : any) => ({
+                id_receiver : role,
+                notification_type : "role"
+            }));
+            // @ts-ignore
+            await insertNotificationReceiverService(notificationId,notificationReceiver , type); 
         
         return {success:true, message:"Product inserted successfully", data : userId};
     }catch(error:any){
@@ -155,7 +165,16 @@ export async function updateProductService(
                 entity_name: `${product.name}`,
                 action: "update",
             };
-            await insertNotificationService(notification, userId);
+            const notificationResult = await insertNotificationService(notification, userId);
+            const notificationId = notificationResult.data;
+            const type = 'role';
+            const allRoles = await getAllRolesService();
+            const notificationReceiver = allRoles?.data?.map((role : any) => ({
+                id_receiver : role,
+                notification_type : "role"
+            }));
+            // @ts-ignore
+            await insertNotificationReceiverService(notificationId,notificationReceiver , type); 
 
     return {
       success: true,
@@ -180,7 +199,16 @@ export async function updateStatusProductService(id_product:number, status:strin
                 entity_name: `${product.name}`,
                 action : "update status"
             }
-            await insertNotificationService(notification, userId);
+            const notificationResult = await insertNotificationService(notification, userId);
+            const notificationId = notificationResult.data;
+            const type = 'role';
+            const allRoles = [1];
+            const notificationReceiver = allRoles?.map((role : any) => ({
+                id_receiver : role,
+                notification_type : "role"
+            }));
+            // @ts-ignore
+            await insertNotificationReceiverService(notificationId,notificationReceiver , type); 
             return {success:true, message:"Product status updated successfully", status:201}
         }else{
             return {success:false, message:"Product not found", status:404}
@@ -227,7 +255,16 @@ export async function updateQtyProductService(id_product:number,updateData : Upd
                 entity_name: `${product?.name}`,
                 action: "update",
             };
-            await insertNotificationService(notification, userId);
+            const notificationResult = await insertNotificationService(notification, userId);
+            const notificationId = notificationResult.data;
+            const type = 'role';
+            const allRoles = await getAllRolesService();
+            const notificationReceiver = allRoles?.data?.map((role : any) => ({
+                id_receiver : role,
+                notification_type : "role"
+            }));
+            // @ts-ignore
+            await insertNotificationReceiverService(notificationId,notificationReceiver , type); 
             return {success:true, message:"Product updated successfully", status:201}
         }else{
             return {success:false, message:"Product not found", status:404}
@@ -280,7 +317,17 @@ export async function deleteProductService(id_product:number ,userId : any): Pro
                 entity_name: `${product?.name}`,
                 action: "delete",
             };
-            await insertNotificationService(notification, userId);
+            const notificationResult = await insertNotificationService(notification, userId);
+            const notificationId = notificationResult.data;
+            const type = 'role';
+            const allRoles = await getAllRolesService();
+            const notificationReceiver = allRoles?.data?.map((role : any) => ({
+                id_receiver : role,
+                notification_type : "role"
+            }));
+            // @ts-ignore
+            await insertNotificationReceiverService(notificationId,notificationReceiver , type); 
+
             return {success:true, message:"Product deleted successfully", status:201}
         }else{
             return {success:false, message:"Product not found", status:404}

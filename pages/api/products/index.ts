@@ -3,15 +3,12 @@ import { getAllProductService , insertProductService } from "../../../services/p
 import { Product } from "../../../models/productModel/productModel";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]";
+import { AuthenticatedNextApiRequest , withAuth } from "../../../lib/auth/helperAuth";
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+async function handler(req: AuthenticatedNextApiRequest, res: NextApiResponse) {
     try{
-        const session = await getServerSession(req, res, authOptions);
-        const userId = session?.user?.id;
-        const role = session?.user?.role;
-        if(!session){
-            return res.status(401).json({ error: "Unauthorized" });
-        }
+        const userId = req?.user?.id;
+        const role = req?.user?.role || "staff";
         if(req.method === "GET"){
             // const {role} = req.query;
             const products = await getAllProductService(role as string);
@@ -31,6 +28,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(500).json({success:false,message:error.message});
     }
 }
+export default withAuth(handler);
 
 // information
 // if pass from req.query it means it pass on api routes and use  const response = await API.get(`/api/products?role=${role}`); in axios to pass by routes

@@ -6,7 +6,8 @@ import { AuthenticatedNextApiRequest , withAuth } from "../../../lib/auth/helper
      async function handler(req : AuthenticatedNextApiRequest, res:NextApiResponse){
     try{
         const {id} = req.query;
-        const supplierId = Number(id); 
+        const supplierId = Number(id);
+        const userId = req?.user?.id; 
         if (isNaN(supplierId)) {
             return res.status(400).json({ success: false, message: "Invalid supplier ID" }); // ✅ Moved outside `if`
         }
@@ -19,12 +20,12 @@ import { AuthenticatedNextApiRequest , withAuth } from "../../../lib/auth/helper
         if(req.method === "PUT"){
             const {supplier_name,phone_number,city,comment} = req.body;
             const supplier : Supplier = {supplier_name,phone_number,city,comment};
-            const result = await updateSupplierService(supplierId,supplier);
+            const result = await updateSupplierService(supplierId,supplier, userId);
             return res.status(result.status).json({success: result.success, message: result.message});
         }
 
         if(req.method === "DELETE"){
-            const result = await deleteSupplierService(supplierId);
+            const result = await deleteSupplierService(supplierId , userId);
             return res.status(result.status).json({success:result.success, message:result.message});
         }
 

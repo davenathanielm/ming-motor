@@ -1,6 +1,7 @@
 import { getAllInventory, getInventoryById , updateInventory, deleteInventory , insertInventory, Inventory} from "../models/inventoryModel/inventoryModel";
 import { Notification } from "../models/notificationModel/notificationModel";
 import { insertNotificationService } from "./notificationService";
+import { getAllRolesService, getAllUsersService , insertNotificationReceiverService } from "./notificationService";
 
 export async function getAllInventoryService(): Promise<{ success: boolean; data?: Inventory[]; message?: string }> {
     try {
@@ -36,7 +37,16 @@ export async function insertInventoryService(inventory:Inventory, userId : any) 
             table_name: "inventory",
             entity_name: `${inventory?.location}`
         }
-        await insertNotificationService(notification, userId);
+        const notificationResult = await insertNotificationService(notification, userId);
+        const notificationId = notificationResult.data;
+        const type = 'role';
+        const allRoles = await getAllRolesService();
+        const notificationReceiver = allRoles?.data?.map((role : any) => ({
+            id_receiver : role,
+            notification_type : "role"
+        }))
+        // @ts-ignore
+        await insertNotificationReceiverService(notificationId,notificationReceiver , type);
         return {success:true, message:"Inventory inserted successfully"}
     }catch(error:any){
         return {success:false, message:error.message}
@@ -54,11 +64,20 @@ export async function updateInventoryService(id_inventory:number, inventory:Inve
                 table_name: "inventory",
                 entity_name: `${inventory?.location}`
             }
-            await insertNotificationService(notification, userId);
-            return {success: true , message: "Inventory Updated Successfully", status:201}
-        } else{
-            return {success:false, message:"Inventory not found", status:404}
-        }
+            const notificationResult = await insertNotificationService(notification, userId);
+            const notificationId = notificationResult.data;
+            const type = 'role';
+            const allRoles = await getAllRolesService();
+            const notificationReceiver = allRoles?.data?.map((role : any) => ({
+                id_receiver : role,
+                notification_type : "role"
+            }))
+            // @ts-ignore
+            await insertNotificationReceiverService(notificationId,notificationReceiver , type);
+                return {success: true , message: "Inventory Updated Successfully", status:201}
+            } else{
+                return {success:false, message:"Inventory not found", status:404}
+            }
     } catch(e:any){
         return {success:false, message:e.message, status:500}
     }
@@ -76,7 +95,16 @@ export async function deleteInventoryService(id_inventory:number,  userId : any)
                 table_name: "inventory",
                 entity_name: `${category?.location}`
             }
-            await insertNotificationService(notification, userId);
+            const notificationResult = await insertNotificationService(notification, userId);
+            const notificationId = notificationResult.data;
+            const type = 'role';
+            const allRoles = await getAllRolesService();
+            const notificationReceiver = allRoles?.data?.map((role : any) => ({
+                id_receiver : role,
+                notification_type : "role"
+            }));
+            // @ts-ignore
+            await insertNotificationReceiverService(notificationId,notificationReceiver , type);
             return {success:true, message:"Inventory deleted successfully", status:201}
         }else{
             return {success:false, message:"Inventory not found", status:404}

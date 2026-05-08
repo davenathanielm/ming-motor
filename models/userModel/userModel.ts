@@ -3,14 +3,15 @@ import { RowDataPacket, ResultSetHeader } from "mysql2"; // Import MySQL types
 import { Employee } from "../employeeModel/employeeModel";
 
 export type User = {
-    id_user: string;
-    fullName: string;
-    username: string;
-    password: string;
-    phone_number: string;
-    role: string;
+    id_user?: string;
+    fullName?: string;
+    username?: string;
+    password?: string;
+    phone_number?: string;
+    role?: string;
     confirmPassword?: any; // Optional field for confirmation
-    id:any;
+    id?: any;
+    id_role? : any;
 };
 
 export async function getAllUsers(): Promise<User[]> {

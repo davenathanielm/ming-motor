@@ -3,8 +3,9 @@ import { transactionService } from "../../../services/productService";
 import { UpdateQtyData } from "../../../models/productModel/productModel";
 import { ProductTransaction } from "../../../models/productModel/productModel";
 import { insertTransactionService, fetchAllTransactionsService } from "../../../services/transactionService";
+import { AuthenticatedNextApiRequest, withAuth } from "../../../lib/auth/helperAuth";
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+async function handler(req: AuthenticatedNextApiRequest, res: NextApiResponse) {
     try {
         if (req.method === "PUT") {
             const items: ProductTransaction[] = req.body;
@@ -41,3 +42,4 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(500).json({ success: false, message: error.message });
     }
 }
+export default withAuth(handler);

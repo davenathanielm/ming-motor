@@ -1,10 +1,13 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { getNotificationByIdService, getAllNotificationService, updateStatusNotificationService} from "../../../services/notificationService";
 import { Notification } from "../../../models/notificationModel/notificationModel";
+import { AuthenticatedNextApiRequest, withAuth } from "../../../lib/auth/helperAuth";
 
-export default async function handler(req : NextApiRequest, res:NextApiResponse){
+async function handler(req : AuthenticatedNextApiRequest, res:NextApiResponse){
     try{
         const {id} = req.query;
+        const userId = req?.user?.id;
+        const role = req?.user?.role;
         const notificationId = Number(id); 
         if (isNaN(notificationId)) {
             return res.status(400).json({ success: false, message: "Invalid notification ID" }); 
@@ -37,3 +40,4 @@ export default async function handler(req : NextApiRequest, res:NextApiResponse)
         return res.status(500).json({success:false,message:error.message});
     }
 }
+export default withAuth(handler);

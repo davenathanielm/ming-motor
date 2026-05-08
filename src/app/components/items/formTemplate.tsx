@@ -474,7 +474,7 @@ export const formDataEmployee= [
         type :"date",
         placeholder : "",
         spanClass :"col-span-2",
-        required : true,
+        // required : true,
     },
 ]
 

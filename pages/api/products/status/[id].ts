@@ -2,16 +2,14 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { updateStatusProductService } from "../../../../services/productService";
 import { authOptions } from "../../auth/[...nextauth]";
 import { getServerSession } from "next-auth";
+import { AuthenticatedNextApiRequest , withAuth } from "../../../../lib/auth/helperAuth";
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+async function handler(req: AuthenticatedNextApiRequest, res: NextApiResponse) {
     try {
         const { id } = req.query;
         const productId = Number(id);
-        const session = await getServerSession(req,res,authOptions)
-        const userId = session?.user?.id;
-        if (!session) {
-            return res.status(401).json({ error: "Unauthorized" });
-        }
+        const userId = req?.user?.id;
+
         if (req.method === "PUT") {
             const { status } = req.body;
             const result = await updateStatusProductService(productId, status, userId);
@@ -21,3 +19,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(500).json({ success: false, message: error.message });
     }
 }
+
+export default withAuth(handler);

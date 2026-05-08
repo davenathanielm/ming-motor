@@ -2,6 +2,7 @@
  import { Notification } from "../models/notificationModel/notificationModel";
 import { getUserById } from "../models/userModel/userModel";
 import { insertNotificationService } from "./notificationService";
+import { getAllRolesService, getAllUsersService , insertNotificationReceiverService } from "./notificationService";
 
 export async function getAllCategoryService(): Promise<{ success: boolean; data?: Category[]; message?: string }> {
     try {
@@ -36,7 +37,16 @@ export async function insertCategoryService(category:Category, userId : any) : P
             table_name: "category",
             entity_name: `${category?.category_name}`
         };
-        await insertNotificationService(notification, userId);
+        const notificationResult = await insertNotificationService(notification, userId);
+        const notificationId = notificationResult.data;
+        const type = 'role';
+        const allRoles = await getAllRolesService();
+        const notificationReceiver = allRoles?.data?.map((role : any) => ({
+            id_receiver : role,
+            notification_type : "role"
+        }));
+        // @ts-ignore
+        await insertNotificationReceiverService(notificationId,notificationReceiver , type);
         return {success:true, message:"Category inserted successfully"}
     }catch(error:any){
         return {success:false, message:error.message}
@@ -54,7 +64,16 @@ export async function updateCategoryService(id_category:number, category:Categor
                 table_name: "category",
                 entity_name: `${category?.category_name}`
             }
-            await insertNotificationService(notification, userId);
+            const notificationResult = await insertNotificationService(notification, userId);
+            const notificationId = notificationResult.data;
+            const type = 'role';
+            const allRoles = await getAllRolesService();
+            const notificationReceiver = allRoles?.data?.map((role : any) => ({
+                id_receiver : role,
+                notification_type : "role"
+            }))
+            // @ts-ignore
+            await insertNotificationReceiverService(notificationId,notificationReceiver , type);
             return {success: true , message: "Category Updated Successfully", status:201}
         } else{
             return {success:false, message:"Category not found", status:404}
@@ -76,7 +95,16 @@ export async function deleteCategoryService(id_category:number, userId:any): Pro
                 table_name: "category",
                 entity_name: `${category?.category_name}`
             }
-            await insertNotificationService(notification, userId);
+            const notificationResult = await insertNotificationService(notification, userId);
+            const notificationId = notificationResult.data;
+            const type = 'role';
+            const allRoles = await getAllRolesService();
+            const notificationReceiver = allRoles?.data?.map((role : any) => ({
+                id_receiver : role,
+                notification_type : "role"
+            }))
+            // @ts-ignore
+            await insertNotificationReceiverService(notificationId,notificationReceiver , type);
             return {success:true, message:"Category deleted successfully", status:201}
         }else{
             return {success:false, message:"Category not found", status:404}

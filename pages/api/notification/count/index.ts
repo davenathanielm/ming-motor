@@ -3,14 +3,11 @@ import { countNotificationUnreadService } from "../../../../services/notificatio
 import { Notification } from "../../../../models/notificationModel/notificationModel";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../auth/[...nextauth]";
+import { AuthenticatedNextApiRequest , withAuth } from "../../../../lib/auth/helperAuth";
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+async function handler(req: AuthenticatedNextApiRequest, res: NextApiResponse) {
     try{
-        const session = await getServerSession(req, res, authOptions);
-        const userId = session?.user?.id;
-        if (!session) {
-            return res.status(401).json({ success: false, message: "Unauthorized" }); 
-        }
+        const userId = req?.user?.id;
         // const {userId} = req.query;
         const statusNotification = '';
 
@@ -23,3 +20,4 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(500).json({success:false,message:error.message});
     }
 }
+export default withAuth(handler);

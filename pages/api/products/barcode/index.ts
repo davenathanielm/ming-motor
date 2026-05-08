@@ -3,14 +3,12 @@ import { searchBarcodeProductService } from "../../../../services/productService
 import { fetchAllBarcode } from "../../../../models/productModel/productModel";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../auth/[...nextauth]";
+import { AuthenticatedNextApiRequest , withAuth } from "../../../../lib/auth/helperAuth";
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse){
+async function handler(req: AuthenticatedNextApiRequest , res: NextApiResponse){
     try{
-        const session = await getServerSession(req, res, authOptions);
-        const role = session?.user?.role;
-        if (!session) {
-            return res.status(401).json({ error: "Unauthorized" });
-        }
+        const userId = req?.user?.id;
+        const role = req?.user?.role || "staff";
         if (req.method === "POST") {
             const { barcode } = req.body;
             // const { role} = req.query;
@@ -28,3 +26,4 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(500).json({ success: false, message: error.message });
     }
 }
+export default withAuth(handler);    

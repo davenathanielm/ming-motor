@@ -9,6 +9,7 @@ export interface AuthenticatedNextApiRequest extends NextApiRequest {
     id: string;
     username?: string;
     role?: string;
+    id_role?: string;
     [key: string]: any;
   };
 }

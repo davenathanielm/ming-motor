@@ -3,14 +3,11 @@ import { updateQtyProductService } from "../../../../services/productService";
 import { UpdateQtyData } from "../../../../models/productModel/productModel";
 import { authOptions } from "../../auth/[...nextauth]";
 import { getServerSession } from "next-auth";
+import { AuthenticatedNextApiRequest , withAuth } from "../../../../lib/auth/helperAuth";
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse){
+async function handler(req: AuthenticatedNextApiRequest, res: NextApiResponse){
     try{
-        const session = await getServerSession(req, res, authOptions);
-        const userId = session?.user?.id
-        if (!session){
-            return res.status(401).json({ error: "Unauthorized" });
-        }
+        const userId = req?.user?.id;
         if (req.method === "PUT") {
             const {id} = req.query;
             const id_product = Number(id); 
@@ -25,3 +22,4 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(500).json({ success: false, message: error.message });
     }
 }
+export default withAuth(handler);

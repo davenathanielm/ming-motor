@@ -1,8 +1,9 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { User } from "../../../../models/userModel/userModel";
 import { checkPasswordService } from "../../../../services/userService";
+import { AuthenticatedNextApiRequest , withAuth } from "../../../../lib/auth/helperAuth";
 
-export default async function handler (req: NextApiRequest, res: NextApiResponse){
+async function handler (req: AuthenticatedNextApiRequest, res: NextApiResponse){
     try{
         const {id} = req.query;
         const userId = String(id); // Convert id to a string
@@ -18,3 +19,4 @@ export default async function handler (req: NextApiRequest, res: NextApiResponse
         return res.status(500).json({ success: false, message: error.message });
     }
 }
+export default withAuth(handler);
